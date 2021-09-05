@@ -49,8 +49,4 @@ public class HyTablist implements IHyPlusModule, IHyPlusEvent {
 
     }
 
-    @Override
-    public void checkConfig(boolean reset) {
-
-    }
 }

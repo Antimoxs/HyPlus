@@ -1,7 +1,6 @@
 package dev.antimoxs.hyplus;
 
 import dev.antimoxs.hypixelapi.util.kvp;
-import dev.antimoxs.hyplus.modules.playerTagCycle.HyPlayerTag;
 
 import java.util.UUID;
 

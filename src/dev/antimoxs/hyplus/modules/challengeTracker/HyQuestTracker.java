@@ -6,14 +6,11 @@ import dev.antimoxs.hypixelapi.objects.resource.ResourceQuest;
 import dev.antimoxs.hypixelapi.objects.resource.ResourceQuestObjective;
 import dev.antimoxs.hypixelapi.response.PlayerResponse;
 import dev.antimoxs.hypixelapi.response.QuestsResponse;
-import dev.antimoxs.hypixelapi.util.UnixConverter;
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
 import dev.antimoxs.hyplus.modules.IHyPlusModule;
 import dev.antimoxs.hyplus.objects.ButtonElement;
 import dev.antimoxs.hyplus.objects.HyServerLocation;
-import dev.antimoxs.hyplus.objects.HySetting;
-import dev.antimoxs.hyplus.objects.HySettingType;
 import net.labymod.main.LabyMod;
 import net.labymod.settings.Settings;
 import net.labymod.settings.elements.BooleanElement;
@@ -39,38 +36,25 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
 
 
     // ChallengeTracker
-    public final HySetting HYPLUS_CTR_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_TOGGLE", "QuestTracker", "Toggle the quest-tracker.", true, true, Material.BOW);
-    public final HySetting HYPLUS_CTR_DAILY = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_DAILY", "Show daily quests", "Toggle the display of daily quests.", true, true, Material.WATCH);
-    public final HySetting HYPLUS_CTR_WEEKLY = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_WEEKLY", "Show weekly quests", "Toggle the display of weekly quests.", true, true, Material.PAPER);
-    public final HySetting HYPLUS_CTR_COMPLETED = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_COMPLETED", "Show completed quests", "Toggle the display of daily quests.", true, true, Material.GOLD_INGOT);
-    public final HySetting HYPLUS_CTR_SORTORDER = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_SORTORDER", "Reversed sort order", "Reverse the sort order.", true, true, Material.ARROW);
-    public final HySetting HYPLUS_CTR_DP_DAILY = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_DP_DAILY", "Announce daily reset time", "Toggle the announcement of the daily reset time.", true, true, Material.EMERALD);
-    public final HySetting HYPLUS_CTR_DP_WEEKLY = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_DP_WEEKLY", "Announce weekly reset time", "Toggle the announcement of the weekly reset time.", true, true, Material.DIAMOND);
+    public boolean HYPLUS_CTR_TOGGLE = true;
+    public boolean HYPLUS_CTR_DAILY = true;
+    public boolean HYPLUS_CTR_WEEKLY = true;
+    public boolean HYPLUS_CTR_COMPLETED = true;
+    public boolean HYPLUS_CTR_SORTORDER = true;
+    public boolean HYPLUS_CTR_DP_DAILY = true;
+    public boolean HYPLUS_CTR_DP_WEEKLY = true;
 
-    HyPlus hyPlus;
+    HyPlus HyPlus;
 
     public HyQuestTracker(HyPlus HyPlus) {
 
-        this.hyPlus = HyPlus;
+        this.HyPlus = HyPlus;
 
     }
 
     @Override
     public String getModuleName() {
         return "QuestTracker";
-    }
-
-    @Override
-    public void checkConfig(boolean reset) {
-
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_CTR_TOGGLE);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_CTR_DAILY);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_CTR_WEEKLY);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_CTR_COMPLETED);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_CTR_SORTORDER);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_CTR_DP_DAILY);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_CTR_DP_WEEKLY);
-
     }
 
     @Override
@@ -83,18 +67,32 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
 
         List<SettingsElement> moduleSettings = new ArrayList<>();
 
-        BooleanElement toggle = new BooleanElement(HYPLUS_CTR_TOGGLE.getDisplayName(), HYPLUS_CTR_TOGGLE.getIcon(), (booleanElement) -> {
+        SettingsElement toggle = new BooleanElement("QuestTracker", HyPlus, new ControlElement.IconData(Material.LEVER), "HYPLUS_CTR_TOGGLE", true);
 
-            HYPLUS_CTR_TOGGLE.changeConfigValue(hyPlus, booleanElement);
-            checkConfig(false);
+        ButtonElement ctr_refesh = new ButtonElement("Reload Quests", new ControlElement.IconData(Material.FEATHER), new Consumer<ButtonElement>() {
+            @Override
+            public void accept(ButtonElement buttonElement) {
+                updateChallanges(HyPlus.hyLocationDetector.getCurrentLocation().rawloc.toLowerCase());
+            }
+        }, "Reload", "Reload current quests.", Color.CYAN);
+        SettingsElement ctr_show_daily = new BooleanElement("Show Daily", HyPlus, new ControlElement.IconData(Material.WATCH), "HYPLUS_CTR_DAILY", true);
+        SettingsElement ctr_show_weekly = new BooleanElement("Show Weekly", HyPlus, new ControlElement.IconData(Material.PAPER), "HYPLUS_CTR_WEEKLY", true);
+        SettingsElement ctr_show_completed = new BooleanElement("Show Completed", HyPlus, new ControlElement.IconData(Material.GOLD_INGOT), "HYPLUS_CTR_COMPLETED", true);
+        HeaderElement ctr_info = new HeaderElement("Chat announcements");
+        BooleanElement ctr_display_daily = new BooleanElement("Display daily reset time", HyPlus, new ControlElement.IconData(Material.EMERALD), "HYPLUS_CTR_DP_DAILY", true);
+        BooleanElement ctr_display_weekly = new BooleanElement("Display weekly reset time", HyPlus, new ControlElement.IconData(Material.DIAMOND), "HYPLUS_CTR_DP_WEEKLY", true);
 
-        }, HYPLUS_CTR_TOGGLE.getValueBoolean());
-        toggle.setDescriptionText(HYPLUS_CTR_TOGGLE.getDescription());
 
 
         Settings ctr_sub = new Settings();
-        ctr_sub.addAll(getSubSettings());
-
+        ctr_sub.add(ctr_refesh);
+        ctr_sub.add(ctr_show_daily);
+        ctr_sub.add(ctr_show_weekly);
+        ctr_sub.add(ctr_show_completed);
+        ctr_sub.add(HyPlus.hyTrackboxGUI.getBooleanElement());
+        ctr_sub.add(ctr_info);
+        ctr_sub.add(ctr_display_daily);
+        ctr_sub.add(ctr_display_weekly);
 
         toggle.setSubSettings(ctr_sub);
 
@@ -103,87 +101,10 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
 
     }
 
-    public ArrayList<SettingsElement> getSubSettings() {
-
-        ArrayList<SettingsElement> subSettings = new ArrayList<>();
-
-        ButtonElement ctr_refesh = new ButtonElement("Reload Quests", new ControlElement.IconData(Material.FEATHER), new Consumer<ButtonElement>() {
-            @Override
-            public void accept(ButtonElement buttonElement) {
-                updateChallanges(hyPlus.hyLocationDetector.getCurrentLocation().rawloc.toLowerCase());
-            }
-        }, "Reload", "Reload current quests.", Color.CYAN);
-
-        BooleanElement ctr_show_daily = new BooleanElement(HYPLUS_CTR_DAILY.getDisplayName(), HYPLUS_CTR_DAILY.getIcon(), (booleanElement) -> {
-
-            HYPLUS_CTR_DAILY.changeConfigValue(hyPlus, booleanElement);
-            checkConfig(false);
-
-        }, HYPLUS_CTR_DAILY.getValueBoolean());
-        ctr_show_daily.setDescriptionText(HYPLUS_CTR_DAILY.getDescription());
-
-        BooleanElement ctr_show_weekly = new BooleanElement(HYPLUS_CTR_WEEKLY.getDisplayName(), HYPLUS_CTR_WEEKLY.getIcon(), (booleanElement) -> {
-
-            HYPLUS_CTR_WEEKLY.changeConfigValue(hyPlus, booleanElement);
-            checkConfig(false);
-
-        }, HYPLUS_CTR_WEEKLY.getValueBoolean());
-        ctr_show_weekly.setDescriptionText(HYPLUS_CTR_WEEKLY.getDescription());
-
-        BooleanElement ctr_show_completed = new BooleanElement(HYPLUS_CTR_COMPLETED.getDisplayName(), HYPLUS_CTR_COMPLETED.getIcon(), (booleanElement) -> {
-
-            HYPLUS_CTR_COMPLETED.changeConfigValue(hyPlus, booleanElement);
-            checkConfig(false);
-
-        }, HYPLUS_CTR_COMPLETED.getValueBoolean());
-        ctr_show_completed.setDescriptionText(HYPLUS_CTR_COMPLETED.getDescription());
-
-        BooleanElement ctr_sortorder = new BooleanElement(HYPLUS_CTR_SORTORDER.getDisplayName(), HYPLUS_CTR_SORTORDER.getIcon(), (booleanElement) -> {
-
-            HYPLUS_CTR_SORTORDER.changeConfigValue(hyPlus, booleanElement);
-            checkConfig(false);
-
-        }, HYPLUS_CTR_SORTORDER.getValueBoolean());
-        ctr_sortorder.setDescriptionText(HYPLUS_CTR_SORTORDER.getDescription());
-
-        HeaderElement ctr_info = new HeaderElement("Chat announcements");
-
-        BooleanElement ctr_display_daily = new BooleanElement(HYPLUS_CTR_DP_DAILY.getDisplayName(), HYPLUS_CTR_DP_DAILY.getIcon(), (booleanElement) -> {
-
-            HYPLUS_CTR_DP_DAILY.changeConfigValue(hyPlus, booleanElement);
-            checkConfig(false);
-
-        }, HYPLUS_CTR_DP_DAILY.getValueBoolean());
-        ctr_display_daily.setDescriptionText(HYPLUS_CTR_DP_DAILY.getDescription());
-
-        BooleanElement ctr_display_weekly = new BooleanElement(HYPLUS_CTR_DP_WEEKLY.getDisplayName(), HYPLUS_CTR_DP_WEEKLY.getIcon(), (booleanElement) -> {
-
-            HYPLUS_CTR_DP_WEEKLY.changeConfigValue(hyPlus, booleanElement);
-            checkConfig(false);
-
-        }, HYPLUS_CTR_DP_WEEKLY.getValueBoolean());
-        ctr_display_weekly.setDescriptionText(HYPLUS_CTR_WEEKLY.getDescription());
-
-
-
-
-        subSettings.add(ctr_refesh);
-        subSettings.add(ctr_show_daily);
-        subSettings.add(ctr_show_weekly);
-        subSettings.add(ctr_show_completed);
-        subSettings.add(ctr_sortorder);
-        subSettings.add(ctr_info);
-        subSettings.add(ctr_display_daily);
-        subSettings.add(ctr_display_weekly);
-
-        return subSettings;
-
-    }
-
 
     public void updateChallanges(String gamemode) {
 
-        if (HYPLUS_CTR_TOGGLE.getValueBoolean()) {
+        if (HYPLUS_CTR_TOGGLE) {
             Thread t = new Thread(() -> {
                 synchronized (dspc) {
 
@@ -197,15 +118,15 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
 
                     //}
 
-                    if (hyPlus.tbcHypixelApi == null) {
+                    if (HyPlus.tbcHypixelApi == null) {
 
-                        hyPlus.displayIgMessage(null, "§6§l[HyPlus]§4§l [WARN]: §7You don't have an API-Key set. Not every function is enabled.§r");
+                        HyPlus.displayIgMessage(null, "§6§l[HyPlus]§4§l [WARN]: §7You don't have an API-Key set. Not every function is enabled.§r");
                         return;
 
                     }
 
                     try {
-                        PlayerResponse response = hyPlus.tbcHypixelApi.createPlayerRequestUUID(LabyMod.getInstance().getPlayerUUID().toString());
+                        PlayerResponse response = HyPlus.tbcHypixelApi.createPlayerRequestUUID(LabyMod.getInstance().getPlayerUUID().toString());
                         if (response.success) {
 
 
@@ -238,43 +159,40 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
                             //HyPlus.displayIgMessage("ResetTimeWeekly", UnixConverter.toDate(unixTimeWeek*1000, "MM/dd/yyyy HH:mm:ss"));
                             //HyPlus.displayIgMessage("Time Now:", UnixConverter.toDate(unixNow*1000, "MM/dd/yyyy HH:mm:ss"));
 
-                            if (HYPLUS_CTR_DP_DAILY.getValueBoolean()) hyPlus.displayIgMessage(getModuleName(), "Daily Quests reset in: "  + hours + "h " + mins + "m " + seconds + "s");
-                            if (HYPLUS_CTR_DP_WEEKLY.getValueBoolean()) hyPlus.displayIgMessage(getModuleName(), "Weekly Quests reset in: "  + hoursW + "h " + minsW + "m " + secondsW + "s");
-                            QuestsResponse qs = hyPlus.tbcHypixelApi.createQuestsRequest();
+                            if (HYPLUS_CTR_DP_DAILY) HyPlus.displayIgMessage(getModuleName(), "Daily Quests reset in: "  + hours + "h " + mins + "m " + seconds + "s");
+                            if (HYPLUS_CTR_DP_WEEKLY) HyPlus.displayIgMessage(getModuleName(), "Weekly Quests reset in: "  + hoursW + "h " + minsW + "m " + secondsW + "s");
+                            QuestsResponse qs = HyPlus.tbcHypixelApi.createQuestsRequest();
 
                             if (qs.getQuests().getQuestsForMode(gamemode).length == 0) {
 
-                                if (!dspc.containsKey(0)) dspc.put(0, new QuestData(hyPlus, 0, 0, new ResourceQuestObjective()));
+                                if (!dspc.containsKey(0)) dspc.put(0, new QuestData(HyPlus, 0, 0, new ResourceQuestObjective()));
 
                             }
 
-
-                            unixReset = unixReset + 21600;
 
                             for (ResourceQuest q : qs.getQuests().getQuestsForMode(gamemode)) {
 
                                 PlayerQuest quest = response.getPlayer().quests.get(q.id);
 
-                                boolean com = false;
+                                long rtime = unixReset;
 
                                 //HyPlus.displayIgMessage(q.id, UnixConverter.toDate(rtime*1000,"MM/dd/yyyy HH:mm:ss"));
 
                                 if (q.requirements[0].type.equals("DailyResetQuestRequirement")) {
                                     //HyPlus.displayIgMessage(getModuleName(), "Daily");
-                                    if (!HYPLUS_CTR_DAILY.getValueBoolean()) continue;
-                                    com = unixReset > quest.getLatestCompletion();
-                                    //hyPlus.displayIgMessage(q.id, unixReset + " | " + quest.getLatestCompletion() + " | " + (unixReset - quest.getLatestCompletion()));
+                                    if (!HYPLUS_CTR_DAILY) continue;
+                                    rtime = unixReset;
                                 }
                                 if (q.requirements[0].type.equals("WeeklyResetQuestRequirement")) {
                                     //HyPlus.displayIgMessage(getModuleName(), "Weekly");
-                                    if (!HYPLUS_CTR_WEEKLY.getValueBoolean()) continue;
-                                    com = unixTimeWeek > quest.getLatestCompletion();
-                                    //hyPlus.displayIgMessage(q.id, unixTimeWeek + " | " + quest.getLatestCompletion() + " | " + (unixTimeWeek - quest.getLatestCompletion()));
+                                    if (!HYPLUS_CTR_WEEKLY) continue;
+                                    rtime = unixTimeWeek;
                                 }
 
+                                // Debug message lol ---
+                                //HyPlus.displayIgMessage(q.id, rtime + " | " + quest.getLatestCompletion() + " | " + (rtime - quest.getLatestCompletion()));
 
-
-                                if (com) {
+                                if (rtime > quest.getLatestCompletion()) {
 
                                     for (ResourceQuestObjective objective : q.objectives) {
 
@@ -294,7 +212,7 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
                                         System.out.println(q.description + " | " + progress + "/" + objective.integer);
                                         double percent = ((double) progress / (double) objective.integer) * 100;
 
-                                        QuestData data = new QuestData(hyPlus, q, progress, (int) percent, objective);
+                                        QuestData data = new QuestData(HyPlus, q, progress, (int) percent, objective);
 
                                         dspc.put(data.getL(false), data);
 
@@ -302,17 +220,17 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
 
                                 } else {
 
-                                    if (HYPLUS_CTR_COMPLETED.getValueBoolean()) {
+                                    if (HYPLUS_CTR_COMPLETED) {
 
                                         System.out.println(q.description + " | " + "completed");
-                                        QuestData data = new QuestData(hyPlus, q, 0, 100, null);
+                                        QuestData data = new QuestData(HyPlus, q, 0, 100, null);
 
                                         dspc.put(data.getL(true), data);
 
                                     }
                                     else {
 
-                                        hyPlus.displayIgMessage(getModuleName(), "no completed"); // remove before release
+                                        HyPlus.displayIgMessage(getModuleName(), "no completed"); // remove before release
 
                                     }
 

@@ -1,6 +1,5 @@
 package dev.antimoxs.hyplus;
 
-import dev.antimoxs.hyplus.objects.HySetting;
 import net.labymod.gui.elements.CheckBox;
 import net.labymod.labyconnect.packets.PacketAddonDevelopment;
 
@@ -83,12 +82,6 @@ public class HyUtilities {
 
         }
         return false;
-
-    }
-    public static CheckBox.EnumCheckBoxValue vCheckbox(HySetting setting) {
-
-        if (setting.getValueBoolean()) return CheckBox.EnumCheckBoxValue.ENABLED;
-        return CheckBox.EnumCheckBoxValue.DISABLED;
 
     }
 

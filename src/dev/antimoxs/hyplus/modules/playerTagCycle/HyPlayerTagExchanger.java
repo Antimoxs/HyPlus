@@ -7,10 +7,9 @@ import dev.antimoxs.hyplus.events.IHyPlusEvent;
 import dev.antimoxs.hyplus.modules.IHyPlusModule;
 import dev.antimoxs.hyplus.objects.ButtonElement;
 import dev.antimoxs.hypixelapi.util.kvp;
+import dev.antimoxs.hyplus.HyPlayerTag;
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.HyPlusConfig;
-import dev.antimoxs.hyplus.objects.HySetting;
-import dev.antimoxs.hyplus.objects.HySettingType;
 import net.labymod.api.events.ServerMessageEvent;
 import net.labymod.settings.Settings;
 import net.labymod.settings.elements.BooleanElement;
@@ -36,11 +35,9 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
     private JsonArray nextTags = new JsonArray();
 
     // PlayerTagChanger
-
-    public final HySetting HYPLUS_PTC_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_PTC_TOGGLE", "Player subtitles", "Toggle player tags", true, true, Material.NAME_TAG);
-    public final HySetting HYPLUS_PTC_CHANGER = new HySetting(HySettingType.BOOLEAN, "HYPLUS_PTC_CHANGER", "Change tags", "Iterate through tags if there are multiple ones.", true, true, Material.REDSTONE);
-    public final HySetting HYPLUS_PTC_INTERVAL = new HySetting(HySettingType.INT, "HYPLUS_PTC_INTERVAL", "Tag changing interval", "Set the interval in which the tags are iterated.", 3, 3, Material.SIGN);
-
+    public boolean HYPLUS_PTC_TOGGLE = true;
+    public boolean HYPLUS_PTC_CHANGER = true;
+    public int HYPLUS_PTC_INTERVAL = 3;
 
     public HyPlayerTagExchanger(HyPlus HyPlus) {
 
@@ -54,7 +51,7 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
     public void setSubtitle(UUID subtitlePlayer, String value, double size) {
 
 
-        //System.out.println("SAVING TAG: " + subtitlePlayer);
+        System.out.println("SAVING TAG: " + subtitlePlayer);
         // List of all subtitles
 
         // Add subtitle
@@ -75,10 +72,10 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
 
     public HyPlayerTag addSubtitle(HyPlayerTag tag) {
 
-        //System.out.println("Adding TAG: " + tag.getUUID());
+        System.out.println("Adding TAG: " + tag.getUUID());
         if (playerTags.containsKey(tag.getUUID())) {
 
-            //System.out.println("Already in list.");
+            System.out.println("Already in list.");
             return tag;
 
         }
@@ -86,7 +83,7 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
 
 
             playerTags.put(tag.getUUID(), tag);
-            //System.out.println("Added to tags, " + playerTags.size());
+            System.out.println("Added to tags, " + playerTags.size());
 
         }
         return tag;
@@ -121,13 +118,11 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
 
         if (!playerTags.isEmpty()) {
 
-            //System.out.println("CLEARED TAGS");
-
-
+            System.out.println("CLEARED TAGS");
             playerTags.clear();
             addSubtitle(HyPlusConfig.antimoxs());
-            //System.out.println("TAGS: " + HyPlusConfig.antimoxs().getValues().size());
-            //System.out.println("RECEIVED TAGS: " + getTagForPlayer(HyPlusConfig.antimoxs().getUUID()).getValues().size());
+            System.out.println("TAGS: " + HyPlusConfig.antimoxs().getValues().size());
+            System.out.println("RECEIVED TAGS: " + getTagForPlayer(HyPlusConfig.antimoxs().getUUID()).getValues().size());
             update(false);
 
         }
@@ -138,11 +133,11 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
 
         if (playerTags.containsKey(uuid)) {
 
-            //System.out.println("RETURNING TAG");
+            System.out.println("RETURNING TAG");
             return playerTags.get(uuid);
 
         }
-        //System.out.println("RETURNING NEW TAG");
+        System.out.println("RETURNING NEW TAG");
         return addSubtitle(new HyPlayerTag(uuid, 1.6d));
 
     }
@@ -150,15 +145,6 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
     @Override
     public String getModuleName() {
         return "HyPlayerTagChanger";
-    }
-
-    @Override
-    public void checkConfig(boolean reset) {
-
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_PTC_TOGGLE);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_PTC_CHANGER);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_PTC_INTERVAL);
-
     }
 
     @Override
@@ -171,35 +157,20 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
 
         List<SettingsElement> moduleSettings = new ArrayList<>();
 
-        BooleanElement toggle = new BooleanElement(HYPLUS_PTC_TOGGLE.getDisplayName(), HYPLUS_PTC_TOGGLE.getIcon(), (booleanElement) -> {
+        SettingsElement toggle = new BooleanElement("HyPlus Player Subtitles", hyPlus, new ControlElement.IconData(Material.LEVER), "HYPLUS_PTC_TOGGLE", true);
+        SettingsElement changer_toggle = new BooleanElement("Player Subtitle changer", hyPlus, new ControlElement.IconData(Material.PAPER), "HYPLUS_PTC_CHANGER", true);
 
-            HYPLUS_PTC_TOGGLE.changeConfigValue(hyPlus, booleanElement);
-            checkConfig(false);
-            if (!booleanElement) emptySubtitles();
-            update(!booleanElement);
-
-
-        }, HYPLUS_PTC_TOGGLE.getValueBoolean());
-        toggle.setDescriptionText(HYPLUS_PTC_TOGGLE.getDescription());
-        BooleanElement changer_toggle = new BooleanElement(HYPLUS_PTC_CHANGER.getDisplayName(), HYPLUS_PTC_CHANGER.getIcon(), (booleanElement) -> {
-
-            HYPLUS_PTC_CHANGER.changeConfigValue(hyPlus, booleanElement);
-            checkConfig(false);
-
-        }, HYPLUS_PTC_CHANGER.getValueBoolean());
-        changer_toggle.setDescriptionText(HYPLUS_PTC_CHANGER.getDescription());
-
-        NumberElement changer_interval = new NumberElement(HYPLUS_PTC_INTERVAL.getDisplayName(), HYPLUS_PTC_INTERVAL.getIcon(), HYPLUS_PTC_INTERVAL.getValueInt());
+        NumberElement changer_interval = new NumberElement( "Update interval", new ControlElement.IconData( Material.TRIPWIRE_HOOK) , HYPLUS_PTC_INTERVAL);
         changer_interval.setMinValue(1); // 1s
         changer_interval.setMaxValue(600); // 10min
-        changer_interval.addCallback((accepted) -> {
-
-            HYPLUS_PTC_INTERVAL.changeConfigValue(hyPlus, accepted);
-            checkConfig(false);
-            delay = 0;
-
+        changer_interval.addCallback( new Consumer<Integer>() {
+            @Override
+            public void accept( Integer accepted ) {
+                hyPlus.changeConfigValue("HYPLUS_PTC_INTERVAL", accepted);
+                HYPLUS_PTC_INTERVAL = accepted;
+                hyPlus.hyPlayerTagExchanger.delay = 0;
+            }
         });
-        changer_interval.setDescriptionText(HYPLUS_PTC_INTERVAL.getDescription());
 
         ButtonElement resetCache = new ButtonElement("Reset Cache",
                 new ControlElement.IconData(Material.BARRIER),
@@ -207,10 +178,8 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
                     @Override
                     public void accept(ButtonElement buttonElement) {
 
-                        checkConfig(false);
                         emptySubtitles();
                         update(true);
-                        active = HYPLUS_PTC_TOGGLE.getValueBoolean();
 
                     }
                 },
@@ -224,7 +193,6 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
         changer_sub.add(changer_interval);
         changer_sub.add(resetCache);
         toggle.setSubSettings(changer_sub);
-        toggle.setSettingEnabled(true);
 
         moduleSettings.add(toggle);
 
@@ -238,10 +206,10 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
 
             nextTags = new JsonArray();
 
-            //System.out.println("UPDATING TAGS: " + playerTags.size());
+            System.out.println("UPDATING TAGS: " + playerTags.size());
             for (UUID uuid : playerTags.keySet()) {
 
-                setSubtitle(uuid, HYPLUS_PTC_CHANGER.getValueBoolean() ? playerTags.get(uuid).getNextValue() : playerTags.get(uuid).getStaticValue(), playerTags.get(uuid).getSize());
+                setSubtitle(uuid, playerTags.get(uuid).getNextValue(), playerTags.get(uuid).getSize());
 
             }
 
@@ -266,8 +234,11 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
         active = false;
         Thread updater = new Thread(() -> {
 
-            emptySubtitles();
-            update(true);
+            for (UUID uuid : playerTags.keySet()) {
+
+                setSubtitle(uuid, null, playerTags.get(uuid).getSize());
+
+            }
 
         });
         Runtime.getRuntime().addShutdownHook(updater);
@@ -277,12 +248,14 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
     @Override
     public boolean loop() {
 
-        if (active && HYPLUS_PTC_TOGGLE.getValueBoolean()) {
+        active = HYPLUS_PTC_TOGGLE;
+
+        if (active) {
 
             if (delay <= 0) {
 
                 update(false);
-                delay = HYPLUS_PTC_INTERVAL.getValueInt();
+                delay = HYPLUS_PTC_INTERVAL;
 
             }
             else {

@@ -43,7 +43,7 @@ public class QuestData extends ResourceQuest {
     public int getL(boolean completed) {
 
         int len = Minecraft.getMinecraft().fontRendererObj.getStringWidth(getText(completed)) + 10;
-        return HyPlus.hyQuestTracker.HYPLUS_CTR_SORTORDER.getValueBoolean() ? -len : len;
+        return HyPlus.hyQuestTracker.HYPLUS_CTR_SORTORDER ? -len : len;
 
     }
 

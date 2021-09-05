@@ -2,24 +2,35 @@ package dev.antimoxs.hyplus.internal.discordapp;
 
 import com.google.gson.JsonElement;
 import dev.antimoxs.hyplus.HyPlus;
+import net.labymod.core.LabyModCore;
 import net.labymod.discordapp.DiscordApp;
 import net.labymod.discordapp.api.DiscordEventHandlers;
 import net.labymod.discordapp.api.DiscordLibraryProvider;
 import net.labymod.discordapp.api.DiscordRPCLibrary;
-import net.labymod.discordapp.listeners.*;
+import net.labymod.discordapp.listeners.DisconnectListener;
+import net.labymod.discordapp.listeners.ErroredListener;
+import net.labymod.discordapp.listeners.JoinRequestListener;
+import net.labymod.discordapp.listeners.ReadyListener;
 import net.labymod.main.LabyMod;
 import net.labymod.support.util.Debug;
 import net.labymod.utils.Consumer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.client.C01PacketChatMessage;
+import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.io.File;
 import java.util.UUID;
 
 public class DiscordAppExtender extends DiscordApp {
 
-    private HyPlus hyPlus;
+    private dev.antimoxs.hyplus.HyPlus HyPlus;
 
     private static final String APPLICATION_ID = "824252829404233729"; // HyPlus Application ID
     public static File libraryFile = null;
@@ -30,18 +41,18 @@ public class DiscordAppExtender extends DiscordApp {
     private UUID queuedJoinKey = null;
 
     public DiscordAppExtender(HyPlus HyPlus) {
-        handlers.ready = new ReadyListener(this);
-        handlers.disconnected = new DisconnectListener(this);
-        handlers.errored = new ErroredListener(this);
-        handlers.joinGame = new DiscordJoinListener(this); // custom
-        handlers.joinRequest = new DiscordRequestListener(this); // custom
-        handlers.spectateGame = new SpectateGameListener(this);
+        this.handlers.ready = new ReadyListener(this);
+        this.handlers.disconnected = new DisconnectListener(this);
+        this.handlers.errored = new ErroredListener(this);
+        this.handlers.joinGame = new DiscordJoinListener(this);
+        this.handlers.joinRequest = new JoinRequestListener(this);
+        //this.handlers.spectateGame = new SpectateGameListener(this);
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             public void run() {
                 DiscordAppExtender.this.shutdown();
             }
         }));
-        this.hyPlus = HyPlus;
+        this.HyPlus = HyPlus;
         this.richPresence = new ModRichPresenceExtender(this, HyPlus);
     }
 
@@ -66,12 +77,11 @@ public class DiscordAppExtender extends DiscordApp {
                                 DiscordApp.libraryFile = libraryFile;
 
                                 try {
-                                    System.out.println("INIT DC HANDLERS");
-                                    DiscordRPCLibrary.initialize(APPLICATION_ID, handlers, 2, (String)null);
-                                    initialized = true;
-                                    onLibraryLoaded();
+                                    DiscordRPCLibrary.initialize(APPLICATION_ID, DiscordAppExtender.this.handlers, 1, (String)null);
+                                    DiscordAppExtender.this.initialized = true;
+                                    DiscordAppExtender.this.onLibraryLoaded();
                                 } catch (Throwable var3) {
-                                    initialized = false;
+                                    DiscordAppExtender.this.initialized = false;
                                     var3.printStackTrace();
                                 }
                             } else {
@@ -99,16 +109,38 @@ public class DiscordAppExtender extends DiscordApp {
 
     private void onLibraryLoaded() {
         Debug.log(Debug.EnumDebugMode.DISCORD, "Discord library's successfully loaded!");
+        MinecraftForge.EVENT_BUS.register(this);
         // Event for server rpc :: LabyMod.getInstance().getEventManager().register((PluginMessageEvent) this);
         this.richPresence.forceUpdate();
     }
 
     // ------------------------------------------------------------
 
+    // Do we need this? - Probs for the case of cutting out information via settings
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @Override
+    public void onGuiOpen(GuiOpenEvent event) {
+        GuiScreen gui = LabyModCore.getForge().getGuiOpenEventGui(event);
+        // TODO: move this into event handler inside game-detector
+    }
+    // Gotta look if we need this
+    @SubscribeEvent
+    @Override
+    public void onTick(TickEvent.ClientTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            if (this.initialized) {
+                if (this.connected) {
+                    //this.richPresence.updateRichPresence();
+                    // this is handled over HyLoop functions and not via tick event.
+                }
+            }
+
+        }
+    }
+
+    // ------------------------------------------------------------
+
     // Overriding LabyCode
-
-
-
     @Override
     public void receiveMessage(String channelName, PacketBuffer packetBuffer) {
         if (channelName.equals("MC|Brand")) {
@@ -153,11 +185,8 @@ public class DiscordAppExtender extends DiscordApp {
 
             //JsonObject obj = new JsonObject();
             //obj.addProperty("joinSecret", this.queuedJoinKey.toString());
-            String name = hyPlus.hyPartyManager.rematchInvite(this.queuedJoinKey);
-            hyPlus.sendMessageIngameChat("/party join " + name);
-            hyPlus.hyPartyManager.getParty().setPublic(true);
-            hyPlus.sendMessageIngameChat("/pl");
-            hyPlus.hyPartyManager.updateParty(false);
+            String name = HyPlus.hyPlay.rematchInvite(this.queuedJoinKey);
+            LabyModCore.getMinecraft().getConnection().addToSendQueue(new C01PacketChatMessage("/party join " + name));
             // Hypixel does not use it anyways so lets save data LabyMod.getInstance().getLabyModAPI().sendJsonMessageToServer("discord_rpc", obj);
 
         }
