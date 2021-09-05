@@ -1,0 +1,10 @@
+{
+  "uuid": "%uuid%",
+  "name": "HyPlus",
+  "mainClass": "dev.antimoxs.hyplus.HyPlus",
+  "description": "Enhance your Hypixel experience with HyPlus by Antimoxs. For more information visit hyplus.antimoxs.dev",
+  "version": 1,
+  "author": "Antimoxs",
+  "category": 4,
+  "icon": "https://i.imgur.com/twFCNxQ.png"
+}

@@ -1,0 +1,33 @@
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run
+logs
+mods
+libs
+resourcepacks
+run
+saves
+server-resource-packs
+options.txt
+README.txt
+assets/Free-to-play Minecraft Games Minecraft Server Hypixel - Minecraft Server and Maps-Dateien
+LabyMod
