@@ -44,7 +44,7 @@ public class HyPlus extends LabyModAddon {
 
     //public static String RSC_LOC = "textures/hyplus";
 
-    private final String version = "0.3.39";
+    private final String version = "0.3.42";
     private final String lastupdated = "5. September 2021";
     public HyAbout hyAbout = new HyAbout(this,
             new kvp("DevBuild :P", 3)

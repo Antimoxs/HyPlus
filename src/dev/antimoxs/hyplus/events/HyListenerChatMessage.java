@@ -36,6 +36,14 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
 
                 }
 
+                // Check for Atlas
+                if (s.startsWith("§r§aTeleporting you to Suspect§r")) {
+
+                    hyPlus.hyEventManager.callLocationResponse(hyPlus.hyLocationDetector.getCurrentLocation().getJson());
+                    return false;
+
+                }
+
             }
 
             // Checking for MSG message

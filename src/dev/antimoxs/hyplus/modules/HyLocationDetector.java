@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import dev.antimoxs.hypixelapi.exceptions.ApiRequestException;
 import dev.antimoxs.hypixelapi.response.StatusResponse;
 import dev.antimoxs.hyplus.HyPlus;
+import dev.antimoxs.hyplus.HyUtilities;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
 import dev.antimoxs.hyplus.objects.ButtonElement;
 import dev.antimoxs.hyplus.objects.HyServerLocation;
@@ -15,6 +16,11 @@ import net.labymod.settings.elements.*;
 import net.labymod.utils.Consumer;
 import net.labymod.utils.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.play.server.S01PacketJoinGame;
+import net.minecraft.scoreboard.Score;
+import net.minecraft.scoreboard.ScoreObjective;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.scoreboard.Scoreboard;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -45,7 +51,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
         Thread t = new Thread(() -> {
 
-            System.out.println("[LocationDetection] Updating location... (" + HYPLUS_LD_API + ")");
+            System.out.println("[LocationDetection] Updating location... (Api: " + HYPLUS_LD_API + ")");
             if (HYPLUS_LD_API) {
 
                 getLocationAPI(forceUpdate);
@@ -153,10 +159,31 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         HyServerLocation serverLoccation = gson.fromJson(json, HyServerLocation.class);
 
+
+        Scoreboard sb = Minecraft.getMinecraft().theWorld.getScoreboard();
+        if (sb != null && !sb.getScoreObjectives().isEmpty()) {
+
+            for (ScoreObjective ob : sb.getScoreObjectives()) {
+
+                String title = HyUtilities.matchOutColorCode(ob.getDisplayName());
+                if (title.toLowerCase().contains("atlas")) {
+
+                    serverLoccation.gametype = "ATLAS";
+                    serverLoccation.mode = "Catching cheaters";
+                    break;
+
+                }
+
+            }
+
+        }
+
+
         System.out.println("Current location: " + serverLoccation.server + ", " + serverLoccation.gametype + " - " + serverLoccation.mode);
 
         // copy the gametype to rawloc (gametype will be fetched)
         serverLoccation.rawloc = serverLoccation.gametype;
+
 
         if (!currentLocation.getJson().equals(serverLoccation.getJson()) || lastLocrawForced) {
 
@@ -178,6 +205,17 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
         // Auto-Update on join?
         if (HYPLUS_LD_TOGGLE) {
+
+            getLocationAsync(false);
+
+        }
+
+    }
+
+    @Override
+    public void onPacketJoinGame(S01PacketJoinGame packet) {
+
+        if (hyPlus.hypixel.checkOnServer()) {
 
             getLocationAsync(false);
 
