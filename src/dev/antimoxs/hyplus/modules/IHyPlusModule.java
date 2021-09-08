@@ -9,6 +9,7 @@ import java.util.List;
 public interface IHyPlusModule {
 
     String getModuleName();
+    void checkConfig(boolean reset);
 
     default boolean showInSettings() { return false; }
     default boolean loop() { return true; };
