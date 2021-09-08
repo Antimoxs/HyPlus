@@ -18,7 +18,7 @@ import java.util.List;
 
 public class HyFriend implements IHyPlusModule, IHyPlusEvent {
 
-    private HyPlus HyPlus;
+    private HyPlus hyPlus;
 
 
     private FriendList fl;
@@ -35,9 +35,9 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
     public CheckBox.EnumCheckBoxValue HYPLUS_AUTOFRIEND_AA_YT = CheckBox.EnumCheckBoxValue.ENABLED;
     public CheckBox.EnumCheckBoxValue HYPLUS_AUTOFRIEND_AA_STAFF = CheckBox.EnumCheckBoxValue.ENABLED;
 
-    public HyFriend(HyPlus HyPlus) {
+    public HyFriend(HyPlus hyPlus) {
 
-        this.HyPlus = HyPlus;
+        this.hyPlus = hyPlus;
 
     }
 
@@ -46,7 +46,7 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
 
         List<SettingsElement> moduleSettings = new ArrayList<>();
 
-        SettingsElement toggle = new BooleanElement("Autofriend", HyPlus, new ControlElement.IconData(Material.LEVER), "HYPLUS_AUTOFRIEND_TOGGLE", true);
+        SettingsElement toggle = new BooleanElement("Autofriend", hyPlus, new ControlElement.IconData(Material.LEVER), "HYPLUS_AUTOFRIEND_TOGGLE", true);
 
 
         ColorPickerCheckBoxBulkElement autoAccept = new ColorPickerCheckBoxBulkElement("AutoAccept");
@@ -57,9 +57,9 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
             @Override
             public void accept( CheckBox.EnumCheckBoxValue accepted ) {
                 HYPLUS_AUTOFRIEND_AA_NON = accepted;
-                HyPlus.getConfig().remove("HYPLUS_AUTOFRIEND_AA_NON");
-                HyPlus.getConfig().addProperty("HYPLUS_AUTOFRIEND_AA_NON", HyUtilities.validateCheckbox(accepted));
-                HyPlus.loadConfig();
+                hyPlus.getConfig().remove("HYPLUS_AUTOFRIEND_AA_NON");
+                hyPlus.getConfig().addProperty("HYPLUS_AUTOFRIEND_AA_NON", HyUtilities.validateCheckbox(accepted));
+                hyPlus.loadConfig();
             }
         });
 
@@ -69,9 +69,9 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
             @Override
             public void accept( CheckBox.EnumCheckBoxValue accepted ) {
                 HYPLUS_AUTOFRIEND_AA_VIP = accepted;
-                HyPlus.getConfig().remove("HYPLUS_AUTOFRIEND_AA_VIP");
-                HyPlus.getConfig().addProperty("HYPLUS_AUTOFRIEND_AA_VIP", HyUtilities.validateCheckbox(accepted));
-                HyPlus.loadConfig();
+                hyPlus.getConfig().remove("HYPLUS_AUTOFRIEND_AA_VIP");
+                hyPlus.getConfig().addProperty("HYPLUS_AUTOFRIEND_AA_VIP", HyUtilities.validateCheckbox(accepted));
+                hyPlus.loadConfig();
             }
         });
 
@@ -81,9 +81,9 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
             @Override
             public void accept( CheckBox.EnumCheckBoxValue accepted ) {
                 HYPLUS_AUTOFRIEND_AA_VIPP = accepted;
-                HyPlus.getConfig().remove("HYPLUS_AUTOFRIEND_AA_VIPP");
-                HyPlus.getConfig().addProperty("HYPLUS_AUTOFRIEND_AA_VIPP", HyUtilities.validateCheckbox(accepted));
-                HyPlus.loadConfig();
+                hyPlus.getConfig().remove("HYPLUS_AUTOFRIEND_AA_VIPP");
+                hyPlus.getConfig().addProperty("HYPLUS_AUTOFRIEND_AA_VIPP", HyUtilities.validateCheckbox(accepted));
+                hyPlus.loadConfig();
             }
         });
 
@@ -93,9 +93,9 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
             @Override
             public void accept( CheckBox.EnumCheckBoxValue accepted ) {
                 HYPLUS_AUTOFRIEND_AA_MVP = accepted;
-                HyPlus.getConfig().remove("HYPLUS_AUTOFRIEND_AA_MVP");
-                HyPlus.getConfig().addProperty("HYPLUS_AUTOFRIEND_AA_MVP", HyUtilities.validateCheckbox(accepted));
-                HyPlus.loadConfig();
+                hyPlus.getConfig().remove("HYPLUS_AUTOFRIEND_AA_MVP");
+                hyPlus.getConfig().addProperty("HYPLUS_AUTOFRIEND_AA_MVP", HyUtilities.validateCheckbox(accepted));
+                hyPlus.loadConfig();
             }
         });
 
@@ -105,9 +105,9 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
             @Override
             public void accept( CheckBox.EnumCheckBoxValue accepted ) {
                 HYPLUS_AUTOFRIEND_AA_MVPP = accepted;
-                HyPlus.getConfig().remove("HYPLUS_AUTOFRIEND_AA_MVPP");
-                HyPlus.getConfig().addProperty("HYPLUS_AUTOFRIEND_AA_MVPP", HyUtilities.validateCheckbox(accepted));
-                HyPlus.loadConfig();
+                hyPlus.getConfig().remove("HYPLUS_AUTOFRIEND_AA_MVPP");
+                hyPlus.getConfig().addProperty("HYPLUS_AUTOFRIEND_AA_MVPP", HyUtilities.validateCheckbox(accepted));
+                hyPlus.loadConfig();
             }
         });
 
@@ -117,9 +117,9 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
             @Override
             public void accept( CheckBox.EnumCheckBoxValue accepted ) {
                 HYPLUS_AUTOFRIEND_AA_MVPPP = accepted;
-                HyPlus.getConfig().remove("HYPLUS_AUTOFRIEND_AA_MVPPP");
-                HyPlus.getConfig().addProperty("HYPLUS_AUTOFRIEND_AA_MVPPP", HyUtilities.validateCheckbox(accepted));
-                HyPlus.loadConfig();
+                hyPlus.getConfig().remove("HYPLUS_AUTOFRIEND_AA_MVPPP");
+                hyPlus.getConfig().addProperty("HYPLUS_AUTOFRIEND_AA_MVPPP", HyUtilities.validateCheckbox(accepted));
+                hyPlus.loadConfig();
             }
         });
 
@@ -129,9 +129,9 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
             @Override
             public void accept( CheckBox.EnumCheckBoxValue accepted ) {
                 HYPLUS_AUTOFRIEND_AA_YT = accepted;
-                HyPlus.getConfig().remove("HYPLUS_AUTOFRIEND_AA_YT");
-                HyPlus.getConfig().addProperty("HYPLUS_AUTOFRIEND_AA_YT", HyUtilities.validateCheckbox(accepted));
-                HyPlus.loadConfig();
+                hyPlus.getConfig().remove("HYPLUS_AUTOFRIEND_AA_YT");
+                hyPlus.getConfig().addProperty("HYPLUS_AUTOFRIEND_AA_YT", HyUtilities.validateCheckbox(accepted));
+                hyPlus.loadConfig();
             }
         });
 
@@ -141,9 +141,9 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
             @Override
             public void accept( CheckBox.EnumCheckBoxValue accepted ) {
                 HYPLUS_AUTOFRIEND_AA_STAFF = accepted;
-                HyPlus.getConfig().remove("HYPLUS_AUTOFRIEND_AA_STAFF");
-                HyPlus.getConfig().addProperty("HYPLUS_AUTOFRIEND_AA_STAFF", HyUtilities.validateCheckbox(accepted));
-                HyPlus.loadConfig();
+                hyPlus.getConfig().remove("HYPLUS_AUTOFRIEND_AA_STAFF");
+                hyPlus.getConfig().addProperty("HYPLUS_AUTOFRIEND_AA_STAFF", HyUtilities.validateCheckbox(accepted));
+                hyPlus.loadConfig();
             }
         });
 
@@ -182,9 +182,24 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
     }
 
     @Override
+    public void checkConfig(boolean reset) {
+
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_AUTOFRIEND_TOGGLE", true);
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_AUTOFRIEND_AA_NON", 0);
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_AUTOFRIEND_AA_VIP", 0);
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_AUTOFRIEND_AA_VIPP", 0);
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_AUTOFRIEND_AA_MVP", 0);
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_AUTOFRIEND_AA_MVPP", 0);
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_AUTOFRIEND_AA_MVPPP", 0);
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_AUTOFRIEND_AA_YT", 0);
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_AUTOFRIEND_AA_STAFF", 0);
+
+    }
+
+    @Override
     public boolean onFriendRequest(HyFriendRequest request) {
 
-        HyPlus.displayIgMessage("HyFriend", "FA from: " + request.toString());
+        hyPlus.displayIgMessage("HyFriend", "FA from: " + request.toString());
         // remove before release (?)
 
         String name = request.getName();
@@ -192,26 +207,26 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
 
         if (!(rank.startsWith("[") && rank.endsWith("]"))) {
 
-            if (HyUtilities.validateCheckbox(HYPLUS_AUTOFRIEND_AA_NON, 0, 1)) HyPlus.sendMessageIngameChat("/friend accept " + name); return true;
+            if (HyUtilities.validateCheckbox(HYPLUS_AUTOFRIEND_AA_NON, 0, 1)) hyPlus.sendMessageIngameChat("/friend accept " + name); return true;
 
         }
         else {
 
             switch (rank.toUpperCase()) {
 
-                case "[VIP]": if (HyUtilities.validateCheckbox(HYPLUS_AUTOFRIEND_AA_VIP, 0, 1)) HyPlus.sendMessageIngameChat("/friend accept " + name); return true;
-                case "[VIP+]": if (HyUtilities.validateCheckbox(HYPLUS_AUTOFRIEND_AA_VIPP, 0, 1)) HyPlus.sendMessageIngameChat("/friend accept " + name); return true;
-                case "[MVP]": if (HyUtilities.validateCheckbox(HYPLUS_AUTOFRIEND_AA_MVP, 0, 1)) HyPlus.sendMessageIngameChat("/friend accept " + name); return true;
-                case "[MVP+]": if (HyUtilities.validateCheckbox(HYPLUS_AUTOFRIEND_AA_MVPP, 0, 1)) HyPlus.sendMessageIngameChat("/friend accept " + name); return true;
-                case "[MVP++]": if (HyUtilities.validateCheckbox(HYPLUS_AUTOFRIEND_AA_MVPPP, 0, 1)) HyPlus.sendMessageIngameChat("/friend accept " + name); return true;
+                case "[VIP]": if (HyUtilities.validateCheckbox(HYPLUS_AUTOFRIEND_AA_VIP, 0, 1)) hyPlus.sendMessageIngameChat("/friend accept " + name); return true;
+                case "[VIP+]": if (HyUtilities.validateCheckbox(HYPLUS_AUTOFRIEND_AA_VIPP, 0, 1)) hyPlus.sendMessageIngameChat("/friend accept " + name); return true;
+                case "[MVP]": if (HyUtilities.validateCheckbox(HYPLUS_AUTOFRIEND_AA_MVP, 0, 1)) hyPlus.sendMessageIngameChat("/friend accept " + name); return true;
+                case "[MVP+]": if (HyUtilities.validateCheckbox(HYPLUS_AUTOFRIEND_AA_MVPP, 0, 1)) hyPlus.sendMessageIngameChat("/friend accept " + name); return true;
+                case "[MVP++]": if (HyUtilities.validateCheckbox(HYPLUS_AUTOFRIEND_AA_MVPPP, 0, 1)) hyPlus.sendMessageIngameChat("/friend accept " + name); return true;
                 case "[YOUTUBE]":
                 case "[PIG+++]":
-                    if (HyUtilities.validateCheckbox(HYPLUS_AUTOFRIEND_AA_YT, 0, 1)) HyPlus.sendMessageIngameChat("/friend accept " + name); return true;
+                    if (HyUtilities.validateCheckbox(HYPLUS_AUTOFRIEND_AA_YT, 0, 1)) hyPlus.sendMessageIngameChat("/friend accept " + name); return true;
                 case "[HELPER]":
                 case "[MODERATOR]":
                 case "[OWNER]":
                 case "[ADMIN]":
-                    if (HyUtilities.validateCheckbox(HYPLUS_AUTOFRIEND_AA_STAFF, 0, 1)) HyPlus.sendMessageIngameChat("/friend accept " + name); return true;
+                    if (HyUtilities.validateCheckbox(HYPLUS_AUTOFRIEND_AA_STAFF, 0, 1)) hyPlus.sendMessageIngameChat("/friend accept " + name); return true;
 
             }
 
@@ -223,18 +238,18 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
 
     public void reloadFL() {
 
-        if (HyPlus.tbcHypixelApi == null) {
+        if (hyPlus.tbcHypixelApi == null) {
 
-            HyPlus.displayIgMessage(null, "§6§l[HyPlus]§4§l [WARN]: §7You don't have an API-Key set. Not every function is enabled.§r");
+            hyPlus.displayIgMessage(null, "§6§l[HyPlus]§4§l [WARN]: §7You don't have an API-Key set. Not every function is enabled.§r");
             return;
 
         }
 
         try {
-            fl = HyPlus.tbcHypixelApi.createFriendsRequest(String.valueOf(LabyMod.getInstance().getPlayerUUID())).getAsFriendlist();
-            HyPlus.displayIgMessage("HyFriend", "Loaded FriendList.");
+            fl = hyPlus.tbcHypixelApi.createFriendsRequest(String.valueOf(LabyMod.getInstance().getPlayerUUID())).getAsFriendlist();
+            hyPlus.displayIgMessage("HyFriend", "Loaded FriendList.");
         } catch (ApiRequestException e) {
-            HyPlus.displayIgMessage("HyFriend", "Failed to load FriendList.");
+            hyPlus.displayIgMessage("HyFriend", "Failed to load FriendList.");
             fl = new FriendList();
         }
 

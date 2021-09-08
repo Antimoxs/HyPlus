@@ -1,23 +1,22 @@
-package dev.antimoxs.hyplus;
+package dev.antimoxs.hyplus.modules;
 
 import dev.antimoxs.hypixelapi.exceptions.ApiRequestException;
 import dev.antimoxs.hypixelapi.objects.player.statGames.PSGDuels;
 import dev.antimoxs.hypixelapi.response.PlayerResponse;
 import dev.antimoxs.hypixelapi.util.kvp;
+import dev.antimoxs.hyplus.HyPlayerTag;
+import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
 import net.labymod.api.events.TabListEvent;
 import net.labymod.main.LabyMod;
 import net.labymod.servermanager.ChatDisplayAction;
 import net.labymod.servermanager.Server;
-import net.labymod.settings.elements.BooleanElement;
 import net.labymod.settings.elements.HeaderElement;
 import net.labymod.settings.elements.SettingsElement;
 import net.labymod.utils.Consumer;
-import net.labymod.utils.ServerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.server.S01PacketJoinGame;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.ScorePlayerTeam;
@@ -27,11 +26,11 @@ import net.minecraft.util.ChatComponentText;
 import java.util.List;
 import java.util.UUID;
 
-public class Hypixel extends Server implements IHyPlusEvent {
+public class Hypixel extends Server implements IHyPlusModule, IHyPlusEvent {
 
     public boolean onServer = false;
 
-    private final HyPlus HyPlus;
+    private final dev.antimoxs.hyplus.HyPlus HyPlus;
     public Hypixel(HyPlus HyPlus) {
         super("hypixel", "mc.hypixel.net", "*.hypixel.net");
         this.HyPlus = HyPlus;
@@ -297,4 +296,30 @@ public class Hypixel extends Server implements IHyPlusEvent {
         return Minecraft.getMinecraft().getCurrentServerData().serverIP.toLowerCase().endsWith("hypixel.net");
     }
 
+    // functions as module for general settings
+
+    @Override
+    public String getModuleName() {
+        return "Hypixel - General";
+    }
+
+    @Override
+    public void checkConfig(boolean reset) {
+
+    }
+
+    @Override
+    public boolean showInSettings() {
+        return IHyPlusModule.super.showInSettings();
+    }
+
+    @Override
+    public boolean loop() {
+        return IHyPlusModule.super.loop();
+    }
+
+    @Override
+    public List<SettingsElement> getModuleSettings() {
+        return IHyPlusModule.super.getModuleSettings();
+    }
 }

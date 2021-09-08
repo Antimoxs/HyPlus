@@ -148,6 +148,15 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
     }
 
     @Override
+    public void checkConfig(boolean reset) {
+
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_PTC_TOGGLE", true);
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_PTC_CHANGER", true);
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_PTC_INTERVAL", 3);
+
+    }
+
+    @Override
     public boolean showInSettings() {
         return true;
     }
@@ -166,7 +175,7 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
         changer_interval.addCallback( new Consumer<Integer>() {
             @Override
             public void accept( Integer accepted ) {
-                hyPlus.changeConfigValue("HYPLUS_PTC_INTERVAL", accepted);
+                hyPlus.hyConfigManager.changeConfigValue("HYPLUS_PTC_INTERVAL", accepted);
                 HYPLUS_PTC_INTERVAL = accepted;
                 hyPlus.hyPlayerTagExchanger.delay = 0;
             }

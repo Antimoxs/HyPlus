@@ -43,7 +43,7 @@ public class HyBetterMsg implements IHyPlusModule, IHyPlusEvent {
         element.setChangeListener( new Consumer<HyBetterMsgType>() {
             @Override
             public void accept( HyBetterMsgType alignment ) {
-                hyPlus.changeConfigValue("HYPLUS_BETTERMSG_STYLE", alignment.name());
+                hyPlus.hyConfigManager.changeConfigValue("HYPLUS_BETTERMSG_STYLE", alignment.name());
                 hyPlus.loadConfig();
             }
         });
@@ -67,6 +67,14 @@ public class HyBetterMsg implements IHyPlusModule, IHyPlusEvent {
     @Override
     public String getModuleName() {
         return "BetterMsg";
+    }
+
+    @Override
+    public void checkConfig(boolean reset) {
+
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_BETTERMSG_TOGGLE", true);
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_BETTERMSG_STYLE", "SWITCH");
+
     }
 
     @Override

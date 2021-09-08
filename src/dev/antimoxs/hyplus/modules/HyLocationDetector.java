@@ -126,6 +126,9 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
             location.mode = r.getSession().mode;
             location.map = r.getSession().map;
 
+            // Check for additional information
+            location = additionalScoreboardCheck(location);
+
             // set current location
 
             if (!currentLocation.getJson().equals(location.getJson()) || forceUpdate) {
@@ -159,24 +162,8 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         HyServerLocation serverLoccation = gson.fromJson(json, HyServerLocation.class);
 
-
-        Scoreboard sb = Minecraft.getMinecraft().theWorld.getScoreboard();
-        if (sb != null && !sb.getScoreObjectives().isEmpty()) {
-
-            for (ScoreObjective ob : sb.getScoreObjectives()) {
-
-                String title = HyUtilities.matchOutColorCode(ob.getDisplayName());
-                if (title.toLowerCase().contains("atlas")) {
-
-                    serverLoccation.gametype = "ATLAS";
-                    serverLoccation.mode = "Catching cheaters";
-                    break;
-
-                }
-
-            }
-
-        }
+        // Check for additional information
+        serverLoccation = additionalScoreboardCheck(serverLoccation);
 
 
         System.out.println("Current location: " + serverLoccation.server + ", " + serverLoccation.gametype + " - " + serverLoccation.mode);
@@ -229,6 +216,14 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
     }
 
     @Override
+    public void checkConfig(boolean reset) {
+
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_LD_TOGGLE", true);
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_LD_API", false);
+
+    }
+
+    @Override
     public boolean showInSettings() {
         return true;
     }
@@ -273,6 +268,31 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
         moduleSettings.add(locationSettings);
 
         return moduleSettings;
+
+    }
+
+
+    private HyServerLocation additionalScoreboardCheck(HyServerLocation location) {
+
+        Scoreboard sb = Minecraft.getMinecraft().theWorld.getScoreboard();
+        if (sb != null && !sb.getScoreObjectives().isEmpty()) {
+
+            for (ScoreObjective ob : sb.getScoreObjectives()) {
+
+                String title = HyUtilities.matchOutColorCode(ob.getDisplayName());
+                if (title.toLowerCase().contains("atlas")) {
+
+                    location.gametype = "ATLAS";
+                    location.mode = "Catching cheaters";
+                    break;
+
+                }
+
+            }
+
+        }
+
+        return location;
 
     }
 

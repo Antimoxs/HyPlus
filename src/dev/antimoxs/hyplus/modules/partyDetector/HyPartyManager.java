@@ -17,7 +17,7 @@ import java.util.List;
 
 public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
-    HyPlus HyPlus;
+    HyPlus hyPlus;
     boolean active = true;
     public int delay = 0;
     public boolean update = true;
@@ -26,7 +26,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
     public HyPartyManager(HyPlus HyPlus) {
 
-        this.HyPlus = HyPlus;
+        this.hyPlus = HyPlus;
 
     }
 
@@ -34,6 +34,13 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
     @Override
     public String getModuleName() {
         return "PartyManager";
+    }
+
+    @Override
+    public void checkConfig(boolean reset) {
+
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_HPD_TOGGLE", false);
+
     }
 
     @Override
@@ -46,7 +53,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
         List<SettingsElement> moduleSettings = new ArrayList<>();
 
-        SettingsElement toggle = new BooleanElement("PartyDetector", HyPlus, new ControlElement.IconData(Material.LEVER), "HYPLUS_HPD_TOGGLE", true);
+        SettingsElement toggle = new BooleanElement("PartyDetector", hyPlus, new ControlElement.IconData(Material.LEVER), "HYPLUS_HPD_TOGGLE", true);
         moduleSettings.add(toggle);
 
         return moduleSettings;
@@ -99,7 +106,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
     @Override
     public void onLocationChange(HyServerLocation location) {
 
-        HyPlus.sendMessageIngameChat("/pl");
+        hyPlus.sendMessageIngameChat("/pl");
 
     }
 
@@ -124,8 +131,8 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
         switch (command[1]) {
 
-            case "accept": { HyPlus.sendMessageIngameChat(s); break; }
-            case "invite": { HyPlus.sendMessageIngameChat(s); break; }
+            case "accept": { hyPlus.sendMessageIngameChat(s); break; }
+            case "invite": { hyPlus.sendMessageIngameChat(s); break; }
             case "list": {
 
                 /*
@@ -167,19 +174,19 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
                  */
 
             }
-            case "leave": { HyPlus.sendMessageIngameChat(s); break; }
-            case "warp": { HyPlus.sendMessageIngameChat(s); break; }
-            case "disband": { HyPlus.sendMessageIngameChat(s); break; }
-            case "promote": { HyPlus.sendMessageIngameChat(s); break; }
-            case "demote": { HyPlus.sendMessageIngameChat(s); break; }
-            case "transfer": { HyPlus.sendMessageIngameChat(s); break; }
-            case "kick": { HyPlus.sendMessageIngameChat(s); break; }
-            case "kickoffline": { HyPlus.sendMessageIngameChat(s); break; }
-            case "settings": { HyPlus.sendMessageIngameChat(s); break; }
-            case "poll": { HyPlus.sendMessageIngameChat(s); break; }
-            case "chat": { HyPlus.sendMessageIngameChat(s); break; }
-            case "mute": { HyPlus.sendMessageIngameChat(s); break; }
-            case "private": { HyPlus.sendMessageIngameChat(s); break; }
+            case "leave": { hyPlus.sendMessageIngameChat(s); break; }
+            case "warp": { hyPlus.sendMessageIngameChat(s); break; }
+            case "disband": { hyPlus.sendMessageIngameChat(s); break; }
+            case "promote": { hyPlus.sendMessageIngameChat(s); break; }
+            case "demote": { hyPlus.sendMessageIngameChat(s); break; }
+            case "transfer": { hyPlus.sendMessageIngameChat(s); break; }
+            case "kick": { hyPlus.sendMessageIngameChat(s); break; }
+            case "kickoffline": { hyPlus.sendMessageIngameChat(s); break; }
+            case "settings": { hyPlus.sendMessageIngameChat(s); break; }
+            case "poll": { hyPlus.sendMessageIngameChat(s); break; }
+            case "chat": { hyPlus.sendMessageIngameChat(s); break; }
+            case "mute": { hyPlus.sendMessageIngameChat(s); break; }
+            case "private": { hyPlus.sendMessageIngameChat(s); break; }
             default: overriddenPartyCommands("/party invite " + s.replaceFirst(command[0], ""));
 
         }
@@ -353,7 +360,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
         }
 
-        this.HyPlus.sendMessageIngameChat("/pl");
+        this.hyPlus.sendMessageIngameChat("/pl");
 
     }
 

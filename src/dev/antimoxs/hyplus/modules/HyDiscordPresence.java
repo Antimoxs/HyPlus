@@ -292,7 +292,7 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
         dp_delay.setMinValue(0);
         dp_delay.setMaxValue(120);
         dp_delay.addCallback(accepted -> {
-            hyPlus.changeConfigValue("HYPLUS_DP_DELAY", accepted);
+            hyPlus.hyConfigManager.changeConfigValue("HYPLUS_DP_DELAY", accepted);
             delay = 0;
         });
 
@@ -323,6 +323,20 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
         moduleSettings.add(dp);
 
         return moduleSettings;
+
+    }
+
+    @Override
+    public void checkConfig(boolean reset) {
+
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_DP_TOGGLE", true);
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_DP_DELAY", 0);
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_DP_GAME", true);
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_DP_MODE", true);
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_DP_LOBBY", true);
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_DP_MAP", true);
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_DP_TIME", true);
+        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_DP_SPECIFIC", true);
 
     }
 
