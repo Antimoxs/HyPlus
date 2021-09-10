@@ -12,7 +12,7 @@ public class HyModuleManager {
 
     public HyModuleManager(HyPlus hyPlus) {
 
-        this.hyPlus = new HyPlus();
+        this.hyPlus = hyPlus;
 
     }
 
