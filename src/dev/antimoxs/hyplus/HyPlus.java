@@ -41,7 +41,7 @@ public class HyPlus extends LabyModAddon {
 
     //public static String RSC_LOC = "textures/hyplus";
 
-    private final String version = "0.3.44";
+    private final String version = "0.3.48";
     private final String lastupdated = "5. September 2021";
     public HyAbout hyAbout = new HyAbout(this,
             new kvp("DevBuild :P", 3)
@@ -71,6 +71,7 @@ public class HyPlus extends LabyModAddon {
     public final HyListenerChatSend hyChatSendListener = new HyListenerChatSend(this);
     public final HyListenerPacket hyPacketListener = new HyListenerPacket(this);
     public final HyListenerQuit hyQuitListener = new HyListenerQuit(this);
+    public final HyListenerGuiOpen hyListenerGuiOpen = new HyListenerGuiOpen();
 
     // Other
     public final ModuleCategory hyModuleCategory = new ModuleCategory(
@@ -164,6 +165,7 @@ public class HyPlus extends LabyModAddon {
 
 
         this.getApi().registerForgeListener(hyQuickPlay);
+        this.getApi().registerForgeListener(hyListenerGuiOpen);
 
         AtmxLogger.log(AtmxLogType.INFORMATION, config.name, "Registered events.");
 
@@ -330,7 +332,8 @@ public class HyPlus extends LabyModAddon {
                 buttonElement -> {
 
                     hyConfigManager.loadConfig(0, true);
-                    Minecraft.getMinecraft().displayGuiScreen(new LabyModAddonsGui());
+
+                    Minecraft.getMinecraft().currentScreen.initGui();
 
 
 
@@ -341,7 +344,12 @@ public class HyPlus extends LabyModAddon {
         );
         ButtonElement reload_values = new ButtonElement("Reload config",
                 new ControlElement.IconData(Material.BARRIER),
-                buttonElement -> loadConfig(),
+                buttonElement -> {
+
+                    loadConfig();
+                    Minecraft.getMinecraft().currentScreen.initGui();
+
+                },
                 "RELOAD",
                 "Reloads the HyPlus config",
                 Color.GREEN
