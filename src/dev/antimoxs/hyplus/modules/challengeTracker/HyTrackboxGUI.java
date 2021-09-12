@@ -25,7 +25,7 @@ public class HyTrackboxGUI extends Module {
 
         this.HyPlus = HyPlus;
         this.tracker = HyPlus.hyQuestTracker;
-        this.lastSort = tracker.HYPLUS_CTR_SORTORDER;
+        this.lastSort = tracker.HYPLUS_CTR_SORTORDER.getDefaultBoolean();
 
     }
 
@@ -43,10 +43,10 @@ public class HyTrackboxGUI extends Module {
 
         double posX = x;
 
-        if (this.lastSort != tracker.HYPLUS_CTR_SORTORDER) {
+        if (this.lastSort != tracker.HYPLUS_CTR_SORTORDER.getValueBoolean()) {
 
             tracker.updateChallanges(HyPlus.hyLocationDetector.getCurrentLocation().rawloc.toLowerCase());
-            this.lastSort = tracker.HYPLUS_CTR_SORTORDER;
+            this.lastSort = tracker.HYPLUS_CTR_SORTORDER.getValueBoolean();
             return;
 
         }
@@ -60,7 +60,7 @@ public class HyTrackboxGUI extends Module {
                 if (HyPlus.hyQuestTracker.dspc2.isEmpty()) return;
                 for (QuestData data : HyPlus.hyQuestTracker.dspc2.values()) {
 
-                    int boxW = tracker.HYPLUS_CTR_SORTORDER ? -data.getL(data.percent == 100) : data.getL(data.percent == 100);
+                    int boxW = tracker.HYPLUS_CTR_SORTORDER.getValueBoolean() ? -data.getL(data.percent == 100) : data.getL(data.percent == 100);
                     if (this.isLastRightBound()) posX = rightX - boxW;
 
                     if (data.id.equals("empty")) {
@@ -145,8 +145,7 @@ public class HyTrackboxGUI extends Module {
     @Override
     public void fillSubSettings(List<SettingsElement> settingsElements) {
 
-        BooleanElement ReverseSort = new BooleanElement("Reverse sort order", HyPlus, new ControlElement.IconData(Material.ARROW), "HYPLUS_CTR_SORTORDER", true);
-        settingsElements.add(ReverseSort);
+        settingsElements.addAll(tracker.getSubSettings());
 
     }
 

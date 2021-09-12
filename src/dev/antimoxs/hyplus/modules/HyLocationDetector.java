@@ -9,6 +9,8 @@ import dev.antimoxs.hyplus.HyUtilities;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
 import dev.antimoxs.hyplus.objects.ButtonElement;
 import dev.antimoxs.hyplus.objects.HyServerLocation;
+import dev.antimoxs.hyplus.objects.HySetting;
+import dev.antimoxs.hyplus.objects.HySettingType;
 import dev.antimoxs.utilities.time.wait;
 import net.labymod.main.LabyMod;
 import net.labymod.settings.Settings;
@@ -34,8 +36,8 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
     private HyServerLocation currentLocation = new HyServerLocation();
 
     // LocationDetector settings
-    public boolean HYPLUS_LD_TOGGLE = true;
-    public boolean HYPLUS_LD_API = true;
+    public final HySetting HYPLUS_LD_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_LD_TOGGLE", "Toggle location detection", "The location detection is important for a range of features and should not be turned off.", true, true, Material.COMPASS);
+    public final HySetting HYPLUS_LD_API = new HySetting(HySettingType.BOOLEAN, "HYPLUS_LD_API", "Use API instead of ingame detection.", "You can use the HypixelAPI for location detection but it's not recommended.", false, false, Material.COMMAND);
 
     public HyLocationDetector(HyPlus hyPlus) {
 
@@ -52,7 +54,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
         Thread t = new Thread(() -> {
 
             System.out.println("[LocationDetection] Updating location... (Api: " + HYPLUS_LD_API + ")");
-            if (HYPLUS_LD_API) {
+            if (HYPLUS_LD_API.getValueBoolean()) {
 
                 getLocationAPI(forceUpdate);
 
@@ -191,7 +193,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
     public void onHypixelJoin() {
 
         // Auto-Update on join?
-        if (HYPLUS_LD_TOGGLE) {
+        if (HYPLUS_LD_TOGGLE.getValueBoolean()) {
 
             getLocationAsync(false);
 
@@ -218,8 +220,8 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
     @Override
     public void checkConfig(boolean reset) {
 
-        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_LD_TOGGLE", true);
-        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_LD_API", false);
+        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_LD_TOGGLE);
+        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_LD_API);
 
     }
 

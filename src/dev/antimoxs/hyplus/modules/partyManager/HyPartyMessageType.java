@@ -1,7 +1,8 @@
-package dev.antimoxs.hyplus.modules.partyDetector;
+package dev.antimoxs.hyplus.modules.partyManager;
 
 public enum HyPartyMessageType {
 
+    UPDATE,
     LINE,
     EMPTY,
     DISBAND,
@@ -24,6 +25,9 @@ public enum HyPartyMessageType {
     LIST_COUNT,
     LIST_LEADER,
     LIST_MEMBERS,
-    LIST_MODS
+    LIST_MODS,
+
+    PGAMES_ON,
+    PGAMES_OFF
 
 }

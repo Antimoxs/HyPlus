@@ -8,17 +8,15 @@ import dev.antimoxs.hyplus.events.*;
 import dev.antimoxs.hyplus.internal.discordapp.DiscordAppExtender;
 import dev.antimoxs.hyplus.modules.*;
 import dev.antimoxs.hyplus.modules.betterMsg.HyBetterMsg;
-import dev.antimoxs.hyplus.modules.betterMsg.HyBetterMsgType;
 import dev.antimoxs.hyplus.modules.challengeTracker.HyQuestTracker;
 import dev.antimoxs.hyplus.modules.challengeTracker.HyTrackboxGUI;
-import dev.antimoxs.hyplus.modulesOLD.discord.HyPlay;
 import dev.antimoxs.hyplus.modules.friends.HyFriend;
 import dev.antimoxs.hyplus.modulesOLD.gameBadge.HyGameBadge;
-import dev.antimoxs.hyplus.modules.partyDetector.HyPartyManager;
+import dev.antimoxs.hyplus.modules.partyManager.HyPartyManager;
 import dev.antimoxs.hyplus.modules.playerTagCycle.HyPlayerTagExchanger;
-import dev.antimoxs.hyplus.modulesOLD.quickplay.HyQuickPlay;
+import dev.antimoxs.hyplus.modules.quickplay.HyQuickPlay;
 import dev.antimoxs.hyplus.modulesOLD.status.HyPresence;
-import dev.antimoxs.hyplus.modulesOLD.updateLog.HyAbout;
+import dev.antimoxs.hyplus.modules.HyAbout;
 import dev.antimoxs.hyplus.objects.ButtonElement;
 import dev.antimoxs.utilities.logger.AtmxLogType;
 import dev.antimoxs.utilities.logger.AtmxLogger;
@@ -27,7 +25,6 @@ import net.labymod.core.LabyModCore;
 import net.labymod.ingamegui.ModuleCategory;
 import net.labymod.ingamegui.ModuleCategoryRegistry;
 import net.labymod.main.LabyMod;
-import net.labymod.settings.LabyModAddonsGui;
 import net.labymod.settings.elements.*;
 import net.labymod.utils.Material;
 import net.minecraft.client.Minecraft;
@@ -41,7 +38,7 @@ public class HyPlus extends LabyModAddon {
 
     //public static String RSC_LOC = "textures/hyplus";
 
-    private final String version = "0.3.48";
+    private final String version = "0.3.116";
     private final String lastupdated = "5. September 2021";
     public HyAbout hyAbout = new HyAbout(this,
             new kvp("DevBuild :P", 3)
@@ -53,14 +50,12 @@ public class HyPlus extends LabyModAddon {
     public TBCHypixelApi tbcHypixelApi;
 
     boolean running = false;
-    boolean updateCheck = false;
     boolean deactivated = false;
 
     private final ArrayList<HyModule> modules = new ArrayList<>();
 
 
     // HyPlus internals
-    public final HySettings hySettings = new HySettings(this);
     public final HyEventManager hyEventManager = new HyEventManager(this);
     public final HyModuleManager hyModuleManager = new HyModuleManager(this);
     public final HyConfigManager hyConfigManager = new HyConfigManager(this);
@@ -72,6 +67,7 @@ public class HyPlus extends LabyModAddon {
     public final HyListenerPacket hyPacketListener = new HyListenerPacket(this);
     public final HyListenerQuit hyQuitListener = new HyListenerQuit(this);
     public final HyListenerGuiOpen hyListenerGuiOpen = new HyListenerGuiOpen();
+    public final HyListenerKeyInput hyListenerKeyInput = new HyListenerKeyInput(this);
 
     // Other
     public final ModuleCategory hyModuleCategory = new ModuleCategory(
@@ -80,9 +76,10 @@ public class HyPlus extends LabyModAddon {
             new ControlElement.IconData("textures/hyplus/HyPlus2.png")
     );
     public final HyPresence HyPresence = new HyPresence(this);
-    public final HyPlay hyPlay = new HyPlay(this);
 
     // NEW HyPlus Modules
+    public final HyGeneral hyGeneral = new HyGeneral(this);
+    public final HyAdvanced hyAdvanced = new HyAdvanced(this);
     public final Hypixel hypixel = new Hypixel(this);
     public final HyTablist hyTablist = new HyTablist(this);
     public final HyFriend hyFriend = new HyFriend(this);
@@ -91,7 +88,7 @@ public class HyPlus extends LabyModAddon {
     public final HyDiscordPresence hyDiscordPresence = new HyDiscordPresence(this);
     public final HyQuestTracker hyQuestTracker = new HyQuestTracker(this);
     public final HyPlayerTagExchanger hyPlayerTagExchanger = new HyPlayerTagExchanger(this);
-    public final HyPartyManager hyPartyDetector = new HyPartyManager(this);
+    public final HyPartyManager hyPartyManager = new HyPartyManager(this);
 
     // old modules
     public final HyQuickPlay hyQuickPlay = new HyQuickPlay(this);
@@ -149,6 +146,8 @@ public class HyPlus extends LabyModAddon {
         LabyMod.getInstance().getEventManager().registerOnQuit(hyQuitListener);
 
 
+        hyModuleManager.registerModule(hyGeneral);
+        hyModuleManager.registerModule(hyAbout);
         hyModuleManager.registerModule(hypixel);
         hyModuleManager.registerModule(hyTablist);
         hyModuleManager.registerModule(hyFriend);
@@ -157,14 +156,16 @@ public class HyPlus extends LabyModAddon {
         hyModuleManager.registerModule(hyDiscordPresence);
         hyModuleManager.registerModule(hyQuestTracker);
         hyModuleManager.registerModule(hyPlayerTagExchanger);
-        hyModuleManager.registerModule(hyPartyDetector);
+        hyModuleManager.registerModule(hyPartyManager);
+        hyModuleManager.registerModule(hyQuickPlay);
+        hyModuleManager.registerModule(hyAdvanced);
 
         // load GUI Category
         ModuleCategoryRegistry.loadCategory(hyModuleCategory);
         LabyMod.getInstance().getLabyModAPI().registerModule(hyTrackboxGUI);
 
 
-        this.getApi().registerForgeListener(hyQuickPlay);
+        this.getApi().registerForgeListener(hyListenerKeyInput);
         this.getApi().registerForgeListener(hyListenerGuiOpen);
 
         AtmxLogger.log(AtmxLogType.INFORMATION, config.name, "Registered events.");
@@ -173,33 +174,8 @@ public class HyPlus extends LabyModAddon {
         AtmxLogger.log(AtmxLogType.INFORMATION, config.name, "Registered Hypixel ServerSupport.");
 
 
-        //TBCLogger.log(TBCLoggingType.INFORMATION, config.name, "Enabling TBCHypixelAPI...");
-        //startAPI();
-
-
-
-        /*Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-
-            while (running) {
-
-                System.out.println("loop");
-                loop();
-
-            }
-
-        }));*/
-
         AtmxLogger.log(AtmxLogType.INFORMATION, config.name, "Indexing modules...");
 
-
-        //modules.add(hyGameDetector);
-        //modules.add(hyPartyDetector);
-        //modules.add(hyFriend);
-        modules.add(hyQuickPlay);
-        //modules.add(hyBetterMsg);
-        //modules.add(hyQuestTracker);
-        //modules.add(hyPlayerTagExchanger);
-        modules.add(hyGameBadge);
 
         // HyLoop for all automated systems
 
@@ -208,16 +184,7 @@ public class HyPlus extends LabyModAddon {
             TimerTask t = new TimerTask() {
                 @Override
                 public void run() {
-
-                    if (!hySettings.HYPLUS_GENERAL_LOOP_TOGGLE) return;
-                    try {
-                        loop();
-                    } catch (Exception e) {
-
-                        System.out.println("An error occurred in the loop.");
-                        e.printStackTrace();
-
-                    }
+                    loop();
                 }
             };
             Timer timer = new Timer();
@@ -231,6 +198,8 @@ public class HyPlus extends LabyModAddon {
         AtmxLogger.log(AtmxLogType.INFORMATION, config.name, "Setting additional information...");
         hyPlayerTagExchanger.addSubtitle(HyPlusConfig.antimoxs());
 
+        AtmxLogger.log(AtmxLogType.INFORMATION, config.name, "Init HypixelAPI...");
+        startAPI();
 
         AtmxLogger.log(AtmxLogType.COMPLETED, config.name, "Successfully started addon. Loading config file...");
 
@@ -243,7 +212,7 @@ public class HyPlus extends LabyModAddon {
 
             System.out.println("Starting HypixelAPI...");
             ApiBuilder builder = new ApiBuilder();
-            builder.addKey(hySettings.HYPLUS_GENERAL_APIKEY);
+            builder.addKey(hyGeneral.getApiKey());
             builder.setApplicationName("HyPlus");
             this.tbcHypixelApi = builder.build();
 
@@ -274,35 +243,7 @@ public class HyPlus extends LabyModAddon {
     protected void fillSettings(List<SettingsElement> list) {
 
         list.add(new HeaderElement("HyPlus settings for version " + version));
-        list.add(new BooleanElement("All features", this, new ControlElement.IconData(Material.REDSTONE), "HYPLUS_GENERAL_TOGGLE", true));
-        list.add(new BooleanElement("HyLoop", this, new ControlElement.IconData(Material.FISHING_ROD), "HYPLUS_GENERAL_LOOP_TOGGLE", true));
-        list.add(new StringElement("Hypixel API-Key", this, new ControlElement.IconData(Material.REDSTONE), "HYPLUS_GENERAL_APIKEY", hySettings.HYPLUS_GENERAL_APIKEY));
-        list.addAll(this.hyAbout.getModuleSettings());
-        list.add(new HeaderElement("HyModules:"));
 
-        for (HyModule module : modules) {
-
-            //list.add(new HeaderElement(module.getModuleName()));
-            try {
-                //list.addAll(module.getModuleSettings());
-            } catch (Exception e) {
-
-                try {
-
-                    list.add(new ControlElement(module.getModuleName(), new ControlElement.IconData(Material.BARRIER)));
-
-                } catch (Exception e2) {
-
-                    list.add(new HeaderElement("Undefined module"));
-
-                }
-                System.err.println("Error while loading mod-settings");
-
-            }
-
-        }
-
-        list.add(new HeaderElement("Updated Modules"));
         for (IHyPlusModule module : hyModuleManager.getModules()) {
 
 
@@ -362,41 +303,44 @@ public class HyPlus extends LabyModAddon {
 
     private void loop() {
 
-        if (this.hypixel.checkOnServer()) {
-            for (HyModule module : modules) {
+        // Check if we are enabled and loop is on.
+        if (!hyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return;
+        if (!hyGeneral.HYPLUS_GENERAL_LOOP_TOGGLE.getValueBoolean()) return;
 
-                deactivated = false;
+        try {
+            if (this.hypixel.checkOnServer()) {
+                for (IHyPlusModule module : hyModuleManager.getModules()) {
 
+                    if (!module.loop()) {
 
-                if (!module.loop()) {
+                        System.out.println("Error executing module loop for NEWmodule: " + module.getModuleName());
 
-                    System.out.println("Error executing module loop for module: " + module.getModuleName());
+                    }
+
+                }
+            } else {
+
+                if (!deactivated) {
+
+                    //for (HyModule module : modules) { module.deactivate(); }
+                    deactivated = true;
 
                 }
 
             }
-            for (IHyPlusModule module : hyModuleManager.getModules()) {
 
-                if (!module.loop()) {
+        }
+        catch (Exception e) {
 
-                    System.out.println("Error executing module loop for NEWmodule: " + module.getModuleName());
-
-                }
-
-            }
-        } else {
-
-            if (!deactivated) {
-
-                //for (HyModule module : modules) { module.deactivate(); }
-                deactivated = true;
-
-            }
+            System.out.println("An error occurred in the loop.");
+            e.printStackTrace();
 
         }
 
 
     }
+
+
 
     public void displayIgMessage(String module, String text) {
 

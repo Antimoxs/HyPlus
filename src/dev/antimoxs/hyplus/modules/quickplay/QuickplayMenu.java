@@ -1,4 +1,4 @@
-package dev.antimoxs.hyplus.modulesOLD.quickplay;
+package dev.antimoxs.hyplus.modules.quickplay;
 
 import net.labymod.core.LabyModCore;
 import net.labymod.gui.elements.ModTextField;

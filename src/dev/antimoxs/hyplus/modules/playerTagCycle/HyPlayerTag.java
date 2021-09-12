@@ -1,4 +1,4 @@
-package dev.antimoxs.hyplus;
+package dev.antimoxs.hyplus.modules.playerTagCycle;
 
 import dev.antimoxs.hypixelapi.util.kvp;
 
@@ -117,12 +117,20 @@ public class HyPlayerTag {
 
         }
 
-        System.out.println("PlayerTag: " + currentValue + " / " + maxValues);
+        //System.out.println("PlayerTag: " + currentValue + " / " + maxValues);
         String re = values.get(currentValue).string;
 
         currentValue++;
 
         return re;
+
+    }
+
+    public String getStaticValue() {
+
+        if (values.isEmpty()) return null;
+
+        return values.get(0).string;
 
     }
 

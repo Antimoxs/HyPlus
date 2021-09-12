@@ -4,7 +4,7 @@ import dev.antimoxs.hypixelapi.exceptions.ApiRequestException;
 import dev.antimoxs.hypixelapi.objects.player.statGames.PSGDuels;
 import dev.antimoxs.hypixelapi.response.PlayerResponse;
 import dev.antimoxs.hypixelapi.util.kvp;
-import dev.antimoxs.hyplus.HyPlayerTag;
+import dev.antimoxs.hyplus.modules.playerTagCycle.HyPlayerTag;
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
 import net.labymod.api.events.TabListEvent;
@@ -257,7 +257,7 @@ public class Hypixel extends Server implements IHyPlusModule, IHyPlusEvent {
     @Override
     public void fillSubSettings(List<SettingsElement> list) {
 
-        list.add(new HeaderElement("hi"));
+
 
     }
 

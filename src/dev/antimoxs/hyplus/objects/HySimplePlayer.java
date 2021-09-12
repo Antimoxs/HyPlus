@@ -7,7 +7,7 @@ public class HySimplePlayer {
 
     public HySimplePlayer() {}
 
-    public HySimplePlayer(String name, String rank) {
+    public HySimplePlayer(String name, String rank, String plusColor) {
 
         this.name = name;
         if (rank != null) {
@@ -25,6 +25,23 @@ public class HySimplePlayer {
 
     public String getRank() {
         return rank;
+    }
+
+    public String getRankFormatted() {
+
+        switch (rank) {
+
+            case "": return "&7";
+            case "VIP": return "&a[VIP]";
+            case "VIP+": return "&a[VIP&6+&a]";
+            case "MVP": return "&a[VIP]";
+            case "MVP+": return "&a[VIP]";
+            case "MVP++": return "&a[VIP]";
+
+        }
+
+        return "";
+
     }
 
     public void setName(String name) {

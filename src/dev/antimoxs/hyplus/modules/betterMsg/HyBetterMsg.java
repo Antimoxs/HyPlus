@@ -3,6 +3,8 @@ package dev.antimoxs.hyplus.modules.betterMsg;
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
 import dev.antimoxs.hyplus.modules.IHyPlusModule;
+import dev.antimoxs.hyplus.objects.HySetting;
+import dev.antimoxs.hyplus.objects.HySettingType;
 import net.labymod.gui.elements.DropDownMenu;
 import net.labymod.settings.Settings;
 import net.labymod.settings.elements.BooleanElement;
@@ -26,30 +28,37 @@ public class HyBetterMsg implements IHyPlusModule, IHyPlusEvent {
     }
 
     // BetterMsg
-    public boolean HYPLUS_BETTERMSG_TOGGLE = true;
-    public HyBetterMsgType HYPLUS_BETTERMSG_STYLE = HyBetterMsgType.SWITCH;
+
+    public HySetting HYPLUS_BETTERMSG_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_BETTERMSG_TOGGLE", "Better Msg", "Toggle prettier private messages.", true, true, Material.PAINTING);
+    public HySetting HYPLUS_BETTERMSG_STYLE = new HySetting(HySettingType.STRING, "HYPLUS_BETTERMSG_STYLE", "Private message style", "Select the message style.", "SWITCH", "SWITCH", Material.PAPER);
 
     @Override
     public List<SettingsElement> getModuleSettings() {
 
         List<SettingsElement> moduleSettings = new ArrayList<>();
 
-        SettingsElement toggle = new BooleanElement("Better MSG", hyPlus, new ControlElement.IconData(Material.LEVER), "HYPLUS_BETTERMSG_TOGGLE", true);
+        BooleanElement toggle = new BooleanElement(HYPLUS_BETTERMSG_TOGGLE.getDisplayName(), HYPLUS_BETTERMSG_TOGGLE.getIcon(), (booleanElement) -> {
 
-        final DropDownMenu<HyBetterMsgType> styleDropDown = new DropDownMenu<HyBetterMsgType>( "Private message style" /* Display name */, 0, 0, 0, 0 ).fill(HyBetterMsgType.values());
-        styleDropDown.setSelected(HYPLUS_BETTERMSG_STYLE);
+            HYPLUS_BETTERMSG_TOGGLE.changeConfigValue(hyPlus, booleanElement);
+            checkConfig(false);
 
-        DropDownElement<HyBetterMsgType> element = new DropDownElement<HyBetterMsgType>( "Select style", styleDropDown );
-        element.setChangeListener( new Consumer<HyBetterMsgType>() {
-            @Override
-            public void accept( HyBetterMsgType alignment ) {
-                hyPlus.hyConfigManager.changeConfigValue("HYPLUS_BETTERMSG_STYLE", alignment.name());
-                hyPlus.loadConfig();
-            }
+        }, HYPLUS_BETTERMSG_TOGGLE.getValueBoolean());
+        toggle.setDescriptionText(HYPLUS_BETTERMSG_TOGGLE.getDescription());
+
+        DropDownMenu<HyBetterMsgType> styleDropDown = new DropDownMenu<HyBetterMsgType>(HYPLUS_BETTERMSG_STYLE.getDisplayName(), 0, 0, 0, 0).fill(HyBetterMsgType.values());
+        styleDropDown.setSelected(HyBetterMsgType.getByName(HYPLUS_BETTERMSG_STYLE.getValueString()));
+
+        DropDownElement<HyBetterMsgType> styleElement = new DropDownElement<HyBetterMsgType>(HYPLUS_BETTERMSG_STYLE.getDisplayName(), styleDropDown);
+        styleElement.setChangeListener((accept) -> {
+
+            HYPLUS_BETTERMSG_STYLE.changeConfigValue(hyPlus, accept.name());
+            checkConfig(false);
+
         });
+        styleElement.setDescriptionText(HYPLUS_BETTERMSG_STYLE.getDescription());
 
         Settings bettermsg_sub = new Settings();
-        bettermsg_sub.add(element);
+        bettermsg_sub.add(styleElement);
 
         toggle.setSubSettings(bettermsg_sub);
 
@@ -72,8 +81,8 @@ public class HyBetterMsg implements IHyPlusModule, IHyPlusEvent {
     @Override
     public void checkConfig(boolean reset) {
 
-        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_BETTERMSG_TOGGLE", true);
-        hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_BETTERMSG_STYLE", "SWITCH");
+        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_BETTERMSG_TOGGLE);
+        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_BETTERMSG_STYLE);
 
     }
 
@@ -87,7 +96,7 @@ public class HyBetterMsg implements IHyPlusModule, IHyPlusEvent {
         StringBuilder builder = new StringBuilder();
         builder.append("§d§lPrivate: ");
 
-        switch (HYPLUS_BETTERMSG_STYLE) {
+        switch (HyBetterMsgType.getByName(HYPLUS_BETTERMSG_STYLE.getValueString())) {
 
             case ARROW: {
 
@@ -125,7 +134,7 @@ public class HyBetterMsg implements IHyPlusModule, IHyPlusEvent {
         StringBuilder builder = new StringBuilder();
         builder.append("§d§lPrivate: ");
 
-        switch (HYPLUS_BETTERMSG_STYLE) {
+        switch (HyBetterMsgType.getByName(HYPLUS_BETTERMSG_STYLE.getValueString())) {
 
             case ARROW: {
 

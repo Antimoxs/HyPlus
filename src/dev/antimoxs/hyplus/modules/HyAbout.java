@@ -1,8 +1,10 @@
-package dev.antimoxs.hyplus.modulesOLD.updateLog;
+package dev.antimoxs.hyplus.modules;
 
 import dev.antimoxs.hypixelapi.util.kvp;
 import dev.antimoxs.hyplus.HyModule;
 import dev.antimoxs.hyplus.HyPlus;
+import dev.antimoxs.hyplus.modules.IHyPlusModule;
+import dev.antimoxs.hyplus.objects.AdvancedElement;
 import net.labymod.settings.Settings;
 import net.labymod.settings.elements.BooleanElement;
 import net.labymod.settings.elements.ControlElement;
@@ -14,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class HyAbout implements HyModule {
+public class HyAbout implements IHyPlusModule {
 
     private dev.antimoxs.hyplus.HyPlus HyPlus;
     private ArrayList<kvp> changes = new ArrayList<kvp>();
@@ -32,13 +34,8 @@ public class HyAbout implements HyModule {
 
         List<SettingsElement> settings = new ArrayList<>();
 
-
-
-
-
-
         SettingsElement header = new HeaderElement("General Information:");
-        SettingsElement creator = new ControlElement( "HyPlus by Antimoxs@TBC", new ControlElement.IconData(Material.BEACON));
+        SettingsElement creator = new ControlElement( "HyPlus by Antimoxs", new ControlElement.IconData(Material.PAPER));
         SettingsElement version = new ControlElement( "Version: " + HyPlus.getVersion(), new ControlElement.IconData(Material.BEACON));
         SettingsElement lastUpdated = new ControlElement( "Last updated: " + HyPlus.getLastUpdated(), new ControlElement.IconData(Material.WATCH));
 
@@ -83,7 +80,9 @@ public class HyAbout implements HyModule {
 
         //settings.add(ul1);
 
-        BooleanElement updateLog = new BooleanElement("About HyPlus", HyPlus, new ControlElement.IconData(Material.BOOK_AND_QUILL), "HYPLUS_ABOUT_UPDATE", true);
+        //BooleanElement updateLog = new BooleanElement("About HyPlus", HyPlus, new ControlElement.IconData(Material.BOOK_AND_QUILL), "HYPLUS_ABOUT_UPDATE", true);
+        AdvancedElement about = new AdvancedElement("About Hyplus", "HYPLUS_ABOUT", new ControlElement.IconData(Material.BOOK_AND_QUILL));
+        about.setSettingEnabled(true);
 
         /*ButtonElement updateLog = new ButtonElement("About HyPlus",
                 new ControlElement.IconData(Material.BOOK_AND_QUILL),
@@ -100,45 +99,28 @@ public class HyAbout implements HyModule {
                 Color.GRAY
         );*/
 
-        updateLog.setSubSettings(subSettings);
-        settings.add(updateLog);
+        about.setSubSettings(subSettings);
+        settings.add(about);
 
         return settings;
 
     }
 
-    @Override
-    public boolean loop() {
-
-        return true;
-
-    }
-
-    @Override
-    public HyModule getModule() {
-
-        return this;
-
-    }
-
-    @Override
-    public void activate() {
-
-
-
-    }
-
-    @Override
-    public void deactivate() {
-
-
-
-    }
 
     @Override
     public String getModuleName() {
 
         return "HyAbout";
 
+    }
+
+    @Override
+    public void checkConfig(boolean reset) {
+
+    }
+
+    @Override
+    public boolean showInSettings() {
+        return true;
     }
 }

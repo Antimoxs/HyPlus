@@ -1,6 +1,7 @@
-package dev.antimoxs.hyplus.modulesOLD.quickplay;
+package dev.antimoxs.hyplus.modules.quickplay;
 
 import net.labymod.main.LabyMod;
+import net.labymod.settings.elements.ControlElement;
 import net.labymod.utils.DrawUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -10,9 +11,11 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
+import javax.naming.ldap.Control;
+
 public class HyQuickPlayButton extends GuiButton {
 
-        public ResourceLocation buttonTextures = new ResourceLocation("textures/gui/widgets.png");
+        public ControlElement.IconData buttonTextures;
         /** Button width in pixels */
         public int width;
         /** Button height in pixels */
@@ -31,7 +34,7 @@ public class HyQuickPlayButton extends GuiButton {
         protected boolean hovered;
         public int packedFGColour; //FML
 
-        public HyQuickPlayButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, ResourceLocation buttonTextures)
+        public HyQuickPlayButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, ControlElement.IconData buttonTextures)
         {
             super(buttonId, x, y, widthIn, heightIn, buttonText);
             this.enabled = true;
@@ -75,7 +78,7 @@ public class HyQuickPlayButton extends GuiButton {
 
                 DrawUtils draw = LabyMod.getInstance().getDrawUtils();
                 FontRenderer fontrenderer = mc.fontRendererObj;
-                mc.getTextureManager().bindTexture(buttonTextures);
+                mc.getTextureManager().bindTexture(buttonTextures.getTextureIcon());
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                 this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
                 int i = this.getHoverState(this.hovered);

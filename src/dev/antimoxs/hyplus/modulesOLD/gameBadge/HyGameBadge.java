@@ -28,9 +28,9 @@ public class HyGameBadge implements HyModule {
 
         List<SettingsElement> settings = new ArrayList<>();
 
-        BooleanElement badge_toggle = new BooleanElement("Toggle Badge", HyPlus, new ControlElement.IconData(Material.LEVER), "HYPLUS_GBADGE_TOGGLE", HyPlus.hySettings.HYPLUS_GBADGE_TOGGLE);
-        BooleanElement bedwars_toggle = new BooleanElement("Show in BedWars", HyPlus, new ControlElement.IconData(Material.BED), "HYPLUS_GBADGE_BEDWARS_TOGGLE", HyPlus.hySettings.HYPLUS_GBADGE_BEDWARS_TOGGLE);
-        BooleanElement duels_toggle = new BooleanElement("Show in Duels", HyPlus, new ControlElement.IconData(Material.BED), "HYPLUS_GBADGE_DUELS_TOGGLE", HyPlus.hySettings.HYPLUS_GBADGE_DUELS_TOGGLE);
+        //BooleanElement badge_toggle = new BooleanElement("Toggle Badge", HyPlus, new ControlElement.IconData(Material.LEVER), "HYPLUS_GBADGE_TOGGLE", HyPlus.hySettings.HYPLUS_GBADGE_TOGGLE);
+        //BooleanElement bedwars_toggle = new BooleanElement("Show in BedWars", HyPlus, new ControlElement.IconData(Material.BED), "HYPLUS_GBADGE_BEDWARS_TOGGLE", HyPlus.hySettings.HYPLUS_GBADGE_BEDWARS_TOGGLE);
+        //BooleanElement duels_toggle = new BooleanElement("Show in Duels", HyPlus, new ControlElement.IconData(Material.BED), "HYPLUS_GBADGE_DUELS_TOGGLE", HyPlus.hySettings.HYPLUS_GBADGE_DUELS_TOGGLE);
 
         Settings duels_sub = new Settings();
 
@@ -41,15 +41,15 @@ public class HyGameBadge implements HyModule {
 
         }
 
-        duels_toggle.setSubSettings(duels_sub);
+        //duels_toggle.setSubSettings(duels_sub);
 
         Settings badge_sub = new Settings();
-        badge_sub.add(bedwars_toggle);
-        badge_sub.add(duels_toggle);
+        //badge_sub.add(bedwars_toggle);
+        //badge_sub.add(duels_toggle);
 
-        badge_toggle.setSubSettings(badge_sub);
+        //badge_toggle.setSubSettings(badge_sub);
 
-        settings.add(badge_toggle);
+        //settings.add(badge_toggle);
 
 
         return settings;

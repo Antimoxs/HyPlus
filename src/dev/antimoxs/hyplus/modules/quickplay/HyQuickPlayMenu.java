@@ -1,5 +1,6 @@
-package dev.antimoxs.hyplus.modulesOLD.quickplay;
+package dev.antimoxs.hyplus.modules.quickplay;
 
+import net.labymod.settings.elements.ControlElement;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
@@ -21,12 +22,13 @@ public class HyQuickPlayMenu extends GuiScreen {
         super.initGui();
         this.buttonList.add(mButtonClose = new GuiButton(0, this.width / 2 - 100, this.height - (this.height / 4) + 10, "Close"));
 
-        ResourceLocation bw = new ResourceLocation("assets/minecraft/hyplus/quickplay/bw.png");
-        ResourceLocation sw = new ResourceLocation("assets/minecraft/hyplus/quickplay/sw.png");
-        ResourceLocation tnt = new ResourceLocation("assets/minecraft/hyplus/quickplay/tnt.png");
-        ResourceLocation sg = new ResourceLocation("assets/minecraft/hyplus/quickplay/sg.png");
-        ResourceLocation duels = new ResourceLocation("assets/minecraft/hyplus/quickplay/duels.png");
-        ResourceLocation suhc = new ResourceLocation("assets/minecraft/hyplus/quickplay/suhc.png");
+        ControlElement.IconData bw = new ControlElement.IconData("textures/hyplus/quickplay/bw.png");
+        ControlElement.IconData sw = new ControlElement.IconData("textures/hyplus/quickplay/sw.png");
+        ControlElement.IconData tnt = new ControlElement.IconData("textures/hyplus/quickplay/tnt.png");
+        ControlElement.IconData sg = new ControlElement.IconData("textures/hyplus/quickplay/sg.png");
+        ControlElement.IconData duels = new ControlElement.IconData("textures/hyplus/quickplay/duels.png");
+        ControlElement.IconData suhc = new ControlElement.IconData("textures/hyplus/quickplay/suhc.png");
+
 
 
 

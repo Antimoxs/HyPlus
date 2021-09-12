@@ -2,7 +2,7 @@ package dev.antimoxs.hyplus.events;
 
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.modules.friends.HyFriendRequest;
-import dev.antimoxs.hyplus.modules.partyDetector.HyPartyMessageType;
+import dev.antimoxs.hyplus.modules.partyManager.HyPartyMessageType;
 import dev.antimoxs.hyplus.objects.HyServerLocation;
 import net.labymod.labyconnect.packets.PacketAddonDevelopment;
 import net.labymod.main.LabyMod;
@@ -148,10 +148,10 @@ public class HyEventManager {
 
     private void sendAddonPacket(String key, String json) {
 
-        String jsonBytes = hyPlus.hySettings.HYPLUS_API_TOGGLE ? json : "{}";
+        String jsonBytes = hyPlus.hyAdvanced.HYPLUS_ADVANCED_API.getValueBoolean() ? json : "{}";
         PacketAddonDevelopment pad = new PacketAddonDevelopment(
                 LabyMod.getInstance().getPlayerUUID(),
-                hyPlus.hySettings.HYPLUS_API_TOGGLE ? "hyplus:" + key : "hyplus:disabled",
+                hyPlus.hyAdvanced.HYPLUS_ADVANCED_API.getValueBoolean() ? "hyplus:" + key : "hyplus:disabled",
                 jsonBytes.getBytes(StandardCharsets.UTF_8)
         );
         LabyMod.getInstance().getLabyModAPI().sendAddonDevelopmentPacket(pad);
