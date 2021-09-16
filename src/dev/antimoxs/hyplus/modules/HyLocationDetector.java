@@ -4,10 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dev.antimoxs.hypixelapi.exceptions.ApiRequestException;
 import dev.antimoxs.hypixelapi.response.StatusResponse;
+import dev.antimoxs.hypixelapi.util.hypixelFetcher;
 import dev.antimoxs.hyplus.HyPlus;
+import dev.antimoxs.hyplus.HyUtilities;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
 import dev.antimoxs.hyplus.objects.ButtonElement;
 import dev.antimoxs.hyplus.objects.HyServerLocation;
+import dev.antimoxs.hyplus.objects.HySetting;
+import dev.antimoxs.hyplus.objects.HySettingType;
 import dev.antimoxs.utilities.time.wait;
 import net.labymod.main.LabyMod;
 import net.labymod.settings.Settings;
@@ -15,6 +19,11 @@ import net.labymod.settings.elements.*;
 import net.labymod.utils.Consumer;
 import net.labymod.utils.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.play.server.S01PacketJoinGame;
+import net.minecraft.scoreboard.Score;
+import net.minecraft.scoreboard.ScoreObjective;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.scoreboard.Scoreboard;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -28,8 +37,9 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
     private HyServerLocation currentLocation = new HyServerLocation();
 
     // LocationDetector settings
-    public boolean HYPLUS_LD_TOGGLE = true;
-    public boolean HYPLUS_LD_API = true;
+    public final HySetting HYPLUS_LD_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_LD_TOGGLE", "Toggle location detection", "The location detection is important for a range of features and should not be turned off.", true, true, Material.COMPASS);
+    public final HySetting HYPLUS_LD_LABYCHAT = new HySetting(HySettingType.BOOLEAN, "HYPLUS_LD_LABYCHAT", "Show location in the labychat", "Toggle whether your location is displayed in ur labychat status.", true, true, Material.PAPER);
+    public final HySetting HYPLUS_LD_API = new HySetting(HySettingType.BOOLEAN, "HYPLUS_LD_API", "Use API instead of ingame detection.", "You can use the HypixelAPI for location detection but it's not recommended.", false, false, Material.COMMAND);
 
     public HyLocationDetector(HyPlus hyPlus) {
 
@@ -45,8 +55,8 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
         Thread t = new Thread(() -> {
 
-            System.out.println("[LocationDetection] Updating location... (" + HYPLUS_LD_API + ")");
-            if (HYPLUS_LD_API) {
+            System.out.println("[LocationDetection] Updating location... (Api: " + HYPLUS_LD_API + ")");
+            if (HYPLUS_LD_API.getValueBoolean()) {
 
                 getLocationAPI(forceUpdate);
 
@@ -118,7 +128,11 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
             location.gametype = r.getSession().gameType;
             location.rawloc = r.getSession().gameType;
             location.mode = r.getSession().mode;
+            location.rawmod = r.getSession().mode;
             location.map = r.getSession().map;
+
+            // Check for additional information
+            location = additionalScoreboardCheck(location);
 
             // set current location
 
@@ -153,10 +167,16 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         HyServerLocation serverLoccation = gson.fromJson(json, HyServerLocation.class);
 
+        // Check for additional information
+        serverLoccation = additionalScoreboardCheck(serverLoccation);
+
+
         System.out.println("Current location: " + serverLoccation.server + ", " + serverLoccation.gametype + " - " + serverLoccation.mode);
 
         // copy the gametype to rawloc (gametype will be fetched)
         serverLoccation.rawloc = serverLoccation.gametype;
+        serverLoccation.rawmod = serverLoccation.mode;
+
 
         if (!currentLocation.getJson().equals(serverLoccation.getJson()) || lastLocrawForced) {
 
@@ -177,7 +197,18 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
     public void onHypixelJoin() {
 
         // Auto-Update on join?
-        if (HYPLUS_LD_TOGGLE) {
+        if (HYPLUS_LD_TOGGLE.getValueBoolean()) {
+
+            getLocationAsync(false);
+
+        }
+
+    }
+
+    @Override
+    public void onPacketJoinGame(S01PacketJoinGame packet) {
+
+        if (hyPlus.hypixel.checkOnServer()) {
 
             getLocationAsync(false);
 
@@ -191,6 +222,15 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
     }
 
     @Override
+    public void checkConfig(boolean reset) {
+
+        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_LD_TOGGLE);
+        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_LD_LABYCHAT);
+        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_LD_API);
+
+    }
+
+    @Override
     public boolean showInSettings() {
         return true;
     }
@@ -200,7 +240,12 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
         List<SettingsElement> moduleSettings = new ArrayList<>();
 
-        BooleanElement locationSettings = new BooleanElement("Location detection", hyPlus, new ControlElement.IconData(Material.COMPASS), "HYPLUS_LD_TOGGLE", true);
+        BooleanElement locationSettings = new BooleanElement(HYPLUS_LD_TOGGLE.getDisplayName(), HYPLUS_LD_TOGGLE.getIcon(), (bool) -> {
+
+            HYPLUS_LD_TOGGLE.changeConfigValue(hyPlus, bool);
+
+        }, HYPLUS_LD_TOGGLE.getValueBoolean());
+        locationSettings.setDescriptionText(HYPLUS_LD_TOGGLE.getDescription());
 
         HeaderElement locSettings_info = new HeaderElement("§lThe Location detection is needed for a");
         HeaderElement locSettings_info2 = new HeaderElement("§lrange of features and should not be deactivated.");
@@ -219,7 +264,22 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
                 Color.ORANGE
         );
 
-        BooleanElement locSettings_useApi = new BooleanElement("Use API instead of ingame detection", hyPlus, new ControlElement.IconData(Material.COMMAND), "HYPLUS_LD_API", false);
+        BooleanElement locSettings_labychat = new BooleanElement(HYPLUS_LD_LABYCHAT.getDisplayName(), HYPLUS_LD_LABYCHAT.getIcon(), (bool) -> {
+
+            HYPLUS_LD_LABYCHAT.changeConfigValue(hyPlus, bool);
+            LabyMod.getInstance().getLabyConnect().updatePlayingOnServerState(null);
+
+        }, HYPLUS_LD_LABYCHAT.getValueBoolean());
+        locationSettings.setDescriptionText(HYPLUS_LD_LABYCHAT.getDescription());
+
+        BooleanElement locSettings_useApi = new BooleanElement(HYPLUS_LD_API.getDisplayName(), HYPLUS_LD_API.getIcon(), (bool) -> {
+
+            HYPLUS_LD_API.changeConfigValue(hyPlus, bool);
+
+        }, HYPLUS_LD_API.getValueBoolean());
+        locationSettings.setDescriptionText(HYPLUS_LD_API.getDescription());
+
+
 
 
 
@@ -238,4 +298,42 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
     }
 
+
+    private HyServerLocation additionalScoreboardCheck(HyServerLocation location) {
+
+        Scoreboard sb = Minecraft.getMinecraft().theWorld.getScoreboard();
+        if (sb != null && !sb.getScoreObjectives().isEmpty()) {
+
+            for (ScoreObjective ob : sb.getScoreObjectives()) {
+
+                String title = HyUtilities.matchOutColorCode(ob.getDisplayName());
+                if (title.toLowerCase().contains("atlas")) {
+
+                    location.gametype = "ATLAS";
+                    location.mode = "Catching cheaters";
+                    break;
+
+                }
+
+            }
+
+        }
+
+        return location;
+
+    }
+
+    @Override
+    public void onLocationChange(HyServerLocation location) {
+
+        if (HYPLUS_LD_LABYCHAT.getValueBoolean()) {
+
+            String gametype = hypixelFetcher.fetchGamemodeStatus(location.rawloc);
+            String gamemode = hypixelFetcher.fetchModeStatus(location.rawmod);
+
+            LabyMod.getInstance().getLabyConnect().updatePlayingOnServerState(gametype + ": " + gamemode);
+
+        }
+
+    }
 }

@@ -4,10 +4,9 @@ package dev.antimoxs.hyplus.events;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import dev.antimoxs.hypixelapi.exceptions.ApiRequestException;
 import dev.antimoxs.hypixelapi.requests.MojangRequest;
 import dev.antimoxs.hyplus.HyPlus;
-import dev.antimoxs.hyplus.Hypixel;
+import dev.antimoxs.hyplus.modules.Hypixel;
 import net.labymod.api.events.MessageSendEvent;
 import net.labymod.api.permissions.Permissions;
 import net.labymod.api.protocol.liquid.FixedLiquidBucketProtocol;
@@ -16,7 +15,6 @@ import net.labymod.main.LabyMod;
 import net.labymod.support.util.Debug;
 import net.labymod.utils.Consumer;
 import net.labymod.utils.ServerData;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.client.C01PacketChatMessage;
 
 import java.util.Iterator;
@@ -39,27 +37,24 @@ public class HyListenerChatSend implements MessageSendEvent, Consumer<ServerData
     @Override
     public boolean onSend(String s) {
 
+        // making sure we are on hypixel.
+        if (!hyPlus.hypixel.checkOnServer()) return false;
+
+        // Check if we are enabled.
+        if (!hyPlus.hyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return false;
+
         String[] command = s.split(" ");
 
         switch (command[0]) {
 
-            // Hypixel Commands
-            case "/stream": {
-
-                // TODO: Move party updates into party detector
-                hyPlus.discordApp.getRichPresence().updateParty(true, 24, 1, "Antimoxs");
-                hyPlus.hyPlay.generateInvite(LabyMod.getInstance().getPlayerName());
-
-                return false;
-
-            }
+            // Overwrite party commands when party manager is enabled.
+            case "/stream":
             case "/pl":
             case "/p":
             case "/party": {
 
-                //hyPlus.hyPartyDetector.overriddenPartyCommands(s);
-                //return hyPlus.hySettings.HYPLUS_HPD_TOGGLE;
-                return false;
+                hyPlus.hyPartyManager.overriddenPartyCommands(s);
+                return hyPlus.hyPartyManager.HYPLUS_PM_TOGGLE.getValueBoolean();
 
             }
             // Tmporaly
@@ -69,6 +64,7 @@ public class HyListenerChatSend implements MessageSendEvent, Consumer<ServerData
                 return true;
 
             }
+
 
             // HyPlus commands
             case "/assets/minecraft/hyplus": {
@@ -292,14 +288,14 @@ public class HyListenerChatSend implements MessageSendEvent, Consumer<ServerData
 
             case "/#showparty": {
 
-                hyPlus.displayIgMessage("Party1", hyPlus.hyPartyDetector.getParty().doesExist() + " (exists)");
-                hyPlus.displayIgMessage("Party2", hyPlus.hyPartyDetector.getParty().getCount() + " (count)");
-                hyPlus.displayIgMessage("Party3", hyPlus.hyPartyDetector.getParty().getPartyLeader().getPlayer() + " (leader)");
-                hyPlus.displayIgMessage("Party4", hyPlus.hyPartyDetector.getParty().getPartyMembers().toString());
-                hyPlus.displayIgMessage("Party5", hyPlus.hyPartyDetector.getParty().getPartyMods().toString());
-                hyPlus.displayIgMessage("Party6", hyPlus.hyPartyDetector.getParty().getAllInvite() + "(allinvite)");
-                hyPlus.displayIgMessage("Party7", hyPlus.hyPartyDetector.getParty().isPublic() + "(public)");
-                hyPlus.displayIgMessage("Party8", hyPlus.hyPartyDetector.getParty().getCap() + "(cap)");
+                hyPlus.displayIgMessage("Party1", hyPlus.hyPartyManager.getParty().doesExist() + " (exists)");
+                hyPlus.displayIgMessage("Party2", hyPlus.hyPartyManager.getParty().getCount() + " (count)");
+                hyPlus.displayIgMessage("Party3", hyPlus.hyPartyManager.getParty().getPartyLeader().getPlayer() + " (leader)");
+                hyPlus.displayIgMessage("Party4", hyPlus.hyPartyManager.getParty().getPartyMembers().toString());
+                hyPlus.displayIgMessage("Party5", hyPlus.hyPartyManager.getParty().getPartyMods().toString());
+                hyPlus.displayIgMessage("Party6", hyPlus.hyPartyManager.getParty().getAllInvite() + "(allinvite)");
+                hyPlus.displayIgMessage("Party7", hyPlus.hyPartyManager.getParty().isPublic() + "(public)");
+                hyPlus.displayIgMessage("Party8", hyPlus.hyPartyManager.getParty().getCap() + "(cap)");
 
                 return false;
 
