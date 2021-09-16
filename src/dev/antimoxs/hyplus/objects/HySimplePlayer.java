@@ -1,5 +1,7 @@
 package dev.antimoxs.hyplus.objects;
 
+import dev.antimoxs.hyplus.HyUtilities;
+
 public class HySimplePlayer {
 
     private String name = "#UndefinedPlayer#";
@@ -55,6 +57,13 @@ public class HySimplePlayer {
     public String getPlayer() {
 
         return rank + " " + name;
+
+    }
+
+    public String getPlayerBlank() {
+
+        String name = HyUtilities.matchOutColorCode(this.name);
+        return name.split(" ")[name.startsWith("[") ? 1 : 0];
 
     }
 
