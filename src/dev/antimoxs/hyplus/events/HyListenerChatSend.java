@@ -37,6 +37,9 @@ public class HyListenerChatSend implements MessageSendEvent, Consumer<ServerData
     @Override
     public boolean onSend(String s) {
 
+        // making sure we are on hypixel.
+        if (!hyPlus.hypixel.checkOnServer()) return false;
+
         // Check if we are enabled.
         if (!hyPlus.hyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return false;
 
@@ -61,6 +64,7 @@ public class HyListenerChatSend implements MessageSendEvent, Consumer<ServerData
                 return true;
 
             }
+
 
             // HyPlus commands
             case "/assets/minecraft/hyplus": {

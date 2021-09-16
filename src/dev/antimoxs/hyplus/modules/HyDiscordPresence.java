@@ -336,6 +336,8 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
         Settings party_sub = new Settings();
         party_sub.addAll(hyPlus.hyPartyManager.getSubSettings());
 
+        adv_all.setSubSettings(party_sub);
+
 
 
         Settings discord_sub = new Settings();

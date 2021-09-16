@@ -2,6 +2,7 @@ package dev.antimoxs.hyplus.events;
 
 
 import dev.antimoxs.hyplus.modules.friends.HyFriendRequest;
+import dev.antimoxs.hyplus.modules.partyManager.HyParty;
 import dev.antimoxs.hyplus.modules.partyManager.HyPartyMessageType;
 import dev.antimoxs.hyplus.objects.HyServerLocation;
 import net.minecraft.network.play.server.S01PacketJoinGame;
@@ -22,6 +23,8 @@ public interface IHyPlusEvent {
 
     default void onHypixelJoin() {}
     default void onHypixelQuit() {}
+
+    default void onPartyDataPacket(HyParty party) {}
 
     default void onInternalPartyMessage(String message, HyPartyMessageType type) {}
 

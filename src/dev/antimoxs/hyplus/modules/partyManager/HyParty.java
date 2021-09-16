@@ -1,7 +1,10 @@
 package dev.antimoxs.hyplus.modules.partyManager;
 
+import com.google.gson.Gson;
+import dev.antimoxs.hypixelapi.objects.games.Game;
 import dev.antimoxs.hyplus.objects.HySimplePlayer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class HyParty {
@@ -86,5 +89,21 @@ public class HyParty {
     public HySimplePlayer getPartyLeader() { return this.partyLeader; }
     public HashMap<String, HySimplePlayer> getPartyMembers() { return this.partyMembers; }
     public HashMap<String, HySimplePlayer> getPartyMods() { return this.partyMods; }
+    public ArrayList<HySimplePlayer> getAllMembers() {
+
+        ArrayList<HySimplePlayer> players = new ArrayList<>();
+
+        players.addAll(this.partyMembers.values());
+        players.addAll(this.partyMods.values());
+
+        return players;
+
+    }
+
+    public String getJson() {
+
+        return new Gson().toJson(this);
+
+    }
 
 }

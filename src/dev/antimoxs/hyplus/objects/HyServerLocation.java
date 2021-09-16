@@ -13,6 +13,7 @@ public class HyServerLocation {
 
     // extra fields
     public String rawloc = "MAIN";          // copied value from gametype since gametype will be name-fetched
+    public String rawmod = "LOBBY";          // copied value from mode since mode will be name-fetched
     public boolean online = true;           // only changed when online is false in api response
 
     // game data

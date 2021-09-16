@@ -4,6 +4,7 @@ import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.HyUtilities;
 import dev.antimoxs.hyplus.modules.friends.HyFriendRequest;
 import dev.antimoxs.hyplus.modules.partyManager.HyPartyMessageType;
+import net.labymod.api.events.MessageModifyChatEvent;
 import net.labymod.api.events.MessageReceiveEvent;
 
 public class HyListenerChatMessage implements MessageReceiveEvent {
@@ -15,6 +16,8 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
         this.hyPlus = hyPlus;
 
     }
+
+
 
     @Override
     public boolean onReceive(String s, String s1) {
@@ -110,12 +113,14 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
             // Checking for party message
             if (hyPlus.hyPartyManager.HYPLUS_PM_TOGGLE.getValueBoolean()) {
 
+                boolean hideMsg = hyPlus.hyPartyManager.HYPLUS_PM_TOGGLE.getValueBoolean();
+
                 // "§9§m-----------------------------§r"
                 if (s.startsWith("§9§m-----------------------------§r")) {
 
                     System.out.println("###PARTYLINE");
                     hyPlus.hyEventManager.callPartyMessage(s, HyPartyMessageType.LINE);
-                    return false;
+                    return hideMsg;
                     //return true;
 
                 }
@@ -125,7 +130,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
 
                     System.out.println("###NOPARTY");
                     hyPlus.hyEventManager.callPartyMessage(s, HyPartyMessageType.EMPTY);
-                    return false;
+                    return hideMsg;
                     //return true;
 
                 }
@@ -161,7 +166,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
 
                     System.out.println("###MEMBERSCOUNT");
                     hyPlus.hyEventManager.callPartyMessage(s, HyPartyMessageType.LIST_COUNT);
-                    return false;
+                    return hideMsg;
                     //return true;
 
                 }
@@ -170,7 +175,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
 
                     System.out.println("###LEADER");
                     hyPlus.hyEventManager.callPartyMessage(s, HyPartyMessageType.LIST_LEADER);
-                    return false;
+                    return hideMsg;
                     //return true;
 
                 }
@@ -179,7 +184,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
 
                     System.out.println("###MEMBERS");
                     hyPlus.hyEventManager.callPartyMessage(s, HyPartyMessageType.LIST_MEMBERS);
-                    return false;
+                    return hideMsg;
                     //return true;
 
                 }
@@ -188,7 +193,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
 
                     System.out.println("###MODERATORS");
                     hyPlus.hyEventManager.callPartyMessage(s, HyPartyMessageType.LIST_MODS);
-                    return false;
+                    return hideMsg;
                     //return true;
 
                 }

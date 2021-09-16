@@ -2,6 +2,7 @@ package dev.antimoxs.hyplus.events;
 
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.modules.friends.HyFriendRequest;
+import dev.antimoxs.hyplus.modules.partyManager.HyParty;
 import dev.antimoxs.hyplus.modules.partyManager.HyPartyMessageType;
 import dev.antimoxs.hyplus.objects.HyServerLocation;
 import net.labymod.labyconnect.packets.PacketAddonDevelopment;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 
 public class HyEventManager {
 
-    HyPlus hyPlus;
+    private final HyPlus hyPlus;
 
     public HyEventManager(HyPlus hyPlus) {
 
@@ -39,7 +40,7 @@ public class HyEventManager {
         }
 
         // calling externals
-        sendAddonPacket("location", location.getJson());
+        sendAddonPacketSelfAPI("location", location.getJson());
 
         System.out.println("[HyEvent] location-change");
 
@@ -69,7 +70,7 @@ public class HyEventManager {
         }
 
         // calling externals
-        sendAddonPacket(incoming ? "msg-received" : "msg-sent", message);
+        sendAddonPacketSelfAPI(incoming ? "msg-received" : "msg-sent", message);
 
     }
 
@@ -86,7 +87,7 @@ public class HyEventManager {
         }
 
         // calling externals
-        sendAddonPacket("friendrequest", request.getJson());
+        sendAddonPacketSelfAPI("friendrequest", request.getJson());
 
         return accepted;
 
@@ -102,7 +103,7 @@ public class HyEventManager {
         }
 
         // calling externals
-        sendAddonPacket("packet-join", "{}");
+        sendAddonPacketSelfAPI("packet-join", "{}");
 
         System.out.println("[HyEvent] packet-join");
 
@@ -118,7 +119,7 @@ public class HyEventManager {
         }
 
         // calling externals
-        sendAddonPacket("hypixel-join", "{}");
+        sendAddonPacketSelfAPI("hypixel-join", "{}");
 
     }
     public void callHypixelQuit() {
@@ -131,7 +132,7 @@ public class HyEventManager {
         }
 
         // calling externals
-        sendAddonPacket("hypixel-quit", "{}");
+        sendAddonPacketSelfAPI("hypixel-quit", "{}");
 
     }
 
@@ -146,7 +147,18 @@ public class HyEventManager {
 
     }
 
-    private void sendAddonPacket(String key, String json) {
+    public void callPartyDataPacket(HyParty party) {
+
+        // calling internals
+        for (IHyPlusEvent event : events) {
+
+            event.onPartyDataPacket(party);
+
+        }
+
+    }
+
+    private void sendAddonPacketSelfAPI(String key, String json) {
 
         String jsonBytes = hyPlus.hyAdvanced.HYPLUS_ADVANCED_API.getValueBoolean() ? json : "{}";
         PacketAddonDevelopment pad = new PacketAddonDevelopment(

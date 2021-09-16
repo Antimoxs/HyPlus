@@ -34,7 +34,7 @@ public class DiscordAppExtender extends DiscordApp {
         handlers.disconnected = new DisconnectListener(this);
         handlers.errored = new ErroredListener(this);
         handlers.joinGame = new DiscordJoinListener(this); // custom
-        handlers.joinRequest = new JoinRequestListener(this);
+        handlers.joinRequest = new DiscordRequestListener(this); // custom
         handlers.spectateGame = new SpectateGameListener(this);
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             public void run() {
@@ -155,6 +155,9 @@ public class DiscordAppExtender extends DiscordApp {
             //obj.addProperty("joinSecret", this.queuedJoinKey.toString());
             String name = hyPlus.hyPartyManager.rematchInvite(this.queuedJoinKey);
             hyPlus.sendMessageIngameChat("/party join " + name);
+            hyPlus.hyPartyManager.getParty().setPublic(true);
+            hyPlus.sendMessageIngameChat("/pl");
+            hyPlus.hyPartyManager.updateParty(false);
             // Hypixel does not use it anyways so lets save data LabyMod.getInstance().getLabyModAPI().sendJsonMessageToServer("discord_rpc", obj);
 
         }

@@ -38,8 +38,8 @@ public class HyPlus extends LabyModAddon {
 
     //public static String RSC_LOC = "textures/hyplus";
 
-    private final String version = "0.3.116";
-    private final String lastupdated = "5. September 2021";
+    private final String version = "0.3.124";
+    private final String lastupdated = "16. September 2021";
     public HyAbout hyAbout = new HyAbout(this,
             new kvp("DevBuild :P", 3)
     );
@@ -68,6 +68,7 @@ public class HyPlus extends LabyModAddon {
     public final HyListenerQuit hyQuitListener = new HyListenerQuit(this);
     public final HyListenerGuiOpen hyListenerGuiOpen = new HyListenerGuiOpen();
     public final HyListenerKeyInput hyListenerKeyInput = new HyListenerKeyInput(this);
+    public final HyListenerDevPacket hyListenerDevPacket = new HyListenerDevPacket(this);
 
     // Other
     public final ModuleCategory hyModuleCategory = new ModuleCategory(
@@ -143,6 +144,7 @@ public class HyPlus extends LabyModAddon {
         LabyMod.getInstance().getEventManager().register(hyChatMessageListener);
         LabyMod.getInstance().getEventManager().register(hyChatSendListener);
         LabyMod.getInstance().getEventManager().registerOnIncomingPacket(hyPacketListener);
+        LabyMod.getInstance().getEventManager().registerOnAddonDevelopmentPacket(hyListenerDevPacket);
         LabyMod.getInstance().getEventManager().registerOnQuit(hyQuitListener);
 
 
@@ -340,8 +342,6 @@ public class HyPlus extends LabyModAddon {
 
     }
 
-
-
     public void displayIgMessage(String module, String text) {
 
         if (module == null) {
@@ -373,7 +373,5 @@ public class HyPlus extends LabyModAddon {
         }
 
     }
-
-
 
 }

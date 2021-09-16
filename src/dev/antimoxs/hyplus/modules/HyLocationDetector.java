@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dev.antimoxs.hypixelapi.exceptions.ApiRequestException;
 import dev.antimoxs.hypixelapi.response.StatusResponse;
+import dev.antimoxs.hypixelapi.util.hypixelFetcher;
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.HyUtilities;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
@@ -37,6 +38,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
     // LocationDetector settings
     public final HySetting HYPLUS_LD_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_LD_TOGGLE", "Toggle location detection", "The location detection is important for a range of features and should not be turned off.", true, true, Material.COMPASS);
+    public final HySetting HYPLUS_LD_LABYCHAT = new HySetting(HySettingType.BOOLEAN, "HYPLUS_LD_LABYCHAT", "Show location in the labychat", "Toggle whether your location is displayed in ur labychat status.", true, true, Material.PAPER);
     public final HySetting HYPLUS_LD_API = new HySetting(HySettingType.BOOLEAN, "HYPLUS_LD_API", "Use API instead of ingame detection.", "You can use the HypixelAPI for location detection but it's not recommended.", false, false, Material.COMMAND);
 
     public HyLocationDetector(HyPlus hyPlus) {
@@ -126,6 +128,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
             location.gametype = r.getSession().gameType;
             location.rawloc = r.getSession().gameType;
             location.mode = r.getSession().mode;
+            location.rawmod = r.getSession().mode;
             location.map = r.getSession().map;
 
             // Check for additional information
@@ -172,6 +175,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
         // copy the gametype to rawloc (gametype will be fetched)
         serverLoccation.rawloc = serverLoccation.gametype;
+        serverLoccation.rawmod = serverLoccation.mode;
 
 
         if (!currentLocation.getJson().equals(serverLoccation.getJson()) || lastLocrawForced) {
@@ -221,6 +225,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
     public void checkConfig(boolean reset) {
 
         hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_LD_TOGGLE);
+        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_LD_LABYCHAT);
         hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_LD_API);
 
     }
@@ -235,7 +240,12 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
         List<SettingsElement> moduleSettings = new ArrayList<>();
 
-        BooleanElement locationSettings = new BooleanElement("Location detection", hyPlus, new ControlElement.IconData(Material.COMPASS), "HYPLUS_LD_TOGGLE", true);
+        BooleanElement locationSettings = new BooleanElement(HYPLUS_LD_TOGGLE.getDisplayName(), HYPLUS_LD_TOGGLE.getIcon(), (bool) -> {
+
+            HYPLUS_LD_TOGGLE.changeConfigValue(hyPlus, bool);
+
+        }, HYPLUS_LD_TOGGLE.getValueBoolean());
+        locationSettings.setDescriptionText(HYPLUS_LD_TOGGLE.getDescription());
 
         HeaderElement locSettings_info = new HeaderElement("§lThe Location detection is needed for a");
         HeaderElement locSettings_info2 = new HeaderElement("§lrange of features and should not be deactivated.");
@@ -254,7 +264,22 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
                 Color.ORANGE
         );
 
-        BooleanElement locSettings_useApi = new BooleanElement("Use API instead of ingame detection", hyPlus, new ControlElement.IconData(Material.COMMAND), "HYPLUS_LD_API", false);
+        BooleanElement locSettings_labychat = new BooleanElement(HYPLUS_LD_LABYCHAT.getDisplayName(), HYPLUS_LD_LABYCHAT.getIcon(), (bool) -> {
+
+            HYPLUS_LD_LABYCHAT.changeConfigValue(hyPlus, bool);
+            LabyMod.getInstance().getLabyConnect().updatePlayingOnServerState(null);
+
+        }, HYPLUS_LD_LABYCHAT.getValueBoolean());
+        locationSettings.setDescriptionText(HYPLUS_LD_LABYCHAT.getDescription());
+
+        BooleanElement locSettings_useApi = new BooleanElement(HYPLUS_LD_API.getDisplayName(), HYPLUS_LD_API.getIcon(), (bool) -> {
+
+            HYPLUS_LD_API.changeConfigValue(hyPlus, bool);
+
+        }, HYPLUS_LD_API.getValueBoolean());
+        locationSettings.setDescriptionText(HYPLUS_LD_API.getDescription());
+
+
 
 
 
@@ -298,4 +323,17 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
     }
 
+    @Override
+    public void onLocationChange(HyServerLocation location) {
+
+        if (HYPLUS_LD_LABYCHAT.getValueBoolean()) {
+
+            String gametype = hypixelFetcher.fetchGamemodeStatus(location.rawloc);
+            String gamemode = hypixelFetcher.fetchModeStatus(location.rawmod);
+
+            LabyMod.getInstance().getLabyConnect().updatePlayingOnServerState(gametype + ": " + gamemode);
+
+        }
+
+    }
 }

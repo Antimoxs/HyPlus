@@ -10,13 +10,17 @@ import dev.antimoxs.hyplus.objects.HyServerLocation;
 import dev.antimoxs.hyplus.objects.HySetting;
 import dev.antimoxs.hyplus.objects.HySettingType;
 import dev.antimoxs.hyplus.objects.HySimplePlayer;
+import dev.antimoxs.utilities.time.wait;
+import net.labymod.labyconnect.packets.PacketAddonDevelopment;
 import net.labymod.main.LabyMod;
 import net.labymod.settings.Settings;
 import net.labymod.settings.elements.BooleanElement;
 import net.labymod.settings.elements.ControlElement;
 import net.labymod.settings.elements.SettingsElement;
 import net.labymod.utils.Material;
+import scala.tools.nsc.Global;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -24,9 +28,6 @@ import java.util.UUID;
 public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
     private final HyPlus hyPlus;
-    boolean active = true;
-    public int delay = 0;
-    public boolean update = true;
 
     private HyParty party = new HyParty();
 
@@ -69,7 +70,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
             HYPLUS_PM_TOGGLE.changeConfigValue(hyPlus, booleanElement);
             checkConfig(false);
-            updateParty();
+            updateParty(false);
 
         }, HYPLUS_PM_TOGGLE.getValueBoolean());
         toggle.setDescriptionText(HYPLUS_PM_TOGGLE.getDescription());
@@ -92,7 +93,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
             HYPLUS_PM_SHOW.changeConfigValue(hyPlus, booleanElement);
             checkConfig(false);
-            updateParty();
+            updateParty(false);
 
         }, HYPLUS_PM_SHOW.getValueBoolean());
         show.setDescriptionText(HYPLUS_PM_SHOW.getDescription());
@@ -101,7 +102,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
             HYPLUS_PM_JOIN.changeConfigValue(hyPlus, booleanElement);
             checkConfig(false);
-            updateParty();
+            updateParty(false);
 
         }, HYPLUS_PM_JOIN.getValueBoolean());
         join.setDescriptionText(HYPLUS_PM_JOIN.getDescription());
@@ -152,7 +153,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
         StringBuilder sb = new StringBuilder();
         sb.append("§9§m------------------------------§r");
 
-
+        if (command.length <=1) return;
 
         switch (command[1]) {
 
@@ -219,203 +220,233 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
         }
 
-        this.hyPlus.sendMessageIngameChat("/pl");
-        updateParty();
+        Thread updater = new Thread(() -> {
+
+            wait.sc(3L);
+            this.hyPlus.sendMessageIngameChat("/pl");
+            wait.sc(3L);
+            updateParty(false);
+
+        });
+        Runtime.getRuntime().addShutdownHook(updater);
+        updater.start();
+
 
     }
 
     public HyParty getParty() { return this.party; }
 
     @Override
+    public void onPartyDataPacket(HyParty party) {
+
+        // updating party over packet
+        LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Updated party via packet.");
+        this.party = party;
+        updateParty(false);
+
+    }
+
+    @Override
     public void onInternalPartyMessage(String message, HyPartyMessageType type) {
 
-        switch (type) {
+        Thread partyT = new Thread(() -> {
 
-            case EMPTY:
-            case DISBAND: {
+            switch (type) {
 
-                // this is spam :(
-                //LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Removed party.");
-                party.reset();
-                updateParty();
-                return;
+                case EMPTY:
+                case DISBAND: {
 
-            }
-            case LINE: {
-
-                return;
-
-            }
-
-            case LIST_COUNT: {
-
-                // spam too :(
-                //LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Updated party.");
-                // "§6Party Members (1)§r"
-                int count = Integer.parseInt(message.substring(17, message.length()-3));
-                party.setExists(true);
-                party.setCount(count);
-                updateParty();
-                return;
-
-            }
-            case LIST_LEADER: {
-
-                party.clearMembers();
-                party.clearMods();
-                // "§eParty Leader: §r§6[MVP§r§5++§r§6] Antimoxs §r§a●§r"
-                String cropped = message.substring(16,message.length()-8);
-                String rank;
-                String name;
-                if (message.charAt(20) == '[') {
-
-                    rank = cropped.split(" ")[0];
-                    name = cropped.split(" ")[1];
+                    // this is spam :(
+                    //LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Removed party.");
+                    party.reset();
+                    updateParty(true);
+                    return;
 
                 }
-                else {
+                case LINE: {
 
-                    rank = null;
-                    name = cropped;
-
-                }
-                party.setExists(true);
-                party.setPartyLeader(new HySimplePlayer(name, rank, ""));
-                updateParty();
-                return;
-
-            }
-            case LIST_MEMBERS: {
-
-                // "§eParty Members: §r§b[MVP§r§2+§r§b] cuddlig§r§a ● §r§b[MVP§r§c+§r§b] valentinsan§r§a ● §r"
-                String cropped = message.substring(17);
-                String[] members = cropped.split("●");
-                party.setExists(true);
-                for (String member : members) {
-
-                    party.addPlayer(getPlayerFromString(member, cropped));
+                    return;
 
                 }
-                updateParty();
-                return;
 
-            }
-            case LIST_MODS: {
+                case LIST_COUNT: {
 
-                // "§eParty Moderators: §r§b[MVP§r§2+§r§b] cuddlig§r§a ● §r§b[MVP§r§c+§r§b] valentinsan§r§a ● §r"
-                String cropped = message.substring(20);
-                String[] members = cropped.split("●");
-                party.setExists(true);
-                for (String member : members) {
-
-                    party.addMod(getPlayerFromString(member, cropped));
+                    // spam too :(
+                    //LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Updated party.");
+                    // "§6Party Members (1)§r"
+                    int count = Integer.parseInt(message.substring(17, message.length()-3));
+                    party.setExists(true);
+                    party.setCount(count);
+                    updateParty(false);
+                    return;
 
                 }
-                updateParty();
-                return;
+                case LIST_LEADER: {
+
+                    party.clearMembers();
+                    party.clearMods();
+                    // "§eParty Leader: §r§6[MVP§r§5++§r§6] Antimoxs §r§a●§r"
+                    String cropped = message.substring(16,message.length()-8);
+                    String rank;
+                    String name;
+                    if (message.charAt(20) == '[') {
+
+                        rank = cropped.split(" ")[0];
+                        name = cropped.split(" ")[1];
+
+                    }
+                    else {
+
+                        rank = null;
+                        name = cropped;
+
+                    }
+
+                    System.out.println("PL: '" + rank + "' | '" + name + "'");
+                    System.out.println(cropped);
+                    party.setExists(true);
+                    party.setPartyLeader(new HySimplePlayer(name, rank, ""));
+                    updateParty(true);
+                    return;
+
+                }
+                case LIST_MEMBERS: {
+
+                    // "§eParty Members: §r§b[MVP§r§2+§r§b] cuddlig§r§a ● §r§b[MVP§r§c+§r§b] valentinsan§r§a ● §r"
+                    String cropped = message.substring(17);
+                    String[] members = cropped.split("●");
+                    party.setExists(true);
+                    for (String member : members) {
+
+                        party.addPlayer(getPlayerFromString(member, cropped));
+
+                    }
+                    updateParty(false);
+                    return;
+
+                }
+                case LIST_MODS: {
+
+                    // "§eParty Moderators: §r§b[MVP§r§2+§r§b] cuddlig§r§a ● §r§b[MVP§r§c+§r§b] valentinsan§r§a ● §r"
+                    String cropped = message.substring(20);
+                    String[] members = cropped.split("●");
+                    party.setExists(true);
+                    for (String member : members) {
+
+                        party.addMod(getPlayerFromString(member, cropped));
+
+                    }
+                    updateParty(false);
+                    return;
+
+                }
+
+                case PUBLIC_CREATED: {
+
+                    // "§aCreated a public party! Players can join with §r§6§l/party join Antimoxs§r"
+                    LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Party is now public.");
+                    party.setExists(true);
+                    party.setPublic(true);
+                    break;
+
+                }
+                case PUBLIC_CAPPED: {
+
+                    LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Updated player cap.");
+                    // "§eParty is capped at 25 players.§r"
+                    String cropped = message.substring(21, message.length()-11);
+                    int cap = Integer.parseInt(cropped);
+                    party.setExists(true);
+                    party.setPublic(true);
+                    party.setCap(cap);
+                    break;
+
+                }
+
+                case ALLINV_ON: {
+
+                    LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Enabled all-invite.");
+                    party.setExists(true);
+                    party.setAllInvite(true);
+                    return;
+
+                }
+                case ALLINV_OFF: {
+
+                    LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Disabled all-invite.");
+                    party.setExists(true);
+                    party.setAllInvite(false);
+                    return;
+
+                }
+                case PGAMES_ON: {
+
+                    LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Enabled private games.");
+                    party.setExists(true);
+                    party.setPGames(true);
+                    return;
+
+                }
+                case PGAMES_OFF: {
+
+                    LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Disabled private games.");
+                    party.setExists(true);
+                    party.setPGames(false);
+                    return;
+
+                }
+                case PUBLIC_OFF: {
+
+                    LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Party is no longer public.");
+                    party.setExists(true);
+                    party.setPublic(false);
+                    party.setCap(-1);
+                    break;
+
+                }
+                case TRANSFERRED: {
+
+                    LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Transferred party.");
+                    break;
+
+                }
+                case UPDATE:
+                case PLAYER_LEFT:
+                case PLAYER_JOINED:
+                case PLAYER_KICKED:
+                case PLAYER_DISCONNECT: {
+
+                    // update the party
+                    break;
+
+                }
+                case MUTED_ON: {
+
+                    LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Party is now muted.");
+                    party.setExists(true);
+                    party.setMuted(true);
+                    return;
+
+                }
+                case MUTED_OFF: {
+
+                    LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Party is now unmuted.");
+                    party.setExists(true);
+                    party.setMuted(false);
+                    return;
+
+                }
 
             }
 
-            case PUBLIC_CREATED: {
+            this.hyPlus.sendMessageIngameChat("/pl");
+            wait.sc(3L);
+            updateParty(true);
 
-                // "§aCreated a public party! Players can join with §r§6§l/party join Antimoxs§r"
-                LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Party is now public.");
-                party.setExists(true);
-                party.setPublic(true);
-                break;
+        });
+        Runtime.getRuntime().addShutdownHook(partyT);
+        partyT.start();
 
-            }
-            case PUBLIC_CAPPED: {
-
-                LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Updated player cap.");
-                // "§eParty is capped at 25 players.§r"
-                String cropped = message.substring(21, message.length()-11);
-                int cap = Integer.parseInt(cropped);
-                party.setExists(true);
-                party.setPublic(true);
-                party.setCap(cap);
-                break;
-
-            }
-
-            case ALLINV_ON: {
-
-                LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Enabled all-invite.");
-                party.setExists(true);
-                party.setAllInvite(true);
-                return;
-
-            }
-            case ALLINV_OFF: {
-
-                LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Disabled all-invite.");
-                party.setExists(true);
-                party.setAllInvite(false);
-                return;
-
-            }
-            case PGAMES_ON: {
-
-                LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Enabled private games.");
-                party.setExists(true);
-                party.setPGames(true);
-                return;
-
-            }
-            case PGAMES_OFF: {
-
-                LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Disabled private games.");
-                party.setExists(true);
-                party.setPGames(false);
-                return;
-
-            }
-            case PUBLIC_OFF: {
-
-                LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Party is no longer public.");
-                party.setExists(true);
-                party.setPublic(false);
-                party.setCap(-1);
-                break;
-
-            }
-            case TRANSFERRED: {
-
-                LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Transferred party.");
-                break;
-
-            }
-            case UPDATE:
-            case PLAYER_LEFT:
-            case PLAYER_JOINED:
-            case PLAYER_KICKED:
-            case PLAYER_DISCONNECT: {
-
-                // update the party
-                break;
-
-            }
-            case MUTED_ON: {
-
-                LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Party is now muted.");
-                party.setExists(true);
-                party.setMuted(true);
-                return;
-
-            }
-            case MUTED_OFF: {
-
-                LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Party is now unmuted.");
-                party.setExists(true);
-                party.setMuted(false);
-                return;
-
-            }
-
-        }
-
-        this.hyPlus.sendMessageIngameChat("/pl");
-        updateParty();
 
     }
 
@@ -447,7 +478,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
     }
 
-    public void updateParty() {
+    public void updateParty(boolean sendPacket) {
 
         Thread updater = new Thread(() -> {
 
@@ -456,6 +487,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
             if (!this.party.doesExist() || !HYPLUS_PM_SHOW.getValueBoolean()) {
 
                 hyPlus.discordApp.getRichPresence().updateParty(false, 0, 0, "");
+                hyPlus.discordApp.getRichPresence().updateJoinSecret(false, null);
                 hyPlus.discordApp.getRichPresence().updateRichPresence();
                 return;
 
@@ -483,6 +515,45 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
             }
 
             hyPlus.discordApp.getRichPresence().updateRichPresence();
+
+            if (sendPacket) {
+
+                System.out.println("Sending party update packet to all members :)");
+                ArrayList<UUID> uuids = new ArrayList<>();
+                for (HySimplePlayer player : this.party.getAllMembers()) {
+
+                    String uuid = MojangRequest.getUUID(player.getName());
+                    System.out.println("REQUEST FOR '" + player.getName() + "' returned: " + uuid);
+                    try {
+                        uuids.add(UUID.fromString(uuid));
+                    }
+                    catch (Exception e) {
+
+                        e.printStackTrace();
+
+                    }
+
+
+                }
+
+                UUID[] uuidsA = new UUID[uuids.size()];
+
+                for (int i = 0; i < uuids.size(); i++) {
+
+                    uuidsA[i] = uuids.get(i);
+
+                }
+
+                String jsonBytes = this.party.getJson();
+                PacketAddonDevelopment pad = new PacketAddonDevelopment(
+                        LabyMod.getInstance().getPlayerUUID(), uuidsA,
+                        "hyplus:partydata",
+                        jsonBytes.getBytes(StandardCharsets.UTF_8)
+                );
+                LabyMod.getInstance().getLabyModAPI().sendAddonDevelopmentPacket(pad);
+
+            }
+
 
         });
         Runtime.getRuntime().addShutdownHook(updater);
