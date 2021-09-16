@@ -293,6 +293,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
         location_sub.add(locSettings_info);
         location_sub.add(locSettings_info2);
         location_sub.add(locSettings_refresh);
+        location_sub.add(locSettings_labychat);
         location_sub.add(locSettings_useApi);
 
         locationSettings.setSubSettings(location_sub);
