@@ -92,4 +92,20 @@ public class HyUtilities {
 
     }
 
+    public static String dashUUID(String uuidJoin) {
+
+        uuidJoin = uuidJoin.substring(0,8)
+                + "-"
+                + uuidJoin.substring(8,12)
+                + "-"
+                + uuidJoin.substring(12,16)
+                + "-"
+                + uuidJoin.substring(16,20)
+                + "-"
+                + uuidJoin.substring(20,32);
+
+        return uuidJoin;
+
+    }
+
 }
