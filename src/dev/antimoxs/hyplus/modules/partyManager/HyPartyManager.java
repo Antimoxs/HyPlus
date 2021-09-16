@@ -522,10 +522,10 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
                 ArrayList<UUID> uuids = new ArrayList<>();
                 for (HySimplePlayer player : this.party.getAllMembers()) {
 
-                    String uuid = MojangRequest.getUUID(player.getName());
-                    System.out.println("REQUEST FOR '" + player.getName() + "' returned: " + uuid);
+                    String uuid = MojangRequest.getUUID(player.getPlayerBlank());
+                    System.out.println("REQUEST FOR '" + player.getPlayerBlank() + "' returned: " + uuid);
                     try {
-                        uuids.add(UUID.fromString(uuid));
+                        uuids.add(UUID.fromString(HyUtilities.dashUUID(uuid)));
                     }
                     catch (Exception e) {
 
@@ -564,16 +564,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
     private void generateInvite(String uuidJoin) {
 
         System.out.println(uuidJoin);
-        uuidJoin = uuidJoin.substring(0,8)
-                + "-"
-                + uuidJoin.substring(8,12)
-                + "-"
-                + uuidJoin.substring(12,16)
-                + "-"
-                + uuidJoin.substring(16,20)
-                + "-"
-                + uuidJoin.substring(20,32);
-        hyPlus.discordApp.getRichPresence().updateJoinSecret(true, uuidJoin);
+        hyPlus.discordApp.getRichPresence().updateJoinSecret(true, HyUtilities.dashUUID(uuidJoin));
 
     }
 
