@@ -116,7 +116,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 boolean hideMsg = hyPlus.hyPartyManager.HYPLUS_PM_TOGGLE.getValueBoolean();
 
                 // "§9§m-----------------------------§r"
-                if (s.startsWith("§9§m-----------------------------§r")) {
+                if (s.equals("§9§m-----------------------------§r")) {
 
                     System.out.println("###PARTYLINE");
                     hyPlus.hyEventManager.callPartyMessage(s, HyPartyMessageType.LINE);
