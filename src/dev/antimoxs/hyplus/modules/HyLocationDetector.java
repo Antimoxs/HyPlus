@@ -63,7 +63,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
             }
             else {
 
-                wait.ms(500L);
+                wait.ms(1000L); // Delay to make sure hypixel switched account state to correct server
                 lastLocrawForced = forceUpdate;
                 getLocationServer();
                 wait.ms(3000L);
@@ -142,6 +142,8 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
             }
 
+            if (currentLocation.gametype != location.gametype) refreshLabyChatStatus(location.rawloc);
+
             currentLocation = location;
 
 
@@ -184,6 +186,8 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
             lastLocrawForced = false;
 
         }
+
+        if (currentLocation.gametype != serverLoccation.gametype) refreshLabyChatStatus(serverLoccation.rawloc);
 
         currentLocation = serverLoccation;
 
@@ -323,15 +327,14 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
     }
 
-    @Override
-    public void onLocationChange(HyServerLocation location) {
+    public void refreshLabyChatStatus(String gametypeIn) {
 
         if (HYPLUS_LD_LABYCHAT.getValueBoolean()) {
 
-            String gametype = hypixelFetcher.fetchGamemodeStatus(location.rawloc);
-            String gamemode = hypixelFetcher.fetchModeStatus(location.rawmod);
+            String gametype = hypixelFetcher.fetchGamemodeStatus(gametypeIn);
+            //String gamemode = hypixelFetcher.fetchModeStatus(location.rawmod);
 
-            LabyMod.getInstance().getLabyConnect().updatePlayingOnServerState(gametype + ": " + gamemode);
+            LabyMod.getInstance().getLabyConnect().updatePlayingOnServerState(gametype);
 
         }
 
