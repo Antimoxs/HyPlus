@@ -62,6 +62,7 @@ public class ModRichPresenceExtender {
         }
 
 
+
     }
 
     // Update the current timestamps
@@ -184,6 +185,7 @@ public class ModRichPresenceExtender {
         else {
             this.joinSecretS = null;
         }
+        this.joinSecret = joinSecret;
         this.updateRequired = true;
 
     }
@@ -237,6 +239,12 @@ public class ModRichPresenceExtender {
         this.updateRequired = true;
         discord.setConnected(true);
         updateRichPresence();
+    }
+
+    public void runCallbacks() {
+
+        DiscordRPCLibrary.runCallbacks();
+
     }
 
 }
