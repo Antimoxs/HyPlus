@@ -2,8 +2,7 @@ package dev.antimoxs.hyplus.events;
 
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.modules.friends.HyFriendRequest;
-import dev.antimoxs.hyplus.modules.partyManager.HyParty;
-import dev.antimoxs.hyplus.modules.partyManager.HyPartyMessageType;
+import dev.antimoxs.hyplus.modules.partyDetector.HyPartyMessageType;
 import dev.antimoxs.hyplus.objects.HyServerLocation;
 import net.labymod.labyconnect.packets.PacketAddonDevelopment;
 import net.labymod.main.LabyMod;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 
 public class HyEventManager {
 
-    private final HyPlus hyPlus;
+    HyPlus hyPlus;
 
     public HyEventManager(HyPlus hyPlus) {
 
@@ -40,7 +39,7 @@ public class HyEventManager {
         }
 
         // calling externals
-        sendAddonPacketSelfAPI("location", location.getJson());
+        sendAddonPacket("location", location.getJson());
 
         System.out.println("[HyEvent] location-change");
 
@@ -70,7 +69,7 @@ public class HyEventManager {
         }
 
         // calling externals
-        sendAddonPacketSelfAPI(incoming ? "msg-received" : "msg-sent", message);
+        sendAddonPacket(incoming ? "msg-received" : "msg-sent", message);
 
     }
 
@@ -87,7 +86,7 @@ public class HyEventManager {
         }
 
         // calling externals
-        sendAddonPacketSelfAPI("friendrequest", request.getJson());
+        sendAddonPacket("friendrequest", request.getJson());
 
         return accepted;
 
@@ -103,7 +102,7 @@ public class HyEventManager {
         }
 
         // calling externals
-        sendAddonPacketSelfAPI("packet-join", "{}");
+        sendAddonPacket("packet-join", "{}");
 
         System.out.println("[HyEvent] packet-join");
 
@@ -119,7 +118,7 @@ public class HyEventManager {
         }
 
         // calling externals
-        sendAddonPacketSelfAPI("hypixel-join", "{}");
+        sendAddonPacket("hypixel-join", "{}");
 
     }
     public void callHypixelQuit() {
@@ -132,7 +131,7 @@ public class HyEventManager {
         }
 
         // calling externals
-        sendAddonPacketSelfAPI("hypixel-quit", "{}");
+        sendAddonPacket("hypixel-quit", "{}");
 
     }
 
@@ -147,23 +146,12 @@ public class HyEventManager {
 
     }
 
-    public void callPartyDataPacket(HyParty party) {
+    private void sendAddonPacket(String key, String json) {
 
-        // calling internals
-        for (IHyPlusEvent event : events) {
-
-            event.onPartyDataPacket(party);
-
-        }
-
-    }
-
-    private void sendAddonPacketSelfAPI(String key, String json) {
-
-        String jsonBytes = hyPlus.hyAdvanced.HYPLUS_ADVANCED_API.getValueBoolean() ? json : "{}";
+        String jsonBytes = hyPlus.hySettings.HYPLUS_API_TOGGLE ? json : "{}";
         PacketAddonDevelopment pad = new PacketAddonDevelopment(
                 LabyMod.getInstance().getPlayerUUID(),
-                hyPlus.hyAdvanced.HYPLUS_ADVANCED_API.getValueBoolean() ? "hyplus:" + key : "hyplus:disabled",
+                hyPlus.hySettings.HYPLUS_API_TOGGLE ? "hyplus:" + key : "hyplus:disabled",
                 jsonBytes.getBytes(StandardCharsets.UTF_8)
         );
         LabyMod.getInstance().getLabyModAPI().sendAddonDevelopmentPacket(pad);
