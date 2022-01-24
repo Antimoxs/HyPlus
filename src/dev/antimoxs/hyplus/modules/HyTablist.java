@@ -10,25 +10,20 @@ import net.minecraft.network.play.server.S01PacketJoinGame;
 
 public class HyTablist implements IHyPlusModule, IHyPlusEvent {
 
-    private final HyPlus hyPlus;
-
-    public HyTablist(HyPlus hyPlus) {
-
-        this.hyPlus = hyPlus;
-
-    }
-
-
     /**
      * Updates the tablist banner to the HyPlus tablist.
      *
      */
+
+    private static final String BANNER_LINK_1 = "https://i.imgur.com/nZttT7W.png";
+    private static final String BANNER_LINK_2 = "https://i.imgur.com/1lydzgc.png";
+
     public void sendTabList() {
 
         System.out.println("[HyTablist] Sending HyPlus tab-banner.");
         // https://i.imgur.com/VyPn1Sm.png
         JsonObject object2 = new JsonObject();
-        object2.addProperty("url", "https://i.imgur.com/nZttT7W.png");
+        object2.addProperty("url", BANNER_LINK_2);
         LabyMod.getInstance().getEventManager().callServerMessage("server_banner", object2);
 
     }

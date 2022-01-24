@@ -3,7 +3,7 @@ package dev.antimoxs.hypixelapi.exceptions;
 import dev.antimoxs.hypixelapi.config;
 import dev.antimoxs.utilities.logger.AtmxLogType;
 
-public class UnknownListenerException extends TBCException {
+public class UnknownListenerException extends AtmxException {
 
     private String reason;
 

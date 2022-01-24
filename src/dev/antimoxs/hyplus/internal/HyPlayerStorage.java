@@ -1,16 +1,17 @@
 package dev.antimoxs.hyplus.internal;
 
 import dev.antimoxs.hypixelapi.objects.player.Player;
+import dev.antimoxs.hyplus.objects.HySimplePlayer;
 
 import java.util.HashMap;
 import java.util.UUID;
 
 public class HyPlayerStorage {
 
-    private HashMap<UUID, Player> players = new HashMap<>();
+    private HashMap<UUID, HySimplePlayer> players = new HashMap<>();
 
 
-    public Player getPlayerByUUID(UUID uuid) {
+    public HySimplePlayer getPlayerByUUID(UUID uuid) {
 
         if (players.containsKey(uuid)) { return players.get(uuid); }
         return null;
@@ -23,7 +24,7 @@ public class HyPlayerStorage {
 
     }
 
-    public Player addPlayer(UUID uuid, Player player) {
+    public HySimplePlayer addPlayer(UUID uuid, HySimplePlayer player) {
 
         players.put(uuid, player);
         return player;

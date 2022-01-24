@@ -2,11 +2,9 @@ package dev.antimoxs.hypixelapi.response;
 
 import dev.antimoxs.hypixelapi.objects.Key;
 
-public class KeyResponse {
+public class KeyResponse extends BaseResponse {
 
-    public boolean success = false;
     private Key record = null;
-    public String cause = "";
 
     public Key getKey() {
 

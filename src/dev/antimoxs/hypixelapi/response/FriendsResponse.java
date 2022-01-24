@@ -5,12 +5,9 @@ import dev.antimoxs.hypixelapi.objects.friends.Friend;
 import dev.antimoxs.hypixelapi.objects.friends.FriendList;
 import dev.antimoxs.hypixelapi.requests.MojangRequest;
 
-public class FriendsResponse {
+public class FriendsResponse extends BaseResponse {
 
-    public boolean success = false;
-    public String uuid = "No data for uuid";
     private Friend[] records = null;
-    public String cause = "";
 
     public FriendsResponse() {
 

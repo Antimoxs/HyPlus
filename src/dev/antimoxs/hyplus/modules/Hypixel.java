@@ -2,6 +2,7 @@ package dev.antimoxs.hyplus.modules;
 
 import dev.antimoxs.hypixelapi.exceptions.ApiRequestException;
 import dev.antimoxs.hypixelapi.objects.player.statGames.PSGDuels;
+import dev.antimoxs.hypixelapi.requests.MojangRequest;
 import dev.antimoxs.hypixelapi.response.PlayerResponse;
 import dev.antimoxs.hypixelapi.util.kvp;
 import dev.antimoxs.hyplus.modules.playerTagCycle.HyPlayerTag;
@@ -16,7 +17,9 @@ import net.labymod.settings.elements.SettingsElement;
 import net.labymod.utils.Consumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.ScorePlayerTeam;
@@ -30,10 +33,8 @@ public class Hypixel extends Server implements IHyPlusModule, IHyPlusEvent {
 
     public boolean onServer = false;
 
-    private final dev.antimoxs.hyplus.HyPlus HyPlus;
-    public Hypixel(HyPlus HyPlus) {
+    public Hypixel() {
         super("hypixel", "mc.hypixel.net", "*.hypixel.net");
-        this.HyPlus = HyPlus;
     }
 
     public static void checkScoreboard(Hypixel hypixel) {
@@ -66,33 +67,33 @@ public class Hypixel extends Server implements IHyPlusModule, IHyPlusEvent {
     public static void listSB(Hypixel hypixel) {
 
         Scoreboard sb = Minecraft.getMinecraft().theWorld.getScoreboard();
-        hypixel.HyPlus.displayIgMessage("sb", "Teams:");
+        HyPlus.getInstance().displayIgMessage("sb", "Teams:");
         for (ScorePlayerTeam team : sb.getTeams()) {
 
-            hypixel.HyPlus.displayIgMessage("reg name", team.getRegisteredName());
-            hypixel.HyPlus.displayIgMessage("name", team.getTeamName());
-            hypixel.HyPlus.displayIgMessage("prefix", team.getColorPrefix());
-            hypixel.HyPlus.displayIgMessage("suffix", team.getColorSuffix());
-            hypixel.HyPlus.displayIgMessage("ß", "---");
+            HyPlus.getInstance().displayIgMessage("reg name", team.getRegisteredName());
+            HyPlus.getInstance().displayIgMessage("name", team.getTeamName());
+            HyPlus.getInstance().displayIgMessage("prefix", team.getColorPrefix());
+            HyPlus.getInstance().displayIgMessage("suffix", team.getColorSuffix());
+            HyPlus.getInstance().displayIgMessage("ß", "---");
 
         }
-        hypixel.HyPlus.displayIgMessage("sb", "Objectives:");
+        HyPlus.getInstance().displayIgMessage("sb", "Objectives:");
         for (ScoreObjective ob : sb.getScoreObjectives()) {
 
-            hypixel.HyPlus.displayIgMessage("display name", ob.getDisplayName());
-            hypixel.HyPlus.displayIgMessage("name", ob.getName());
-            hypixel.HyPlus.displayIgMessage("cri", ob.getCriteria().getName());
-            hypixel.HyPlus.displayIgMessage("rt", ob.getRenderType().name());
-            hypixel.HyPlus.displayIgMessage("ß","---");
+            HyPlus.getInstance().displayIgMessage("display name", ob.getDisplayName());
+            HyPlus.getInstance().displayIgMessage("name", ob.getName());
+            HyPlus.getInstance().displayIgMessage("cri", ob.getCriteria().getName());
+            HyPlus.getInstance().displayIgMessage("rt", ob.getRenderType().name());
+            HyPlus.getInstance().displayIgMessage("ß","---");
 
         }
-        hypixel.HyPlus.displayIgMessage("sb", "Scores:");
+        HyPlus.getInstance().displayIgMessage("sb", "Scores:");
         for (Score s : sb.getScores()) {
 
-            hypixel.HyPlus.displayIgMessage("name",s.getPlayerName());
-            hypixel.HyPlus.displayIgMessage("points",s.getScorePoints() + "");
-            hypixel.HyPlus.displayIgMessage("objective name",s.getObjective().getName());
-            hypixel.HyPlus.displayIgMessage("ß","---");
+            HyPlus.getInstance().displayIgMessage("name",s.getPlayerName());
+            HyPlus.getInstance().displayIgMessage("points",s.getScorePoints() + "");
+            HyPlus.getInstance().displayIgMessage("objective name",s.getObjective().getName());
+            HyPlus.getInstance().displayIgMessage("ß","---");
 
         }
 
@@ -106,21 +107,22 @@ public class Hypixel extends Server implements IHyPlusModule, IHyPlusEvent {
             StringBuilder pchat = new StringBuilder();
             for (NetworkPlayerInfo info : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
 
-                String name = info.getGameProfile().getName();
+                String name = MojangRequest.getName(info.getGameProfile().getId().toString());
                 try {
 
                     info.setDisplayName(new ChatComponentText(name));
+
                     Thread req = new Thread(group, () -> {
 
-                        if (hypixel.HyPlus.tbcHypixelApi == null) {
+                        if (HyPlus.getInstance().hypixelApi == null) {
 
-                            hypixel.HyPlus.displayIgMessage(null, "§6§l[HyPlus]§4§l [WARN]: §7You don't have an API-Key set. Not every function is enabled.§r");
+                            HyPlus.getInstance().displayIgMessage(null, "§6§l[HyPlus]§4§l [WARN]: §7You don't have an API-Key set. Not every function is enabled.§r");
                             return;
 
                         }
 
                         try {
-                            PlayerResponse res = hypixel.HyPlus.tbcHypixelApi.createPlayerRequestUUID(info.getGameProfile().getId().toString());
+                            PlayerResponse res = HyPlus.getInstance().hypixelApi.createPlayerRequestUUID(info.getGameProfile().getId().toString());
                             if (res.success) {
 
                                 StringBuilder builder = new StringBuilder();
@@ -157,7 +159,7 @@ public class Hypixel extends Server implements IHyPlusModule, IHyPlusEvent {
                                 if (strk > 5) builder.append("!!! ");
                                 builder.append("S: " + strk);
 
-                                HyPlayerTag tag = hypixel.HyPlus.hyPlayerTagExchanger.getTagForPlayer(UUID.fromString(info.getGameProfile().getId().toString()));
+                                HyPlayerTag tag = HyPlus.getInstance().hyPlayerTagExchanger.getTagForPlayer(UUID.fromString(info.getGameProfile().getId().toString()));
                                 tag.setValue(new kvp(builder.toString(), 1));
                                 if (name.toLowerCase().equals("dev/antimoxs") || name.toLowerCase().equals("_ghettofish_")) {
                                     return;
@@ -172,7 +174,7 @@ public class Hypixel extends Server implements IHyPlusModule, IHyPlusEvent {
 
                             }
                         } catch (ApiRequestException e) {
-                            hypixel.HyPlus.displayIgMessage("Lookup", "Request failed for player '" + info.getGameProfile().getName() + "'. Nicked? (" + e.getReason() + ")");
+                            HyPlus.getInstance().displayIgMessage("Lookup", "Request failed for player '" + info.getGameProfile().getName() + "'. Nicked? (" + e.getReason() + ")");
                             e.printStackTrace();
                         }
 
@@ -194,7 +196,7 @@ public class Hypixel extends Server implements IHyPlusModule, IHyPlusEvent {
 
             while (group.activeCount() != 0) {}
 
-            hypixel.HyPlus.sendMessageIngameChat("/pc " + pchat);
+            HyPlus.getInstance().sendMessageIngameChat("/pc " + pchat);
 
             //count = -1;
 
@@ -231,7 +233,7 @@ public class Hypixel extends Server implements IHyPlusModule, IHyPlusEvent {
         //HyPlus.displayIgMessage(null, "Enabled Hypixel ServerSupport.");
         LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("https://i.imgur.com/twFCNxQ.png", "Welcome to Hypixel!", "Enabled HyPlus server support.");
 
-        HyPlus.hyEventManager.callHypixelJoin();
+        HyPlus.getInstance().hyEventManager.callHypixelJoin();
 
         //HyPlus.discordApp.updateServer(serverData);
 
@@ -274,7 +276,7 @@ public class Hypixel extends Server implements IHyPlusModule, IHyPlusEvent {
     @Override
     public void loopSecond() {
 
-        if (HyPlus == null) { return; }
+        if (HyPlus.getInstance() == null) { return; }
 
         if (checkOnServer()) {
 
@@ -311,11 +313,6 @@ public class Hypixel extends Server implements IHyPlusModule, IHyPlusEvent {
     @Override
     public boolean showInSettings() {
         return IHyPlusModule.super.showInSettings();
-    }
-
-    @Override
-    public boolean loop() {
-        return IHyPlusModule.super.loop();
     }
 
     @Override

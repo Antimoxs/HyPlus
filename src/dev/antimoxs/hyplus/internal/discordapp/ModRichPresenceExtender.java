@@ -6,7 +6,6 @@ import net.labymod.discordapp.api.DiscordRichPresence;
 
 public class ModRichPresenceExtender {
 
-    private dev.antimoxs.hyplus.HyPlus HyPlus;
     private DiscordRichPresence drp = new DiscordRichPresence();
 
     private boolean updateRequired = true;
@@ -19,6 +18,7 @@ public class ModRichPresenceExtender {
     private String gameType = "Hypixel"; // The name of the current game type
     private String gameMap = null; // Current map; null when not specified
     private String gameMode = "Lobby"; // Mode of the game (ex. Doubles)
+    private String playState = "Idle"; // Current state, aka Lobby, Playing or Private
 
     private boolean party = false;
     private int partyMax = 0;
@@ -34,10 +34,9 @@ public class ModRichPresenceExtender {
 
     private DiscordAppExtender discord;
 
-    public ModRichPresenceExtender(DiscordAppExtender discord, HyPlus HyPlus) {
+    public ModRichPresenceExtender(DiscordAppExtender discord) {
 
         this.discord = discord;
-        this.HyPlus = HyPlus;
 
     }
 
@@ -125,6 +124,16 @@ public class ModRichPresenceExtender {
         return this.updateRequired;
 
     }
+    public void updateState(String state) {
+
+        if (this.playState != state) {
+
+            this.playState = state;
+            this.updateRequired = true;
+
+        }
+
+    }
 
     // Update image data
     public void updateImageL(String icon, String text) {
@@ -201,7 +210,7 @@ public class ModRichPresenceExtender {
         this.drp.smallImageKey = this.smallImage;
 
         // Game Information
-        this.drp.details = this.gameType + (this.gameMap == null ? "" : ": " + this.gameMap);
+        this.drp.details = this.gameType + (this.playState == null ? "" : ": " + this.playState);
         this.drp.state = this.gameMode;
 
         // Party Indicators

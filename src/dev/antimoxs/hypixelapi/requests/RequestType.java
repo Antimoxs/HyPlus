@@ -11,7 +11,8 @@ public enum RequestType {
     KEY("key"),
     STATUS("status"),
     FRIENDS("friends"),
-    QUESTS("resources/quests");
+    QUESTS("resources/quests"),
+    GAMES("recentgames");
 
     private String URLKey;
 

@@ -19,7 +19,6 @@ import java.util.UUID;
 
 public class DiscordAppExtender extends DiscordApp {
 
-    private HyPlus hyPlus;
 
     private static final String APPLICATION_ID = "824252829404233729"; // HyPlus Application ID
     public static File libraryFile = null;
@@ -29,7 +28,7 @@ public class DiscordAppExtender extends DiscordApp {
     private boolean connected = false;
     private UUID queuedJoinKey = null;
 
-    public DiscordAppExtender(HyPlus HyPlus) {
+    public DiscordAppExtender() {
         handlers.ready = new ReadyListener(this);
         handlers.disconnected = new DisconnectListener(this);
         handlers.errored = new ErroredListener(this);
@@ -41,8 +40,7 @@ public class DiscordAppExtender extends DiscordApp {
                 DiscordAppExtender.this.shutdown();
             }
         }));
-        this.hyPlus = HyPlus;
-        this.richPresence = new ModRichPresenceExtender(this, HyPlus);
+        this.richPresence = new ModRichPresenceExtender(this);
     }
 
     // Use this method to check and enable if not
@@ -124,14 +122,14 @@ public class DiscordAppExtender extends DiscordApp {
 
     }
 
-    // Excluding server rpc - there is non from Hypixel
+    // Excluding server rpc - there is non from Hypixel - they dont care about laby :(
     @Override
     public void onServerMessage(String messageKey, JsonElement serverMessage) {
         System.out.println("RPC FROM SERVER...?");
 
     }
 
-    // Whatever this does
+    // Whatever this does but we need it... I guess
     @Override
     public void respond(String userId, int reply) {
         DiscordRPCLibrary.respond(userId, reply);
@@ -149,15 +147,17 @@ public class DiscordAppExtender extends DiscordApp {
         System.out.println("Joining Hypixel via Discord key...");
         Debug.log(Debug.EnumDebugMode.DISCORD, "Redeem join secret key: " + joinKey.toString() + " on " + serverDomain);
         this.queuedJoinKey = joinKey;
-        if (!LabyMod.getInstance().switchServer(serverDomain, false)) {
+
+        // switching server to hypixel - using default hypixel proxy
+        if (!LabyMod.getInstance().switchServer("mc.hypixel.net", true)) {
 
             //JsonObject obj = new JsonObject();
             //obj.addProperty("joinSecret", this.queuedJoinKey.toString());
-            String name = hyPlus.hyPartyManager.rematchInvite(this.queuedJoinKey);
-            hyPlus.sendMessageIngameChat("/party join " + name);
-            hyPlus.hyPartyManager.getParty().setPublic(true);
-            hyPlus.sendMessageIngameChat("/pl");
-            hyPlus.hyPartyManager.updateParty(false);
+            String name = HyPlus.getInstance().hyPartyManager.rematchInvite(this.queuedJoinKey);
+            HyPlus.getInstance().sendMessageIngameChat("/party join " + name);
+            HyPlus.getInstance().hyPartyManager.getParty().setPublic(true);
+            HyPlus.getInstance().sendMessageIngameChat("/pl");
+            //hyPlus.hyPartyManager.updateParty(false); <- not needed lol
             // Hypixel does not use it anyways so lets save data LabyMod.getInstance().getLabyModAPI().sendJsonMessageToServer("discord_rpc", obj);
 
         }

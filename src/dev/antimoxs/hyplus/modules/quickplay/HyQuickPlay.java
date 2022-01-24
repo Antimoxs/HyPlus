@@ -15,16 +15,8 @@ import java.util.List;
 
 public class HyQuickPlay implements IHyPlusModule {
 
-    private final HyPlus hyPlus;
-
     public final HySetting HYPLUS_QUICKPLAY_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_QUICKPLAY_TOGGLE", "Quickplay", "Toggles if the quickplay hotkey is enabled.", true, true, Material.POTION);
     public final HySetting HYPLUS_QUICKPLAY_KEY = new HySetting(HySettingType.INT, "HYPLUS_QUICKPLAY_KEY", "Quickplay menu key", "Set the activation key for the quickplay menu", 89, 89, Material.ACACIA_STAIRS);
-
-    public HyQuickPlay(HyPlus HyPlus) {
-
-        this.hyPlus = HyPlus;
-
-    }
 
     @Override
     public List<SettingsElement> getModuleSettings() {
@@ -33,14 +25,14 @@ public class HyQuickPlay implements IHyPlusModule {
 
         BooleanElement qp_toggle = new BooleanElement(HYPLUS_QUICKPLAY_TOGGLE.getDisplayName(), HYPLUS_QUICKPLAY_TOGGLE.getIcon(), (booleanElement) -> {
 
-            HYPLUS_QUICKPLAY_TOGGLE.changeConfigValue(hyPlus, booleanElement);
+            HYPLUS_QUICKPLAY_TOGGLE.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
         }, HYPLUS_QUICKPLAY_TOGGLE.getValueBoolean());
         qp_toggle.setDescriptionText(HYPLUS_QUICKPLAY_TOGGLE.getDescription());
         KeyElement qp_key = new KeyElement(HYPLUS_QUICKPLAY_KEY.getDisplayName(), HYPLUS_QUICKPLAY_KEY.getIcon(), HYPLUS_QUICKPLAY_KEY.getValueInt(), (accepted) -> {
 
-            HYPLUS_QUICKPLAY_KEY.changeConfigValue(hyPlus, accepted);
+            HYPLUS_QUICKPLAY_KEY.changeConfigValue(HyPlus.getInstance(), accepted);
             checkConfig(false);
 
         });
@@ -64,8 +56,8 @@ public class HyQuickPlay implements IHyPlusModule {
     @Override
     public void checkConfig(boolean reset) {
 
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_QUICKPLAY_TOGGLE);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_QUICKPLAY_KEY);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_QUICKPLAY_TOGGLE);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_QUICKPLAY_KEY);
 
     }
 

@@ -16,17 +16,9 @@ import java.util.List;
 
 public class HyAdvanced implements IHyPlusModule{
 
-    private final HyPlus hyPlus;
-
     public final HySetting HYPLUS_ADVANCED_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_ADVANCED_TOGGLE", "Advanced settings", "View advanced settings", true, true, Material.COMMAND);
     public final HySetting HYPLUS_ADVANCED_API = new HySetting(HySettingType.BOOLEAN, "HYPLUS_ADVANCED_API", "External HyPlus API", "Toggle the HyPlus API for other addons.", true, true, Material.COMMAND);
 
-
-    public HyAdvanced(HyPlus hyPlus) {
-
-        this.hyPlus = hyPlus;
-
-    }
 
     @Override
     public String getModuleName() {
@@ -36,7 +28,7 @@ public class HyAdvanced implements IHyPlusModule{
     @Override
     public void checkConfig(boolean reset) {
 
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_ADVANCED_API);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_ADVANCED_API);
 
     }
 
@@ -56,7 +48,7 @@ public class HyAdvanced implements IHyPlusModule{
 
         BooleanElement adv_api = new BooleanElement(HYPLUS_ADVANCED_API.getDisplayName(), HYPLUS_ADVANCED_API.getIcon(), (booleanElement) -> {
 
-            HYPLUS_ADVANCED_API.changeConfigValue(hyPlus, booleanElement);
+            HYPLUS_ADVANCED_API.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
         }, HYPLUS_ADVANCED_API.getValueBoolean());

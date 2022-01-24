@@ -1,5 +1,6 @@
 package dev.antimoxs.hypixelapi.util;
 
+import org.jetbrains.annotations.NotNull;
 
 public class kvp implements Comparable<kvp> {
 
@@ -14,7 +15,7 @@ public class kvp implements Comparable<kvp> {
     }
 
     @Override
-    public int compareTo(kvp o) {
+    public int compareTo(@NotNull kvp o) {
         return (int)this.string.length() - o.string.length();
     }
 }

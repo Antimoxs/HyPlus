@@ -20,9 +20,7 @@ import net.labymod.utils.Consumer;
 import net.labymod.utils.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.server.S01PacketJoinGame;
-import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
-import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 
 import java.awt.*;
@@ -31,7 +29,6 @@ import java.util.List;
 
 public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
-    private final HyPlus hyPlus;
     private int responseWaiter = 1;
     private boolean lastLocrawForced = false;
     private HyServerLocation currentLocation = new HyServerLocation();
@@ -41,11 +38,6 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
     public final HySetting HYPLUS_LD_LABYCHAT = new HySetting(HySettingType.BOOLEAN, "HYPLUS_LD_LABYCHAT", "Show location in the labychat", "Toggle whether your location is displayed in ur labychat status.", true, true, Material.PAPER);
     public final HySetting HYPLUS_LD_API = new HySetting(HySettingType.BOOLEAN, "HYPLUS_LD_API", "Use API instead of ingame detection.", "You can use the HypixelAPI for location detection but it's not recommended.", false, false, Material.COMMAND);
 
-    public HyLocationDetector(HyPlus hyPlus) {
-
-        this.hyPlus = hyPlus;
-
-    }
     public HyServerLocation getCurrentLocation() { return this.currentLocation; }
 
     /**
@@ -67,7 +59,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
                 lastLocrawForced = forceUpdate;
                 getLocationServer();
                 wait.ms(3000L);
-                hyPlus.displayIgMessage(null, "[LocationDetection] Server: " + currentLocation.server);
+                HyPlus.getInstance().displayIgMessage(null, "[LocationDetection] Server: " + currentLocation.server);
                 if (currentLocation.server.equals("limbo")) getLocationServer(); // check twice in case rawloc returned fake-limbo
 
             }
@@ -87,7 +79,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
     public void getLocationServer() {
 
         this.responseWaiter++;
-        hyPlus.sendMessageIngameChat("/locraw");
+        HyPlus.getInstance().sendMessageIngameChat("/locraw");
 
         System.out.println("WAITING FOR RESPONSE");
         while (this.responseWaiter > 0) {
@@ -108,7 +100,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
      */
     public void getLocationAPI(boolean forceUpdate) {
 
-        if (hyPlus.tbcHypixelApi == null) {
+        if (HyPlus.getInstance().hypixelApi == null) {
 
             return;
 
@@ -118,7 +110,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
 
             // Get the data from the API
-            StatusResponse r = hyPlus.tbcHypixelApi.createStatusRequest(LabyMod.getInstance().getPlayerUUID().toString());
+            StatusResponse r = HyPlus.getInstance().hypixelApi.createStatusRequest(LabyMod.getInstance().getPlayerUUID().toString());
 
 
             // transfer data into new location object
@@ -138,7 +130,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
             if (!currentLocation.getJson().equals(location.getJson()) || forceUpdate) {
 
-                hyPlus.hyEventManager.callLocationChange(location);
+                HyPlus.getInstance().hyEventManager.callLocationChange(location);
 
             }
 
@@ -182,7 +174,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
         if (!currentLocation.getJson().equals(serverLoccation.getJson()) || lastLocrawForced) {
 
-            hyPlus.hyEventManager.callLocationChange(serverLoccation);
+            HyPlus.getInstance().hyEventManager.callLocationChange(serverLoccation);
             lastLocrawForced = false;
 
         }
@@ -212,7 +204,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
     @Override
     public void onPacketJoinGame(S01PacketJoinGame packet) {
 
-        if (hyPlus.hypixel.checkOnServer()) {
+        if (HyPlus.getInstance().hypixel.checkOnServer()) {
 
             getLocationAsync(false);
 
@@ -228,9 +220,9 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
     @Override
     public void checkConfig(boolean reset) {
 
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_LD_TOGGLE);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_LD_LABYCHAT);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_LD_API);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_LD_TOGGLE);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_LD_LABYCHAT);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_LD_API);
 
     }
 
@@ -246,7 +238,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
         BooleanElement locationSettings = new BooleanElement(HYPLUS_LD_TOGGLE.getDisplayName(), HYPLUS_LD_TOGGLE.getIcon(), (bool) -> {
 
-            HYPLUS_LD_TOGGLE.changeConfigValue(hyPlus, bool);
+            HYPLUS_LD_TOGGLE.changeConfigValue(HyPlus.getInstance(), bool);
 
         }, HYPLUS_LD_TOGGLE.getValueBoolean());
         locationSettings.setDescriptionText(HYPLUS_LD_TOGGLE.getDescription());
@@ -270,7 +262,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
         BooleanElement locSettings_labychat = new BooleanElement(HYPLUS_LD_LABYCHAT.getDisplayName(), HYPLUS_LD_LABYCHAT.getIcon(), (bool) -> {
 
-            HYPLUS_LD_LABYCHAT.changeConfigValue(hyPlus, bool);
+            HYPLUS_LD_LABYCHAT.changeConfigValue(HyPlus.getInstance(), bool);
             LabyMod.getInstance().getLabyConnect().updatePlayingOnServerState(null);
 
         }, HYPLUS_LD_LABYCHAT.getValueBoolean());
@@ -278,7 +270,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
         BooleanElement locSettings_useApi = new BooleanElement(HYPLUS_LD_API.getDisplayName(), HYPLUS_LD_API.getIcon(), (bool) -> {
 
-            HYPLUS_LD_API.changeConfigValue(hyPlus, bool);
+            HYPLUS_LD_API.changeConfigValue(HyPlus.getInstance(), bool);
 
         }, HYPLUS_LD_API.getValueBoolean());
         locationSettings.setDescriptionText(HYPLUS_LD_API.getDescription());
@@ -332,7 +324,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
         if (HYPLUS_LD_LABYCHAT.getValueBoolean()) {
 
-            String gametype = hypixelFetcher.fetchGamemodeStatus(gametypeIn);
+            String gametype = hypixelFetcher.fetchGame(gametypeIn);
             //String gamemode = hypixelFetcher.fetchModeStatus(location.rawmod);
 
             LabyMod.getInstance().getLabyConnect().updatePlayingOnServerState(gametype);

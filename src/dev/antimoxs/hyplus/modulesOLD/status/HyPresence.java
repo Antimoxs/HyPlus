@@ -8,16 +8,6 @@ import java.util.UUID;
 
 public class HyPresence {
 
-    private dev.antimoxs.hyplus.HyPlus HyPlus;
-
-    public HyPresence(dev.antimoxs.hyplus.HyPlus HyPlus) {
-
-        this.HyPlus = HyPlus;
-
-    }
-
-
-
     public void updatePrecense(HyPlus HyPlus, String text) {
 
 
@@ -45,7 +35,7 @@ public class HyPresence {
 
     public void updateGameInfo(boolean hasGame, String gamemode, String details, long startTime, long endTime ) {
 
-        if (HyPlus.hyDiscordPresence.HYPLUS_DP_TOGGLE.getValueBoolean()) {
+        if (HyPlus.getInstance().hyDiscordPresence.HYPLUS_DP_TOGGLE.getValueBoolean()) {
 
             updateGameInfoCustom(hasGame, startTime, endTime, gamemode, details);
             return;
@@ -88,10 +78,10 @@ public class HyPresence {
     public void sendToSelf(JsonObject obj) {
 
 
-        if (HyPlus.hyDiscordPresence.HYPLUS_DP_TOGGLE.getValueBoolean()) {
+        if (HyPlus.getInstance().hyDiscordPresence.HYPLUS_DP_TOGGLE.getValueBoolean()) {
 
             System.out.println("RPC - Custom");
-            HyPlus.discordApp.onServerMessage("discord_rpc", obj);
+            HyPlus.getInstance().discordApp.onServerMessage("discord_rpc", obj);
 
         }
         else {

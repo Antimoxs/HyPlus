@@ -31,7 +31,6 @@ import java.util.List;
 
 public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
 
-    private final HyPlus hyPlus;
     private final ControlElement.IconData icon_update = new ControlElement.IconData(Material.BOOK_AND_QUILL);
 
     public int delay = 0;
@@ -48,21 +47,15 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
     public HySetting HYPLUS_DP_MAP = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_MAP", "Show Map", "Toggle the display of the current map.", true, true, Material.MAP);
     public HySetting HYPLUS_DP_TIME = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_TIME", "Show Time", "Toggle the display of the elapsed play time.", true, true, Material.WATCH);
     public HySetting HYPLUS_DP_SPECIFIC = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_SPECIFIC", "Show specific information", "Toggle the display of special information such as round stats or player statistics.", false, false, Material.NETHER_STAR);
-
-    // init
-    public HyDiscordPresence(HyPlus HyPlus) {
-
-        this.hyPlus = HyPlus;
-
-    }
+    public HySetting HYPLUS_DP_STATE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_STATE", "Show playing state", "Toggle the display of the playing state", false, true, Material.SIGN);
 
 
 
     public boolean presenceCheck() {
 
-        if (!hyPlus.hypixel.checkOnServer()) {
+        if (!HyPlus.getInstance().hypixel.checkOnServer()) {
 
-            hyPlus.discordApp.shutdown();
+            HyPlus.getInstance().discordApp.shutdown();
             if (LabyMod.getMainConfig().getSettings().discordRichPresence) {
 
                 LabyMod.getInstance().getDiscordApp().initialize();
@@ -74,7 +67,7 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
 
         if (!LabyMod.getMainConfig().getSettings().discordRichPresence) {
 
-            hyPlus.discordApp.shutdown();
+            HyPlus.getInstance().discordApp.shutdown();
             LabyMod.getInstance().getDiscordApp().shutdown();
             return false;
 
@@ -83,7 +76,7 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
         if (HYPLUS_DP_TOGGLE.getValueBoolean()) {
 
             LabyMod.getInstance().getDiscordApp().shutdown();
-            if (!hyPlus.discordApp.init()) {
+            if (!HyPlus.getInstance().discordApp.init()) {
 
                 System.out.println("Can't start HyPlus DiscordRPC?");
                 LabyMod.getInstance().getDiscordApp().initialize();
@@ -95,7 +88,7 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
         }
         else {
 
-            hyPlus.discordApp.shutdown();
+            HyPlus.getInstance().discordApp.shutdown();
             LabyMod.getInstance().getDiscordApp().initialize();
             return false;
 
@@ -103,12 +96,36 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
 
     }
 
+    /**
+     * Update the server location displayed on discord
+     * @param locationIn {@link HyServerLocation}
+     */
+    public void updatePresenceNEW(HyServerLocation locationIn) {
+
+        // let's make sure the presence is enabled and running
+        if (!presenceCheck()) return;
+
+        // waiting set time from user
+        if (HYPLUS_DP_DELAY.getValueInt() != 0) {
+
+            HyPlus.getInstance().displayIgMessage(getModuleName(), "Delaying update...");
+            wait.sc((long)HYPLUS_DP_DELAY.getValueInt());
+
+        }
+        HyPlus.getInstance().displayIgMessage(getModuleName(), "Updating Discord ServerStatus....");
+
+
+
+
+
+    }
     public void updatePresence(HyServerLocation locationIn) {
+
 
         if (!presenceCheck()) return;
 
         String updateDelay = HYPLUS_DP_DELAY.getDefaultInt() == 0 ? "" : "[in " + HYPLUS_DP_DELAY + "s]";
-        hyPlus.displayIgMessage(getModuleName(), "Updating ServerStatus... " + updateDelay);
+        HyPlus.getInstance().displayIgMessage(getModuleName(), "Updating ServerStatus... " + updateDelay);
         //hyPlus.displayIgMessage(getModuleName(), location.getJson());
         wait.sc((long)HYPLUS_DP_DELAY.getValueInt());
 
@@ -203,19 +220,19 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
                             mn.equals("base")
             ) {
 
-                location.map = null;
+                location.map = "Hypixel";
 
             }
 
         }
         else {
 
-            location.map = null;
+            location.map = "Hypixel";
 
         }
 
         // Update GameType
-        if (hyPlus.discordApp.getRichPresence().updateType(location.gametype)) {
+        if (HyPlus.getInstance().discordApp.getRichPresence().updateType(location.gametype)) {
 
             start = true;
             starttime = System.currentTimeMillis();
@@ -238,21 +255,49 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
 
         }
 
+        if (HYPLUS_DP_STATE.getValueBoolean()) {
+
+            if (location.mode.equalsIgnoreCase("lobby")) {
+
+                HyPlus.getInstance().discordApp.getRichPresence().updateState("Lobby");
+
+            }
+            else if (HyPlus.getInstance().hyPartyManager.getParty().getPGames()) {
+
+                HyPlus.getInstance().discordApp.getRichPresence().updateState("Private");
+
+            }
+            else {
+
+                HyPlus.getInstance().discordApp.getRichPresence().updateState("Playing");
+
+            }
+            System.out.println("State is not null");
+
+
+        }
+        else {
+
+            System.out.println("State is null");
+            HyPlus.getInstance().discordApp.getRichPresence().updateState(null);
+
+        }
+
         String imageKey = location.gametype.equals("Playing on Hypixel") ? "hypixel" : location.gametype;
 
         // Send other updaters
-        hyPlus.discordApp.getRichPresence().updateMode(location.mode);
-        hyPlus.discordApp.getRichPresence().updateMap(location.map);
+        HyPlus.getInstance().discordApp.getRichPresence().updateMode(location.mode);
+        HyPlus.getInstance().discordApp.getRichPresence().updateMap(location.map);
         if (HYPLUS_DP_TIME.getValueBoolean()) {
-            hyPlus.discordApp.getRichPresence().updateTimestamps(start, starttime);
+            HyPlus.getInstance().discordApp.getRichPresence().updateTimestamps(start, starttime);
         }
         else {
-            hyPlus.discordApp.getRichPresence().removeTimestamp();
+            HyPlus.getInstance().discordApp.getRichPresence().removeTimestamp();
         }
-        hyPlus.discordApp.getRichPresence().updateImageL(imageKey.toLowerCase(), "Playing '" + location.gametype + ": " + location.mode + "' on Hypixel.");
-        hyPlus.discordApp.getRichPresence().updateImageS("hyplus", "LabyMod with HyPlus! v." + hyPlus.getVersion());
+        HyPlus.getInstance().discordApp.getRichPresence().updateImageL(imageKey.toLowerCase(), "Playing '" + location.gametype + ": " + location.mode + "' on " + location.map);
+        HyPlus.getInstance().discordApp.getRichPresence().updateImageS("hyplus", "LabyMod with HyPlus! v." + HyPlus.getInstance().getVersion());
 
-        hyPlus.discordApp.getRichPresence().updateRichPresence();
+        HyPlus.getInstance().discordApp.getRichPresence().updateRichPresence();
 
     }
 
@@ -279,7 +324,7 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
         // Main toggle for the Discord presence
         BooleanElement dp = new BooleanElement(HYPLUS_DP_TOGGLE.getDisplayName(), HYPLUS_DP_TOGGLE.getIcon(), (booleanElement) -> {
 
-            HYPLUS_DP_TOGGLE.changeConfigValue(hyPlus, booleanElement);
+            HYPLUS_DP_TOGGLE.changeConfigValue(HyPlus.getInstance(), booleanElement);
             this.checkConfig(false);
 
             presenceCheck();
@@ -292,7 +337,7 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
 
                 "Resend status", icon_update, (buttonElement) -> {
 
-            updatePresence(hyPlus.hyLocationDetector.getCurrentLocation());
+            updatePresence(HyPlus.getInstance().hyLocationDetector.getCurrentLocation());
 
             }, "Resend", "Resend the Discord status.", Color.ORANGE
 
@@ -307,34 +352,42 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
         dp_delay.setMinValue(0);
         dp_delay.setMaxValue(120);
         dp_delay.addCallback(accepted -> {
-            HYPLUS_DP_DELAY.changeConfigValue(hyPlus, accepted);
+            HYPLUS_DP_DELAY.changeConfigValue(HyPlus.getInstance(), accepted);
             delay = 0;
         });
         dp_delay.setDescriptionText(HYPLUS_DP_DELAY.getDescription());
 
         // Location information
-        BooleanElement dp_game = new BooleanElement(HYPLUS_DP_GAME.getDisplayName(), hyPlus, HYPLUS_DP_GAME.getIcon(), HYPLUS_DP_GAME.getConfigName(), HYPLUS_DP_GAME.getDefaultBoolean());
+        BooleanElement dp_game = new BooleanElement(HYPLUS_DP_GAME.getDisplayName(), HyPlus.getInstance(), HYPLUS_DP_GAME.getIcon(), HYPLUS_DP_GAME.getConfigName(), HYPLUS_DP_GAME.getDefaultBoolean());
         dp_game.setDescriptionText(HYPLUS_DP_GAME.getDescription());
-        BooleanElement dp_mode = new BooleanElement(HYPLUS_DP_MODE.getDisplayName(), hyPlus, HYPLUS_DP_MODE.getIcon(), HYPLUS_DP_MODE.getConfigName(), HYPLUS_DP_MODE.getDefaultBoolean());
+
+        BooleanElement dp_mode = new BooleanElement(HYPLUS_DP_MODE.getDisplayName(), HyPlus.getInstance(), HYPLUS_DP_MODE.getIcon(), HYPLUS_DP_MODE.getConfigName(), HYPLUS_DP_MODE.getDefaultBoolean());
         dp_mode.setDescriptionText(HYPLUS_DP_MODE.getDescription());
-        BooleanElement dp_lobbyN = new BooleanElement(HYPLUS_DP_LOBBY.getDisplayName(), hyPlus, HYPLUS_DP_LOBBY.getIcon(), HYPLUS_DP_LOBBY.getConfigName(), HYPLUS_DP_LOBBY.getDefaultBoolean());
+
+        BooleanElement dp_lobbyN = new BooleanElement(HYPLUS_DP_LOBBY.getDisplayName(), HyPlus.getInstance(), HYPLUS_DP_LOBBY.getIcon(), HYPLUS_DP_LOBBY.getConfigName(), HYPLUS_DP_LOBBY.getDefaultBoolean());
         dp_lobbyN.setDescriptionText(HYPLUS_DP_LOBBY.getDescription());
-        BooleanElement dp_map = new BooleanElement(HYPLUS_DP_MAP.getDisplayName(), hyPlus, HYPLUS_DP_MAP.getIcon(), HYPLUS_DP_MAP.getConfigName(), HYPLUS_DP_MAP.getDefaultBoolean());
+
+        BooleanElement dp_map = new BooleanElement(HYPLUS_DP_MAP.getDisplayName(), HyPlus.getInstance(), HYPLUS_DP_MAP.getIcon(), HYPLUS_DP_MAP.getConfigName(), HYPLUS_DP_MAP.getDefaultBoolean());
         dp_map.setDescriptionText(HYPLUS_DP_MAP.getDescription());
-        BooleanElement dp_time = new BooleanElement(HYPLUS_DP_TIME.getDisplayName(), hyPlus, HYPLUS_DP_TIME.getIcon(), HYPLUS_DP_TIME.getConfigName(), HYPLUS_DP_TIME.getDefaultBoolean());
+
+        BooleanElement dp_time = new BooleanElement(HYPLUS_DP_TIME.getDisplayName(), HyPlus.getInstance(), HYPLUS_DP_TIME.getIcon(), HYPLUS_DP_TIME.getConfigName(), HYPLUS_DP_TIME.getDefaultBoolean());
         dp_time.setDescriptionText(HYPLUS_DP_TIME.getDescription());
-        BooleanElement dp_spfc = new BooleanElement(HYPLUS_DP_SPECIFIC.getDisplayName(), hyPlus, HYPLUS_DP_SPECIFIC.getIcon(), HYPLUS_DP_SPECIFIC.getConfigName(), HYPLUS_DP_SPECIFIC.getDefaultBoolean());
+
+        BooleanElement dp_state = new BooleanElement(HYPLUS_DP_STATE.getDisplayName(), HyPlus.getInstance(), HYPLUS_DP_STATE.getIcon(), HYPLUS_DP_STATE.getConfigName(), HYPLUS_DP_STATE.getDefaultBoolean());
+        dp_state.setDescriptionText(HYPLUS_DP_STATE.getDescription());
+
+        BooleanElement dp_spfc = new BooleanElement(HYPLUS_DP_SPECIFIC.getDisplayName(), HyPlus.getInstance(), HYPLUS_DP_SPECIFIC.getIcon(), HYPLUS_DP_SPECIFIC.getConfigName(), HYPLUS_DP_SPECIFIC.getDefaultBoolean());
         dp_spfc.setDescriptionText(HYPLUS_DP_SPECIFIC.getDescription());
         dp_spfc.setBlocked(true);
 
         HeaderElement dp_lobbyNNote = new HeaderElement("§l* Only in lobbies and over §lingame§r detection.");
 
-        AdvancedElement adv_all = new AdvancedElement(hyPlus.hyPartyManager.HYPLUS_PM_TOGGLE.getDisplayName(), hyPlus.hyPartyManager.HYPLUS_PM_TOGGLE.getConfigName(), hyPlus.hyPartyManager.HYPLUS_PM_TOGGLE.getIcon());
-        adv_all.setDescriptionText(hyPlus.hyPartyManager.HYPLUS_PM_TOGGLE.getDescription());
+        AdvancedElement adv_all = new AdvancedElement(HyPlus.getInstance().hyPartyManager.HYPLUS_PM_TOGGLE.getDisplayName(), HyPlus.getInstance().hyPartyManager.HYPLUS_PM_TOGGLE.getConfigName(), HyPlus.getInstance().hyPartyManager.HYPLUS_PM_TOGGLE.getIcon());
+        adv_all.setDescriptionText(HyPlus.getInstance().hyPartyManager.HYPLUS_PM_TOGGLE.getDescription());
         adv_all.setSettingEnabled(true);
 
         Settings party_sub = new Settings();
-        party_sub.addAll(hyPlus.hyPartyManager.getSubSettings());
+        party_sub.addAll(HyPlus.getInstance().hyPartyManager.getSubSettings());
 
         adv_all.setSubSettings(party_sub);
 
@@ -349,6 +402,7 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
         discord_sub.add(dp_lobbyN);
         discord_sub.add(dp_map);
         discord_sub.add(dp_time);
+        discord_sub.add(dp_state);
         discord_sub.add(dp_spfc);
         discord_sub.add(dp_lobbyNNote);
         discord_sub.add(adv_all);
@@ -363,14 +417,14 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
     @Override
     public void checkConfig(boolean reset) {
 
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_DP_TOGGLE);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_DP_DELAY);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_DP_GAME);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_DP_MODE);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_DP_LOBBY);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_DP_MAP);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_DP_TIME);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_DP_SPECIFIC);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_DP_TOGGLE);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_DP_DELAY);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_DP_GAME);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_DP_MODE);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_DP_LOBBY);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_DP_MAP);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_DP_TIME);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_DP_SPECIFIC);
 
     }
 

@@ -3,11 +3,9 @@ package dev.antimoxs.hypixelapi.response;
 
 import dev.antimoxs.hypixelapi.objects.guild.Guild;
 
-public class GuildResponse {
+public class GuildResponse extends BaseResponse {
 
-    public boolean success = false;
     private Guild guild = null;
-    public String cause = "";
 
     public GuildResponse() {
 

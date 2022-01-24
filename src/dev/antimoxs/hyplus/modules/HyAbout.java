@@ -18,12 +18,10 @@ import java.util.List;
 
 public class HyAbout implements IHyPlusModule {
 
-    private dev.antimoxs.hyplus.HyPlus HyPlus;
     private ArrayList<kvp> changes = new ArrayList<kvp>();
 
-    public HyAbout(HyPlus HyPlus, kvp... update) {
+    public HyAbout(kvp... update) {
 
-        this.HyPlus = HyPlus;
         this.changes.addAll(Arrays.asList(update));
 
     }
@@ -36,8 +34,8 @@ public class HyAbout implements IHyPlusModule {
 
         SettingsElement header = new HeaderElement("General Information:");
         SettingsElement creator = new ControlElement( "HyPlus by Antimoxs", new ControlElement.IconData(Material.PAPER));
-        SettingsElement version = new ControlElement( "Version: " + HyPlus.getVersion(), new ControlElement.IconData(Material.BEACON));
-        SettingsElement lastUpdated = new ControlElement( "Last updated: " + HyPlus.getLastUpdated(), new ControlElement.IconData(Material.WATCH));
+        SettingsElement version = new ControlElement( "Version: " + HyPlus.getInstance().getVersion(), new ControlElement.IconData(Material.BEACON));
+        SettingsElement lastUpdated = new ControlElement( "Last updated: " + HyPlus.getInstance().getLastUpdated(), new ControlElement.IconData(Material.WATCH));
 
         SettingsElement updatelogHeader = new HeaderElement("Changelog:");
 

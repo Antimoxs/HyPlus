@@ -6,6 +6,7 @@ import dev.antimoxs.hyplus.objects.HySimplePlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class HyParty {
 
@@ -103,6 +104,23 @@ public class HyParty {
     public String getJson() {
 
         return new Gson().toJson(this);
+
+    }
+
+    public boolean isInParty(String name) {
+
+        for (HySimplePlayer player : this.getAllMembers()) {
+
+            if (player.getPlayerBlank().equals(name)) return true;
+
+        }
+        return false;
+
+    }
+
+    public int getMax() {
+
+        return isPublic() ? getCap() : getCount();
 
     }
 

@@ -19,13 +19,6 @@ import java.util.List;
 
 public class HyBetterMsg implements IHyPlusModule, IHyPlusEvent {
 
-    private final HyPlus hyPlus;
-
-    public HyBetterMsg(HyPlus hyPlus) {
-
-        this.hyPlus = hyPlus;
-
-    }
 
     // BetterMsg
 
@@ -39,7 +32,7 @@ public class HyBetterMsg implements IHyPlusModule, IHyPlusEvent {
 
         BooleanElement toggle = new BooleanElement(HYPLUS_BETTERMSG_TOGGLE.getDisplayName(), HYPLUS_BETTERMSG_TOGGLE.getIcon(), (booleanElement) -> {
 
-            HYPLUS_BETTERMSG_TOGGLE.changeConfigValue(hyPlus, booleanElement);
+            HYPLUS_BETTERMSG_TOGGLE.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
         }, HYPLUS_BETTERMSG_TOGGLE.getValueBoolean());
@@ -51,7 +44,7 @@ public class HyBetterMsg implements IHyPlusModule, IHyPlusEvent {
         DropDownElement<HyBetterMsgType> styleElement = new DropDownElement<HyBetterMsgType>(HYPLUS_BETTERMSG_STYLE.getDisplayName(), styleDropDown);
         styleElement.setChangeListener((accept) -> {
 
-            HYPLUS_BETTERMSG_STYLE.changeConfigValue(hyPlus, accept.name());
+            HYPLUS_BETTERMSG_STYLE.changeConfigValue(HyPlus.getInstance(), accept.name());
             checkConfig(false);
 
         });
@@ -81,8 +74,8 @@ public class HyBetterMsg implements IHyPlusModule, IHyPlusEvent {
     @Override
     public void checkConfig(boolean reset) {
 
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_BETTERMSG_TOGGLE);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_BETTERMSG_STYLE);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_BETTERMSG_TOGGLE);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_BETTERMSG_STYLE);
 
     }
 
@@ -121,7 +114,7 @@ public class HyBetterMsg implements IHyPlusModule, IHyPlusEvent {
         builder.append("§d§l> §7");
         builder.append(message.substring(s2[0].length() + 4));
 
-        hyPlus.api.displayMessageInChat(builder.toString());
+        HyPlus.getInstance().api.displayMessageInChat(builder.toString());
 
     }
 
@@ -158,7 +151,7 @@ public class HyBetterMsg implements IHyPlusModule, IHyPlusEvent {
         builder.append("§d§l> §7");
         builder.append(message.substring((s2[0].length()) + 4));
 
-        hyPlus.api.displayMessageInChat(builder.toString());
+        HyPlus.getInstance().api.displayMessageInChat(builder.toString());
 
     }
 

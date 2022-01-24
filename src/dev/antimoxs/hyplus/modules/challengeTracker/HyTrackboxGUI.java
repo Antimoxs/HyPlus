@@ -17,14 +17,12 @@ import java.util.*;
 
 public class HyTrackboxGUI extends Module {
 
-    dev.antimoxs.hyplus.HyPlus HyPlus;
     HyQuestTracker tracker;
     boolean lastSort;
 
-    public HyTrackboxGUI(HyPlus HyPlus) {
+    public HyTrackboxGUI() {
 
-        this.HyPlus = HyPlus;
-        this.tracker = HyPlus.hyQuestTracker;
+        this.tracker = HyPlus.getInstance().hyQuestTracker;
         this.lastSort = tracker.HYPLUS_CTR_SORTORDER.getDefaultBoolean();
 
     }
@@ -45,27 +43,27 @@ public class HyTrackboxGUI extends Module {
 
         if (this.lastSort != tracker.HYPLUS_CTR_SORTORDER.getValueBoolean()) {
 
-            tracker.updateChallanges(HyPlus.hyLocationDetector.getCurrentLocation().rawloc.toLowerCase());
+            tracker.updateChallanges(HyPlus.getInstance().hyLocationDetector.getCurrentLocation().rawloc.toLowerCase());
             this.lastSort = tracker.HYPLUS_CTR_SORTORDER.getValueBoolean();
             return;
 
         }
 
 
-        if (tracker.active && HyPlus.hypixel.checkOnServer()) {
+        if (tracker.active && HyPlus.getInstance().hypixel.checkOnServer()) {
 
             try {
 
                 int count = 0;
-                if (HyPlus.hyQuestTracker.dspc2.isEmpty()) return;
-                for (QuestData data : HyPlus.hyQuestTracker.dspc2.values()) {
+                if (HyPlus.getInstance().hyQuestTracker.dspc2.isEmpty()) return;
+                for (QuestData data : HyPlus.getInstance().hyQuestTracker.dspc2.values()) {
 
                     int boxW = tracker.HYPLUS_CTR_SORTORDER.getValueBoolean() ? -data.getL(data.percent == 100) : data.getL(data.percent == 100);
                     if (this.isLastRightBound()) posX = rightX - boxW;
 
                     if (data.id.equals("empty")) {
 
-                        String text = "No avaible quests.";
+                        String text = "No quests available.";
                         int len = Minecraft.getMinecraft().fontRendererObj.getStringWidth(text) + 10;
                         HyTrackboxBox draw = new HyTrackboxBox(1, (int) posX, (int) y + count, len, text);
                         //HyPlus.displayIgMessage("trackbox", k.i + "");
@@ -196,7 +194,7 @@ public class HyTrackboxGUI extends Module {
 
     @Override
     public ModuleCategory getCategory() {
-        return HyPlus.hyModuleCategory;
+        return HyPlus.getInstance().hyModuleCategory;
     }
 
     @Override

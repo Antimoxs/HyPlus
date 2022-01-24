@@ -17,6 +17,7 @@ import net.labymod.settings.Settings;
 import net.labymod.settings.elements.BooleanElement;
 import net.labymod.settings.elements.ControlElement;
 import net.labymod.settings.elements.SettingsElement;
+import net.labymod.settings.elements.SliderElement;
 import net.labymod.utils.Material;
 import scala.tools.nsc.Global;
 
@@ -27,19 +28,13 @@ import java.util.UUID;
 
 public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
-    private final HyPlus hyPlus;
 
     private HyParty party = new HyParty();
 
     public final HySetting HYPLUS_PM_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_PM_TOGGLE", "PartyManager", "Toggle the party-manager.", true, true, Material.CAKE);
     public final HySetting HYPLUS_PM_SHOW = new HySetting(HySettingType.BOOLEAN, "HYPLUS_PM_SHOW", "Show in DiscordPresence", "Toggle the display of the current party state in the Discord.", true, true, Material.PAPER);
     public final HySetting HYPLUS_PM_JOIN = new HySetting(HySettingType.BOOLEAN, "HYPLUS_PM_JOIN", "Allow party joins.", "Allow players to join ur party. (Only public party)", true, true, Material.GOLD_BOOTS);
-
-    public HyPartyManager(HyPlus HyPlus) {
-
-        this.hyPlus = HyPlus;
-
-    }
+    public final HySetting HYPLUS_PM_DC_UPDATE = new HySetting(HySettingType.INT, "HYPLUS_PM_DC_UPDATE", "Discord Callback interval.", "Set the interval for Callback checks.", 2, 2, Material.WATCH);
 
 
     @Override
@@ -50,9 +45,9 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
     @Override
     public void checkConfig(boolean reset) {
 
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_PM_TOGGLE);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_PM_SHOW);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_PM_JOIN);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_PM_TOGGLE);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_PM_SHOW);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_PM_JOIN);
 
     }
 
@@ -68,7 +63,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
         BooleanElement toggle = new BooleanElement(HYPLUS_PM_TOGGLE.getDisplayName(), HYPLUS_PM_TOGGLE.getIcon(), (booleanElement) -> {
 
-            HYPLUS_PM_TOGGLE.changeConfigValue(hyPlus, booleanElement);
+            HYPLUS_PM_TOGGLE.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
             updateParty(false);
 
@@ -91,7 +86,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
         ArrayList<SettingsElement> subSettings = new ArrayList<>();
         BooleanElement show = new BooleanElement(HYPLUS_PM_SHOW.getDisplayName(), HYPLUS_PM_SHOW.getIcon(), (booleanElement) -> {
 
-            HYPLUS_PM_SHOW.changeConfigValue(hyPlus, booleanElement);
+            HYPLUS_PM_SHOW.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
             updateParty(false);
 
@@ -100,15 +95,30 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
         BooleanElement join = new BooleanElement(HYPLUS_PM_JOIN.getDisplayName(), HYPLUS_PM_JOIN.getIcon(), (booleanElement) -> {
 
-            HYPLUS_PM_JOIN.changeConfigValue(hyPlus, booleanElement);
+            HYPLUS_PM_JOIN.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
             updateParty(false);
 
         }, HYPLUS_PM_JOIN.getValueBoolean());
         join.setDescriptionText(HYPLUS_PM_JOIN.getDescription());
 
+
+        SliderElement interval = new SliderElement(HYPLUS_PM_DC_UPDATE.getDisplayName(), HYPLUS_PM_DC_UPDATE.getIcon(), HYPLUS_PM_DC_UPDATE.getValueInt());
+        interval.addCallback((sliderElement) -> {
+
+            HYPLUS_PM_DC_UPDATE.changeConfigValue(HyPlus.getInstance(), sliderElement);
+            checkConfig(false);
+            updateParty(false);
+
+        });
+        interval.setMinValue(1);
+        interval.setMaxValue(50);
+        interval.setSteps(1);
+
+
         subSettings.add(show);
         subSettings.add(join);
+        subSettings.add(interval);
 
         return subSettings;
 
@@ -118,14 +128,33 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
     public void onLocationChange(HyServerLocation location) {
 
         if (!HYPLUS_PM_TOGGLE.getValueBoolean()) return;
-        hyPlus.sendMessageIngameChat("/pl");
+        HyPlus.getInstance().sendMessageIngameChat("/pl");
 
     }
+
+    private int interval = 0;
 
     @Override
     public boolean loop() {
 
-        hyPlus.discordApp.getRichPresence().runCallbacks();
+        if (interval > HYPLUS_PM_DC_UPDATE.getValueInt()) {
+
+            interval = 0;
+
+            Thread t = new Thread(() -> {
+
+                HyPlus.getInstance().discordApp.getRichPresence().runCallbacks();
+
+            });
+            Runtime.getRuntime().addShutdownHook(t);
+            t.start();
+
+        }
+        else {
+
+            interval++;
+
+        }
         return true;
 
     }
@@ -144,7 +173,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
         if (s.startsWith("/stream")) {
 
-            hyPlus.sendMessageIngameChat(s); return;
+            HyPlus.getInstance().sendMessageIngameChat(s); return;
 
         }
 
@@ -153,12 +182,30 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
         StringBuilder sb = new StringBuilder();
         sb.append("§9§m------------------------------§r");
 
-        if (command.length <=1) return;
+        if (command.length <=1) {
+            HyPlus.getInstance().sendMessageIngameChat("/party");
+            return;
+        }
 
         switch (command[1]) {
 
-            case "accept": { hyPlus.sendMessageIngameChat(s); break; }
-            case "invite": { hyPlus.sendMessageIngameChat(s); break; }
+            case "accept":
+            case "transfer":
+            case "demote":
+            case "kickoffline":
+            case "promote":
+            case "disband":
+            case "warp":
+            case "poll":
+            case "chat":
+            case "private":
+            case "join":
+            case "settings":
+            case "mute":
+            case "invite":
+            case "leave":
+            case "kick":
+            case "answer": { HyPlus.getInstance().sendMessageIngameChat(s); break; }
             case "list": {
 
 
@@ -195,27 +242,12 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
                 }
                 sb.append("\n§9§m------------------------------§r");
 
-                hyPlus.displayIgMessage(null, sb.toString());
+                HyPlus.getInstance().displayIgMessage(null, sb.toString());
                 break;
 
 
 
             }
-            case "leave": { hyPlus.sendMessageIngameChat(s); break; }
-            case "warp": { hyPlus.sendMessageIngameChat(s); break; }
-            case "disband": { hyPlus.sendMessageIngameChat(s); break; }
-            case "promote": { hyPlus.sendMessageIngameChat(s); break; }
-            case "demote": { hyPlus.sendMessageIngameChat(s); break; }
-            case "transfer": { hyPlus.sendMessageIngameChat(s); break; }
-            case "kick": { hyPlus.sendMessageIngameChat(s); break; }
-            case "kickoffline": { hyPlus.sendMessageIngameChat(s); break; }
-            case "settings": { hyPlus.sendMessageIngameChat(s); break; }
-            case "poll": { hyPlus.sendMessageIngameChat(s); break; }
-            case "chat": { hyPlus.sendMessageIngameChat(s); break; }
-            case "mute": { hyPlus.sendMessageIngameChat(s); break; }
-            case "private": { hyPlus.sendMessageIngameChat(s); break; }
-            case "join": { hyPlus.sendMessageIngameChat(s); break; }
-            case "answer": { hyPlus.sendMessageIngameChat(s); break; }
             default: overriddenPartyCommands("/party invite " + s.replaceFirst(command[0], ""));
 
         }
@@ -223,7 +255,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
         Thread updater = new Thread(() -> {
 
             wait.sc(3L);
-            this.hyPlus.sendMessageIngameChat("/pl");
+            HyPlus.getInstance().sendMessageIngameChat("/pl");
             wait.sc(3L);
             updateParty(false);
 
@@ -239,8 +271,11 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
     @Override
     public void onPartyDataPacket(HyParty party) {
 
-        // updating party over packet
         LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Updated party via packet.");
+        // check if we even in the party lol
+        if (!party.isInParty(LabyMod.getInstance().getPlayerName())) return; // we're not in that party :sob:
+        // updating party over packet
+
         this.party = party;
         updateParty(false);
 
@@ -248,6 +283,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
     @Override
     public void onInternalPartyMessage(String message, HyPartyMessageType type) {
+
 
         Thread partyT = new Thread(() -> {
 
@@ -276,6 +312,9 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
                     // "§6Party Members (1)§r"
                     int count = Integer.parseInt(message.substring(17, message.length()-3));
                     party.setExists(true);
+
+                    if (count == party.getCount()) return;
+
                     party.setCount(count);
                     updateParty(false);
                     return;
@@ -283,6 +322,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
                 }
                 case LIST_LEADER: {
 
+                    // PACKET EXCHANGE
                     party.clearMembers();
                     party.clearMods();
                     // "§eParty Leader: §r§6[MVP§r§5++§r§6] Antimoxs §r§a●§r"
@@ -305,6 +345,9 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
                     System.out.println("PL: '" + rank + "' | '" + name + "'");
                     System.out.println(cropped);
                     party.setExists(true);
+
+                    // if (name.equals(party.getPartyLeader().getName())) return; -- update it every time >:O
+
                     party.setPartyLeader(new HySimplePlayer(name, rank, ""));
                     updateParty(true);
                     return;
@@ -316,6 +359,9 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
                     String cropped = message.substring(17);
                     String[] members = cropped.split("●");
                     party.setExists(true);
+
+                    if (members.length == party.getPartyMembers().size()) return;
+
                     for (String member : members) {
 
                         party.addPlayer(getPlayerFromString(member, cropped));
@@ -331,6 +377,9 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
                     String cropped = message.substring(20);
                     String[] members = cropped.split("●");
                     party.setExists(true);
+
+                    if (members.length == party.getPartyMods().size()) return;
+
                     for (String member : members) {
 
                         party.addMod(getPlayerFromString(member, cropped));
@@ -343,60 +392,85 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
                 case PUBLIC_CREATED: {
 
+                    // DETECTED CLIENTSIDE
                     // "§aCreated a public party! Players can join with §r§6§l/party join Antimoxs§r"
                     LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Party is now public.");
                     party.setExists(true);
+
                     party.setPublic(true);
-                    break;
+                    updateParty(false);
+                    return;
 
                 }
                 case PUBLIC_CAPPED: {
 
+                    // DETECTED CLIENTSIDE
                     LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Updated player cap.");
                     // "§eParty is capped at 25 players.§r"
                     String cropped = message.substring(21, message.length()-11);
                     int cap = Integer.parseInt(cropped);
                     party.setExists(true);
                     party.setPublic(true);
+
+                    if (cap == party.getCap()) return;
+
                     party.setCap(cap);
-                    break;
+                    HyPlus.getInstance().sendMessageIngameChat("/pl");
+                    return;
 
                 }
 
                 case ALLINV_ON: {
 
+                    // DETECTED CLIENTSIDE
                     LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Enabled all-invite.");
                     party.setExists(true);
+
+                    //if (party.getAllInvite()) return;
+
                     party.setAllInvite(true);
                     return;
 
                 }
                 case ALLINV_OFF: {
 
+                    // DETECTED CLIENTSIDE
                     LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Disabled all-invite.");
                     party.setExists(true);
+
+                    //if (!party.getAllInvite()) return;
+
                     party.setAllInvite(false);
                     return;
 
                 }
                 case PGAMES_ON: {
 
+                    // DETECTED CLIENTSIDE
                     LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Enabled private games.");
                     party.setExists(true);
+
+                    //if (party.getPGames()) return;
+
                     party.setPGames(true);
                     return;
 
                 }
                 case PGAMES_OFF: {
 
+                    // DETECTED CLIENTSIDE
                     LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Disabled private games.");
                     party.setExists(true);
+
+                    //if (!party.getPGames()) return;
+
                     party.setPGames(false);
                     return;
 
                 }
                 case PUBLIC_OFF: {
 
+                    // DETECTED CLIENTSIDE
                     LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Party is no longer public.");
                     party.setExists(true);
                     party.setPublic(false);
@@ -406,6 +480,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
                 }
                 case TRANSFERRED: {
 
+                    // DETECTED CLIENTSIDE
                     LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Transferred party.");
                     break;
 
@@ -416,12 +491,13 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
                 case PLAYER_KICKED:
                 case PLAYER_DISCONNECT: {
 
-                    // update the party
+                    // just update the party via '/party list'
                     break;
 
                 }
                 case MUTED_ON: {
 
+                    // DETECTED CLIENTSIDE
                     LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Party is now muted.");
                     party.setExists(true);
                     party.setMuted(true);
@@ -430,6 +506,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
                 }
                 case MUTED_OFF: {
 
+                    // DETECTED CLIENTSIDE
                     LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Party is now unmuted.");
                     party.setExists(true);
                     party.setMuted(false);
@@ -439,9 +516,9 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
             }
 
-            this.hyPlus.sendMessageIngameChat("/pl");
-            wait.sc(3L);
-            updateParty(true);
+            HyPlus.getInstance().sendMessageIngameChat("/pl");
+            //wait.sc(3L);
+            //updateParty(true);
 
         });
         Runtime.getRuntime().addShutdownHook(partyT);
@@ -482,26 +559,27 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
         Thread updater = new Thread(() -> {
 
-            if (!hyPlus.hyDiscordPresence.presenceCheck()) return;
+            if (!HyPlus.getInstance().hyDiscordPresence.presenceCheck()) return;
 
             if (!this.party.doesExist() || !HYPLUS_PM_SHOW.getValueBoolean()) {
 
-                hyPlus.discordApp.getRichPresence().updateParty(false, 0, 0, "");
-                hyPlus.discordApp.getRichPresence().updateJoinSecret(false, null);
-                hyPlus.discordApp.getRichPresence().updateRichPresence();
+                HyPlus.getInstance().discordApp.getRichPresence().updateParty(false, 0, 0, "");
+                HyPlus.getInstance().discordApp.getRichPresence().updateJoinSecret(false, null);
+                HyPlus.getInstance().discordApp.getRichPresence().updateRichPresence();
                 return;
 
             }
 
             int max = this.party.isPublic() ? this.party.getCap() : this.party.getCount();
             int count = this.party.getCount();
-            String name = this.party.getPartyLeader().getName();
+            String name = this.party.getPartyLeader().getPlayerBlank();
             System.out.println("LEADERNAME: '" + name + "'");
 
             if (name.equals("#UndefinedPlayer#")) return;
 
+
             String id = MojangRequest.getUUID(name);
-            hyPlus.discordApp.getRichPresence().updateParty(true, max, count, id);
+            HyPlus.getInstance().discordApp.getRichPresence().updateParty(true, max, count, id);
 
             if (this.party.isPublic() && HYPLUS_PM_JOIN.getValueBoolean()) {
 
@@ -510,11 +588,11 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
             }
             else {
 
-                hyPlus.discordApp.getRichPresence().updateJoinSecret(false, null);
+                HyPlus.getInstance().discordApp.getRichPresence().updateJoinSecret(false, null);
 
             }
 
-            hyPlus.discordApp.getRichPresence().updateRichPresence();
+            HyPlus.getInstance().discordApp.getRichPresence().updateRichPresence();
 
             if (sendPacket) {
 
@@ -522,7 +600,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
                 ArrayList<UUID> uuids = new ArrayList<>();
                 for (HySimplePlayer player : this.party.getAllMembers()) {
 
-                    String uuid = MojangRequest.getUUID(player.getPlayerBlank());
+                    String uuid = player.getPlayerObject().uuid;
                     System.out.println("REQUEST FOR '" + player.getPlayerBlank() + "' returned: " + uuid);
                     try {
                         uuids.add(UUID.fromString(HyUtilities.dashUUID(uuid)));
@@ -554,6 +632,8 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
             }
 
+            HyPlus.getInstance().displayIgMessage("PartyManager", "Updating your party <3");
+
 
         });
         Runtime.getRuntime().addShutdownHook(updater);
@@ -564,7 +644,8 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
     private void generateInvite(String uuidJoin) {
 
         System.out.println(uuidJoin);
-        hyPlus.discordApp.getRichPresence().updateJoinSecret(true, HyUtilities.dashUUID(uuidJoin));
+        HyPlus.getInstance().displayIgMessage("PublicPartyUUID", uuidJoin);
+        HyPlus.getInstance().discordApp.getRichPresence().updateJoinSecret(true, HyUtilities.dashUUID(uuidJoin));
 
     }
 

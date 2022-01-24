@@ -20,5 +20,10 @@ public class Game {
         return UnixConverter.toDate(ended);
 
     }
+    public int getDurationSeconds() {
+
+        return (int) (ended - date);
+
+    }
 
 }

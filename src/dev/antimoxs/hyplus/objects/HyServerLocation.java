@@ -2,6 +2,8 @@ package dev.antimoxs.hyplus.objects;
 
 import com.google.gson.annotations.Expose;
 
+import java.util.Objects;
+
 public class HyServerLocation {
 
     // location fields
@@ -18,6 +20,22 @@ public class HyServerLocation {
 
     // game data
     public HyGameData gameData = null;
+
+    public boolean isLimbo() { return server.equalsIgnoreCase("limbo"); }
+    public boolean isLobby() { return !Objects.equals(lobbyname, ""); }
+    public String getLobbyNumber() {
+
+        int index = lobbyname.toLowerCase().indexOf("lobby");
+        if (lobbyname.length() >= index+5) {
+
+            return lobbyname.substring(index + 5);
+
+
+        }
+        return "";
+
+    }
+
 
     public String getJson() {
 

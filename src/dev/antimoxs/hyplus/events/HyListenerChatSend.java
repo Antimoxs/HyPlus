@@ -15,7 +15,6 @@ import net.labymod.main.LabyMod;
 import net.labymod.support.util.Debug;
 import net.labymod.utils.Consumer;
 import net.labymod.utils.ServerData;
-import net.minecraft.network.play.client.C01PacketChatMessage;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -23,25 +22,14 @@ import java.util.UUID;
 
 public class HyListenerChatSend implements MessageSendEvent, Consumer<ServerData> {
 
-
-    private HyPlus hyPlus;
-
-
-    public HyListenerChatSend(HyPlus addon) {
-
-        this.hyPlus = addon;
-
-
-    }
-
     @Override
     public boolean onSend(String s) {
 
         // making sure we are on hypixel.
-        if (!hyPlus.hypixel.checkOnServer()) return false;
+        if (!HyPlus.getInstance().hypixel.checkOnServer()) return false;
 
         // Check if we are enabled.
-        if (!hyPlus.hyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return false;
+        if (!HyPlus.getInstance().hyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return false;
 
         String[] command = s.split(" ");
 
@@ -53,14 +41,14 @@ public class HyListenerChatSend implements MessageSendEvent, Consumer<ServerData
             case "/p":
             case "/party": {
 
-                hyPlus.hyPartyManager.overriddenPartyCommands(s);
-                return hyPlus.hyPartyManager.HYPLUS_PM_TOGGLE.getValueBoolean();
+                HyPlus.getInstance().hyPartyManager.overriddenPartyCommands(s);
+                return HyPlus.getInstance().hyPartyManager.HYPLUS_PM_TOGGLE.getValueBoolean();
 
             }
             // Tmporaly
             case "/#dx": {
 
-                Hypixel.gulugulu(hyPlus.hypixel);
+                Hypixel.gulugulu(HyPlus.getInstance().hypixel);
                 return true;
 
             }
@@ -74,27 +62,21 @@ public class HyListenerChatSend implements MessageSendEvent, Consumer<ServerData
             }
             case "/hydiscord": {
 
-                hyPlus.displayIgMessage("Discord", "https://discord.gg/ATdbUS4");
+                HyPlus.getInstance().displayIgMessage("Discord", "https://discord.gg/ATdbUS4");
                 return true;
 
             }
             case "/forceupdate": {
 
 
-                if (!hyPlus.hypixel.checkOnServer()) {
-                    return false;
-                }
-
-
-
-                return true;
+                return HyPlus.getInstance().hypixel.checkOnServer();
 
             }
 
             // Dev commands
             case "/#test": {
 
-                hyPlus.sendMessageIngameChat("/pc §4$lHI§r");
+                HyPlus.getInstance().sendMessageIngameChat("/pc §4$lHI§r");
                 return true;
 
             }
@@ -109,7 +91,7 @@ public class HyListenerChatSend implements MessageSendEvent, Consumer<ServerData
             case "/#dc": {
 
                 System.out.println("HyPlus COMMAND");
-                hyPlus.HyPresence.updatePrecense(hyPlus, "poop");
+                HyPlus.getInstance().HyPresence.updatePrecense(HyPlus.getInstance(), "poop");
                 return true;
 
             }
@@ -141,13 +123,13 @@ public class HyListenerChatSend implements MessageSendEvent, Consumer<ServerData
             }
             case "/#sb": {
 
-                Hypixel.checkScoreboard(hyPlus.hypixel);
+                Hypixel.checkScoreboard(HyPlus.getInstance().hypixel);
                 return true;
 
             }
             case "/#sl": {
 
-                Hypixel.listSB(hyPlus.hypixel);
+                Hypixel.listSB(HyPlus.getInstance().hypixel);
                 return true;
 
             }
@@ -170,7 +152,7 @@ public class HyListenerChatSend implements MessageSendEvent, Consumer<ServerData
                         + "-"
                         + uuidLeader.substring(20,32);
 
-                hyPlus.HyPresence.updatePartyInfo(true, UUID.fromString(uuidLeader),1,2);
+                HyPlus.getInstance().HyPresence.updatePartyInfo(true, UUID.fromString(uuidLeader),1,2);
                 return true;
 
             }
@@ -180,13 +162,6 @@ public class HyListenerChatSend implements MessageSendEvent, Consumer<ServerData
 
             }
 
-
-            case "/#mt": {
-
-                LabyModCore.getMinecraft().getConnection().addToSendQueue(new C01PacketChatMessage("hai"));
-                return true;
-
-            }
 
             case "/#perms": {
 
@@ -281,21 +256,21 @@ public class HyListenerChatSend implements MessageSendEvent, Consumer<ServerData
             }
             case "/#reloadfl" : {
 
-                hyPlus.hyFriend.reloadFL();
+                HyPlus.getInstance().hyFriend.reloadFL();
                 return true;
 
             }
 
             case "/#showparty": {
 
-                hyPlus.displayIgMessage("Party1", hyPlus.hyPartyManager.getParty().doesExist() + " (exists)");
-                hyPlus.displayIgMessage("Party2", hyPlus.hyPartyManager.getParty().getCount() + " (count)");
-                hyPlus.displayIgMessage("Party3", hyPlus.hyPartyManager.getParty().getPartyLeader().getPlayer() + " (leader)");
-                hyPlus.displayIgMessage("Party4", hyPlus.hyPartyManager.getParty().getPartyMembers().toString());
-                hyPlus.displayIgMessage("Party5", hyPlus.hyPartyManager.getParty().getPartyMods().toString());
-                hyPlus.displayIgMessage("Party6", hyPlus.hyPartyManager.getParty().getAllInvite() + "(allinvite)");
-                hyPlus.displayIgMessage("Party7", hyPlus.hyPartyManager.getParty().isPublic() + "(public)");
-                hyPlus.displayIgMessage("Party8", hyPlus.hyPartyManager.getParty().getCap() + "(cap)");
+                HyPlus.getInstance().displayIgMessage("Party1", HyPlus.getInstance().hyPartyManager.getParty().doesExist() + " (exists)");
+                HyPlus.getInstance().displayIgMessage("Party2", HyPlus.getInstance().hyPartyManager.getParty().getCount() + " (count)");
+                HyPlus.getInstance().displayIgMessage("Party3", HyPlus.getInstance().hyPartyManager.getParty().getPartyLeader().getPlayer() + " (leader)");
+                HyPlus.getInstance().displayIgMessage("Party4", HyPlus.getInstance().hyPartyManager.getParty().getPartyMembers().toString() + "(members)");
+                HyPlus.getInstance().displayIgMessage("Party5", HyPlus.getInstance().hyPartyManager.getParty().getPartyMods().toString() + "(mods)");
+                HyPlus.getInstance().displayIgMessage("Party6", HyPlus.getInstance().hyPartyManager.getParty().getAllInvite() + "(allinvite)");
+                HyPlus.getInstance().displayIgMessage("Party7", HyPlus.getInstance().hyPartyManager.getParty().isPublic() + "(public)");
+                HyPlus.getInstance().displayIgMessage("Party8", HyPlus.getInstance().hyPartyManager.getParty().getCap() + "(cap)");
 
                 return false;
 

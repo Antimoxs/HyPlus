@@ -1,13 +1,17 @@
 package dev.antimoxs.hypixelapi.requests;
 
+import dev.antimoxs.hypixelapi.HypixelApi;
+import dev.antimoxs.hypixelapi.events.EventHandler;
 import dev.antimoxs.hypixelapi.response.ApiResponse;
 import dev.antimoxs.hypixelapi.config;
 import dev.antimoxs.hypixelapi.exceptions.ApiRequestException;
 import dev.antimoxs.hypixelapi.objects.ApiKey;
+import dev.antimoxs.hypixelapi.util.kvp;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -18,12 +22,14 @@ public class ApiRequest {
     protected String values;
     protected String rawValues;
     protected String baseURL = config.BaseURL;
+    protected EventHandler eventHandler;
 
-    public ApiRequest(ApiKey ApiToken, RequestType type, String values) {
+    public ApiRequest(ApiKey ApiToken, RequestType type, String values, EventHandler eventHandler) {
 
         this.ApiToken = ApiToken;
         this.type = type;
         this.rawValues = values;
+        this.eventHandler = eventHandler;
 
         switch (type) {
 
@@ -39,11 +45,11 @@ public class ApiRequest {
             case PLAYER_UUID:
             case STATUS:
             case FRIENDS:
+            case GAMES:
                 this.values = valueBuilder.build("uuid", values);
                 break;
 
-            case KEY:
-            case QUESTS:
+            default:
                 this.values = "";
                 break;
 
@@ -73,28 +79,22 @@ public class ApiRequest {
 
         String url = buildUrl(baseURL, type, values);
         String json;
+        int code = 0;
 
         try {
-            json = doApiRequest(url, to);
+            kvp result = doApiRequest(url, to);
+            json = result.string;
+            code = result.i;
         } catch (IOException e) {
+
+            e.printStackTrace();
+
+            this.eventHandler.callApiRequestErrorEvent("Failed request with url: " + url);
             throw new ApiRequestException("Failed request with url: " + url);
-        }
-
-        switch (this.type) {
-
-            case QUESTS:
-            case GUILD_NAME:
-            case GUILD_UUID:
-            case PLAYER_NAME:
-            case PLAYER_UUID:
-            case KEY:
-            case STATUS:
-            case FRIENDS:
-                return new ApiResponse(this.ApiToken, json, url);
-            default: return null;
-
 
         }
+
+        return new ApiResponse(this.ApiToken, json, url, code);
 
     }
 
@@ -106,12 +106,15 @@ public class ApiRequest {
 
     }
 
-    private synchronized String doApiRequest(String url, int to) throws IOException {
+    private synchronized kvp doApiRequest(String url, int to) throws IOException {
 
         URL hpxl = new URL(url);
-        URLConnection yc = hpxl.openConnection();
+        HttpURLConnection yc = (HttpURLConnection) hpxl.openConnection();
         yc.setConnectTimeout(to);
-        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+        yc.connect();
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getResponseCode() != 200 ? yc.getErrorStream() : yc.getInputStream()));
+
         String inputLine;
         String re = "";
 
@@ -121,9 +124,11 @@ public class ApiRequest {
 
         }
 
+        // close reader
         in.close();
 
-        return re.replaceFirst("\\{", "\\{\"url\":\"" + url + "\",");
+        // insert url
+        return new kvp(re.replaceFirst("\\{", "\\{\"url\":\"" + url + "\","), yc.getResponseCode());
 
 
     }

@@ -15,13 +15,6 @@ import java.util.List;
 
 public class HyGameBadge implements HyModule {
 
-    HyPlus HyPlus;
-
-    public HyGameBadge(HyPlus HyPlus) {
-
-        this.HyPlus = HyPlus;
-
-    }
 
     @Override
     public List<SettingsElement> getModuleSettings() {
@@ -36,7 +29,7 @@ public class HyGameBadge implements HyModule {
 
         for (Field f : PSGDuels.class.getDeclaredFields()) {
 
-            BooleanElement elem = new BooleanElement(f.getName(), HyPlus, new ControlElement.IconData(Material.BED), "HYPLUS_GBADGE_BEDWARS_STATS_" + f.getName().toUpperCase(), false);
+            BooleanElement elem = new BooleanElement(f.getName(), HyPlus.getInstance(), new ControlElement.IconData(Material.BED), "HYPLUS_GBADGE_BEDWARS_STATS_" + f.getName().toUpperCase(), false);
             duels_sub.add(elem);
 
         }

@@ -2,12 +2,9 @@ package dev.antimoxs.hypixelapi.response;
 
 import dev.antimoxs.hypixelapi.objects.status.Session;
 
-public class StatusResponse {
+public class StatusResponse extends BaseResponse {
 
-    public boolean success = false;
-    public String uuid = "No data for uuid";
     private Session session = null;
-    public String cause = "";
 
     public StatusResponse() {
 

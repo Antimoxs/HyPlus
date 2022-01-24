@@ -14,14 +14,6 @@ import java.util.ArrayList;
 
 public class HyEventManager {
 
-    private final HyPlus hyPlus;
-
-    public HyEventManager(HyPlus hyPlus) {
-
-        this.hyPlus = hyPlus;
-
-    }
-
     private ArrayList<IHyPlusEvent> events = new ArrayList<>();
 
     public void register(IHyPlusEvent event) {
@@ -89,6 +81,8 @@ public class HyEventManager {
         // calling externals
         sendAddonPacketSelfAPI("friendrequest", request.getJson());
 
+        System.out.println("FRIEND REQUEST AUTO ACCEPT: " + accepted);
+
         return accepted;
 
     }
@@ -147,6 +141,18 @@ public class HyEventManager {
 
     }
 
+    public void callPartyMessageAsync(String s, HyPartyMessageType type) {
+
+        Thread t = new Thread(() -> {
+
+            callPartyMessage(s, type);
+
+        });
+        Runtime.getRuntime().addShutdownHook(t);
+        t.start();
+
+    }
+
     public void callPartyDataPacket(HyParty party) {
 
         // calling internals
@@ -160,10 +166,10 @@ public class HyEventManager {
 
     private void sendAddonPacketSelfAPI(String key, String json) {
 
-        String jsonBytes = hyPlus.hyAdvanced.HYPLUS_ADVANCED_API.getValueBoolean() ? json : "{}";
+        String jsonBytes = HyPlus.getInstance().hyAdvanced.HYPLUS_ADVANCED_API.getValueBoolean() ? json : "{}";
         PacketAddonDevelopment pad = new PacketAddonDevelopment(
                 LabyMod.getInstance().getPlayerUUID(),
-                hyPlus.hyAdvanced.HYPLUS_ADVANCED_API.getValueBoolean() ? "hyplus:" + key : "hyplus:disabled",
+                HyPlus.getInstance().hyAdvanced.HYPLUS_ADVANCED_API.getValueBoolean() ? "hyplus:" + key : "hyplus:disabled",
                 jsonBytes.getBytes(StandardCharsets.UTF_8)
         );
         LabyMod.getInstance().getLabyModAPI().sendAddonDevelopmentPacket(pad);

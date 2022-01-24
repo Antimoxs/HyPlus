@@ -14,18 +14,9 @@ import java.util.List;
 
 public class HyGeneral implements IHyPlusModule {
 
-    private final HyPlus hyPlus;
-
     public final HySetting HYPLUS_GENERAL_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_GENERAL_TOGGLE", "HyPlus enabled", "Toggle all features of the HyPlus addon.", true, true, Material.REDSTONE);
     public final HySetting HYPLUS_GENERAL_LOOP_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_GENERAL_LOOP_TOGGLE", "HyLoop", "Toggle the HyLoop.", true, true, Material.FISHING_ROD);
     public final HySetting HYPLUS_GENERAL_APIKEY = new HySetting(HySettingType.STRING, "HYPLUS_GENERAL_APIKEY", "Hypixel API-Key", "Set the HypixelAPI key. (Needed for a range of features.)", "", "", Material.TRIPWIRE_HOOK);
-
-
-    public HyGeneral(HyPlus hyPlus) {
-
-        this.hyPlus = hyPlus;
-
-    }
 
     @Override
     public String getModuleName() {
@@ -35,9 +26,9 @@ public class HyGeneral implements IHyPlusModule {
     @Override
     public void checkConfig(boolean reset) {
 
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_GENERAL_TOGGLE);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_GENERAL_LOOP_TOGGLE);
-        hyPlus.hyConfigManager.checkConfig(reset, HYPLUS_GENERAL_APIKEY);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_GENERAL_TOGGLE);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_GENERAL_LOOP_TOGGLE);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_GENERAL_APIKEY);
 
     }
 
@@ -53,23 +44,23 @@ public class HyGeneral implements IHyPlusModule {
 
         BooleanElement gen_all = new BooleanElement(HYPLUS_GENERAL_TOGGLE.getDisplayName(), HYPLUS_GENERAL_TOGGLE.getIcon(), (booleanElement) -> {
 
-            HYPLUS_GENERAL_TOGGLE.changeConfigValue(hyPlus, booleanElement);
+            HYPLUS_GENERAL_TOGGLE.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
         }, HYPLUS_GENERAL_TOGGLE.getValueBoolean());
         gen_all.setDescriptionText(HYPLUS_GENERAL_TOGGLE.getDescription());
         BooleanElement gen_loop = new BooleanElement(HYPLUS_GENERAL_LOOP_TOGGLE.getDisplayName(), HYPLUS_GENERAL_LOOP_TOGGLE.getIcon(), (booleanElement) -> {
 
-            HYPLUS_GENERAL_LOOP_TOGGLE.changeConfigValue(hyPlus, booleanElement);
+            HYPLUS_GENERAL_LOOP_TOGGLE.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
         }, HYPLUS_GENERAL_LOOP_TOGGLE.getValueBoolean());
         gen_loop.setDescriptionText(HYPLUS_GENERAL_LOOP_TOGGLE.getDescription());
         StringElement gen_apikey = new StringElement(HYPLUS_GENERAL_APIKEY.getDisplayName(), HYPLUS_GENERAL_APIKEY.getIcon(), HYPLUS_GENERAL_APIKEY.getValueString(), (accepted) -> {
 
-           HYPLUS_GENERAL_APIKEY.changeConfigValue(hyPlus, accepted);
+           HYPLUS_GENERAL_APIKEY.changeConfigValue(HyPlus.getInstance(), accepted);
            checkConfig(false);
-           hyPlus.startAPI();
+           HyPlus.getInstance().startAPI();
 
         });
         gen_apikey.setDescriptionText(HYPLUS_GENERAL_APIKEY.getDescription());

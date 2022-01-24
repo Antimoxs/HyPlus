@@ -9,22 +9,17 @@ import org.lwjgl.input.Keyboard;
 
 public class HyListenerKeyInput {
 
-    private final HyPlus hyPlus;
-
-    public HyListenerKeyInput(HyPlus hyPlus) {
-
-        this.hyPlus = hyPlus;
-
-    }
 
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent event) {
 
         // Check if we are enabled.
-        if (!hyPlus.hyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return;
+        if (!HyPlus.getInstance().hyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return;
 
         //System.out.println("KEY: " + Keyboard.getEventKey());
 
+        // Quickplay not yet finished :(
+        /*
         try {
 
             if (Keyboard.isKeyDown(hyPlus.hyQuickPlay.HYPLUS_QUICKPLAY_KEY.getValueInt())) {
@@ -44,6 +39,8 @@ public class HyListenerKeyInput {
 
 
         }
+
+         */
 
     }
 

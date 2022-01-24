@@ -1,5 +1,6 @@
 package dev.antimoxs.hypixelapi;
 
+import dev.antimoxs.hypixelapi.events.IHypixelApiEvent;
 import dev.antimoxs.hypixelapi.exceptions.ApiBuildException;
 import dev.antimoxs.utilities.logger.AtmxLogType;
 import dev.antimoxs.utilities.logger.AtmxLogger;
@@ -11,7 +12,7 @@ public class ApiBuilder {
 
     private ArrayList<String> API_KEYS;
     private String APP_NAME;
-    private HashMap<Integer, ApiEvent> LISTENERS = new HashMap<>();
+    private ArrayList<IHypixelApiEvent> events = new ArrayList<>();
     private boolean useSlothPixel = false;
     private int TIMEOUT = 120;
 
@@ -49,23 +50,14 @@ public class ApiBuilder {
 
     }
 
-    // in progress...
-    private ApiBuilder addListener(ApiEvent event) {
+    public ApiBuilder registerEvent(IHypixelApiEvent event) {
 
-        if (LISTENERS.isEmpty()) {
-
-            LISTENERS.put(0, event);
-
-        } else {
-
-            LISTENERS.put(LISTENERS.size(), event);
-
-        }
+        this.events.add(event);
         return this;
 
     }
 
-    public TBCHypixelApi build() {
+    public HypixelApi build() {
 
         if (this.API_KEYS == null) {
 
@@ -75,7 +67,7 @@ public class ApiBuilder {
 
         try {
 
-            return new TBCHypixelApi(this);
+            return new HypixelApi(this);
 
         } catch (ApiBuildException e) {
             AtmxLogger.log(AtmxLogType.FAILED, config.AppName, "Failed ApiBuild.");
@@ -91,7 +83,7 @@ public class ApiBuilder {
 
     public ArrayList<String> getApiKeys() { return this.API_KEYS; }
     public String getAppName() { return this.APP_NAME; }
-    public HashMap getListeners() { return this.LISTENERS; }
+    public ArrayList<IHypixelApiEvent> getEvents() { return this.events; }
     public boolean isUseSlothPixel() { return this.useSlothPixel; }
 
     public int getTIMEOUT() {

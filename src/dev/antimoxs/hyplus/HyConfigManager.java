@@ -7,22 +7,15 @@ import dev.antimoxs.hyplus.objects.HySetting;
 
 public class HyConfigManager {
 
-    private final HyPlus hyPlus;
     private boolean updateCheck = false;
-
-    public HyConfigManager(HyPlus hyPlus) {
-
-        this.hyPlus = hyPlus;
-
-    }
 
     public void loadConfig(int retry, boolean reset) {
 
         if (retry >= 10) {
 
-            hyPlus.onDisable();
-            hyPlus.hyGeneral.HYPLUS_GENERAL_TOGGLE.changeConfigValue(hyPlus, false);
-            hyPlus.hyGeneral.checkConfig(false);
+            HyPlus.getInstance().onDisable();
+            HyPlus.getInstance().hyGeneral.HYPLUS_GENERAL_TOGGLE.changeConfigValue(HyPlus.getInstance(), false);
+            HyPlus.getInstance().hyGeneral.checkConfig(false);
             System.out.println("--- Unable to properly read HyPlus config file. ---");
             return;
 
@@ -38,7 +31,7 @@ public class HyConfigManager {
         //hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_DUELS_ANTIBLUR", 0);
 
 
-        for (IHyPlusModule module : hyPlus.hyModuleManager.getModules()) {
+        for (IHyPlusModule module : HyPlus.getInstance().hyModuleManager.getModules()) {
 
             module.checkConfig(reset);
 
@@ -81,10 +74,10 @@ public class HyConfigManager {
 
         }
 
-        hyPlus.startAPI();
+        HyPlus.getInstance().startAPI();
 
         System.out.println("Config loaded.");
-        hyPlus.saveConfig();
+        HyPlus.getInstance().saveConfig();
 
         //this.onDisable();
         //this.onEnable();
@@ -101,12 +94,12 @@ public class HyConfigManager {
 
         //System.out.println("Checking for '" + property + "'...");
 
-        if (hyPlus.getConfig().has(property)) {
+        if (HyPlus.getInstance().getConfig().has(property)) {
 
             //TBCLogger.log(TBCLoggingType.INFORMATION, config.name, "Loaded '" + property + "'");
             if (reset) {
 
-                hyPlus.getConfig().remove(property);
+                HyPlus.getInstance().getConfig().remove(property);
                 checkConfig(true, setting);
                 return;
 
@@ -114,10 +107,10 @@ public class HyConfigManager {
 
             switch (setting.getType()) {
 
-                case STRING: setting.changeValue(hyPlus.getConfig().get(property).getAsString()); break;
-                case INT: setting.changeValue(hyPlus.getConfig().get(property).getAsInt()); break;
-                case BOOLEAN: setting.changeValue(hyPlus.getConfig().get(property).getAsBoolean()); break;
-                case CHAR: setting.changeValue(hyPlus.getConfig().get(property).getAsCharacter()); break;
+                case STRING: setting.changeValue(HyPlus.getInstance().getConfig().get(property).getAsString()); break;
+                case INT: setting.changeValue(HyPlus.getInstance().getConfig().get(property).getAsInt()); break;
+                case BOOLEAN: setting.changeValue(HyPlus.getInstance().getConfig().get(property).getAsBoolean()); break;
+                case CHAR: setting.changeValue(HyPlus.getInstance().getConfig().get(property).getAsCharacter()); break;
                 default: System.out.println("uhm this is not indented nor wanted. fix asap? " + property); return;
 
             }
@@ -139,10 +132,10 @@ public class HyConfigManager {
 
             switch (setting.getType()) {
 
-                case STRING: hyPlus.getConfig().addProperty(property, setting.getDefaultString()); break;
-                case INT: hyPlus.getConfig().addProperty(property, setting.getDefaultInt()); break;
-                case BOOLEAN: hyPlus.getConfig().addProperty(property, setting.getDefaultBoolean()); break;
-                case CHAR: hyPlus.getConfig().addProperty(property, setting.getDefaultChar()); break;
+                case STRING: HyPlus.getInstance().getConfig().addProperty(property, setting.getDefaultString()); break;
+                case INT: HyPlus.getInstance().getConfig().addProperty(property, setting.getDefaultInt()); break;
+                case BOOLEAN: HyPlus.getInstance().getConfig().addProperty(property, setting.getDefaultBoolean()); break;
+                case CHAR: HyPlus.getInstance().getConfig().addProperty(property, setting.getDefaultChar()); break;
                 default: System.out.println("uhm this is not indented nor wanted. (create) fix asap? " + property); return;
 
             }
@@ -152,27 +145,27 @@ public class HyConfigManager {
             updateCheck = true;
 
         }
-        hyPlus.saveConfig();
+        HyPlus.getInstance().saveConfig();
 
     }
 
     public void changeConfigValue(String property, Object value) {
 
-        if (hyPlus.getConfig().has(property)) {
+        if (HyPlus.getInstance().getConfig().has(property)) {
 
-            hyPlus.getConfig().remove(property);
+            HyPlus.getInstance().getConfig().remove(property);
 
         }
 
 
         if (value instanceof String) {
-            hyPlus.getConfig().addProperty(property, (String) value);
+            HyPlus.getInstance().getConfig().addProperty(property, (String) value);
         } else if (value instanceof Integer) {
-            hyPlus.getConfig().addProperty(property, (int) value);
+            HyPlus.getInstance().getConfig().addProperty(property, (int) value);
         } else if (value instanceof Boolean) {
-            hyPlus.getConfig().addProperty(property, (boolean) value);
+            HyPlus.getInstance().getConfig().addProperty(property, (boolean) value);
         } else if (value instanceof Character) {
-            hyPlus.getConfig().addProperty(property, (char) value);
+            HyPlus.getInstance().getConfig().addProperty(property, (char) value);
         } else {
             System.out.println("uhm this is not indented neither wanted. fix asap? (changer)" + property + " " + value);
         }
