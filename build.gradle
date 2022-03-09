@@ -64,12 +64,8 @@ repositories {
         url = "https://jitpack.io/"
     }
     maven {
-        name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/Antimoxs/HypixelApi")
-        credentials {
-            username = "antimoxs"
-            password = "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"
-        }
+        name = "AntimoxsRepo"
+        url = uri("https://repo.antimoxs.dev")
     }
     jcenter()
     flatDir {
@@ -91,9 +87,7 @@ configurations {
 dependencies {
 
 
-    shadow("dev.antimoxs:hypixel-api:1.4.14")
-    api 'dev.antimoxs:hypixel-api:1.4.14'
-
+    compile "dev.antimoxs:hypixel-api:1.4.19"
 
 
 

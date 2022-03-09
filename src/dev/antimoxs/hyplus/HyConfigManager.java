@@ -4,6 +4,9 @@ import dev.antimoxs.hyplus.modules.HyModuleManager;
 import dev.antimoxs.hyplus.modules.IHyPlusModule;
 import dev.antimoxs.hyplus.modules.betterMsg.HyBetterMsgType;
 import dev.antimoxs.hyplus.objects.HySetting;
+import net.labymod.core.LabyModCore;
+import net.labymod.main.LabyMod;
+import net.labymod.support.util.Debug;
 
 public class HyConfigManager {
 
@@ -40,7 +43,7 @@ public class HyConfigManager {
         if (updateCheck) {
 
             updateCheck = false;
-            System.out.println("Some properties updated, reloading!");
+            // DEBUG System.out.println("Some properties updated, reloading!");
             loadConfig(0, false);
             return;
 
@@ -76,7 +79,7 @@ public class HyConfigManager {
 
         HyPlus.getInstance().startAPI();
 
-        System.out.println("Config loaded.");
+        System.out.println("HyPlus Config loaded.");
         HyPlus.getInstance().saveConfig();
 
         //this.onDisable();
@@ -115,18 +118,18 @@ public class HyConfigManager {
 
             }
 
-            System.out.println("Loaded '" + property + "'.");
+            // DEBUG System.out.println("Loaded '" + property + "'.");
 
         } else {
 
             if (reset) {
 
-                System.out.println("Property '" + property + "' were put to default.");
+                // DEBUG System.out.println("Property '" + property + "' were put to default.");
 
             }
             else {
 
-                System.out.println("Property '" + property + "' not yet in config, creating!");
+                // DEBUG System.out.println("Property '" + property + "' not yet in config, creating!");
 
             }
 

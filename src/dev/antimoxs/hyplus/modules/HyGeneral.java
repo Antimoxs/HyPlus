@@ -47,6 +47,9 @@ public class HyGeneral implements IHyPlusModule {
             HYPLUS_GENERAL_TOGGLE.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
+            HyPlus.getInstance().hyDiscordPresence.presenceCheck(); // check for presence
+
+
         }, HYPLUS_GENERAL_TOGGLE.getValueBoolean());
         gen_all.setDescriptionText(HYPLUS_GENERAL_TOGGLE.getDescription());
         BooleanElement gen_loop = new BooleanElement(HYPLUS_GENERAL_LOOP_TOGGLE.getDisplayName(), HYPLUS_GENERAL_LOOP_TOGGLE.getIcon(), (booleanElement) -> {

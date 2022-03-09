@@ -2,8 +2,8 @@ package dev.antimoxs.hyplus.events;
 
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.modules.friends.HyFriendRequest;
-import dev.antimoxs.hyplus.modules.partyManager.HyParty;
-import dev.antimoxs.hyplus.modules.partyManager.HyPartyMessageType;
+import dev.antimoxs.hyplus.modules.party.HyParty;
+import dev.antimoxs.hyplus.modules.party.HyPartyMessageType;
 import dev.antimoxs.hyplus.objects.HyServerLocation;
 import net.labymod.labyconnect.packets.PacketAddonDevelopment;
 import net.labymod.main.LabyMod;
@@ -34,7 +34,22 @@ public class HyEventManager {
         // calling externals
         sendAddonPacketSelfAPI("location", location.getJson());
 
-        System.out.println("[HyEvent] location-change");
+        // DEBUG System.out.println("[HyEvent] location-change");
+
+    }
+    public void callGameStatusChange(String s) {
+
+        // calling internals
+        for (IHyPlusEvent event : events) {
+
+            event.onGameStatusChange();
+
+        }
+
+        // calling externals
+        //sendAddonPacketSelfAPI("location", location.getJson());
+
+        // DEBUG System.out.println("[HyEvent] status-change: " + s);
 
     }
     public void callLocationResponse(String json) {
@@ -81,7 +96,7 @@ public class HyEventManager {
         // calling externals
         sendAddonPacketSelfAPI("friendrequest", request.getJson());
 
-        System.out.println("FRIEND REQUEST AUTO ACCEPT: " + accepted);
+        // DEBUG System.out.println("FRIEND REQUEST AUTO ACCEPT: " + accepted);
 
         return accepted;
 
@@ -99,7 +114,7 @@ public class HyEventManager {
         // calling externals
         sendAddonPacketSelfAPI("packet-join", "{}");
 
-        System.out.println("[HyEvent] packet-join");
+        // DEBUG System.out.println("[HyEvent] packet-join");
 
     }
 
@@ -143,6 +158,7 @@ public class HyEventManager {
 
     public void callPartyMessageAsync(String s, HyPartyMessageType type) {
 
+        // calling internals
         Thread t = new Thread(() -> {
 
             callPartyMessage(s, type);
@@ -173,6 +189,47 @@ public class HyEventManager {
                 jsonBytes.getBytes(StandardCharsets.UTF_8)
         );
         LabyMod.getInstance().getLabyModAPI().sendAddonDevelopmentPacket(pad);
+
+    }
+
+    public void callGameStart(HyServerLocation location) {
+
+        // calling internals
+        for (IHyPlusEvent event : events) {
+
+            event.onGameStart(location);
+
+        }
+
+        // calling externals
+        sendAddonPacketSelfAPI("game-start", "{}");
+
+        // DEBUG System.out.println("[HyEvent] game-start");
+
+    }
+
+    public void callPlayerSpawn(PlayerSpawnEvent playerSpawnEvent) {
+
+
+        // calling internals
+        for (IHyPlusEvent event : events) {
+
+            // calling internals
+            Thread t = new Thread(() -> {
+
+                event.onPlayerSpawn(playerSpawnEvent);
+
+            });
+            Runtime.getRuntime().addShutdownHook(t);
+            t.start();
+
+
+        }
+
+        // calling externals !!! no externals on packets :)
+        //sendAddonPacketSelfAPI("player-spawn", "{}");
+
+        // DEBUG System.out.println("[HyEvent] player-spawn");
 
     }
 

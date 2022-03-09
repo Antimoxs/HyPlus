@@ -18,13 +18,12 @@ public class HyServerLocation {
     public String rawmod = "LOBBY";          // copied value from mode since mode will be name-fetched
     public boolean online = true;           // only changed when online is false in api response
 
-    // game data
-    public HyGameData gameData = null;
 
     public boolean isLimbo() { return server.equalsIgnoreCase("limbo"); }
     public boolean isLobby() { return !Objects.equals(lobbyname, ""); }
     public String getLobbyNumber() {
 
+        if (!isLobby()) return "";
         int index = lobbyname.toLowerCase().indexOf("lobby");
         if (lobbyname.length() >= index+5) {
 

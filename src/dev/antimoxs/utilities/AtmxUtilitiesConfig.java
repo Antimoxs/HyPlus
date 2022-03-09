@@ -4,7 +4,7 @@ public class AtmxUtilitiesConfig {
 
     /*
     *   Configuration file for the AtmxUtilities library
-    *   Copyright Antimoxs 2021
+    *   Copyright Antimoxs 2022
     *   https://antimoxs.dev
     */
 
@@ -12,11 +12,6 @@ public class AtmxUtilitiesConfig {
     public static String App_Name = "AtmxUtilities";
     public static String App_Version = "v.2";
     public static String Config_Version = "v.1.0";
-
-    // Logger settings
-    public static String Logger_Name = "AtmxLogger";
-    public static String Logger_Version = "v.2";
-    public static Boolean Logger_FirstLog = true;
 
     // TextTools settings
     public static String Text_Name = "AtmxTextTools";

@@ -1,7 +1,7 @@
 package dev.antimoxs.hyplus.modules.friends;
 
-import dev.antimoxs.hypixelapi.exceptions.ApiRequestException;
-import dev.antimoxs.hypixelapi.objects.friends.FriendList;
+import dev.antimoxs.hypixelapiHP.exceptions.ApiRequestException;
+import dev.antimoxs.hypixelapiHP.objects.friends.FriendList;
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.HyUtilities;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
@@ -12,7 +12,6 @@ import net.labymod.gui.elements.CheckBox;
 import net.labymod.main.LabyMod;
 import net.labymod.settings.Settings;
 import net.labymod.settings.elements.*;
-import net.labymod.utils.Consumer;
 import net.labymod.utils.Material;
 
 import java.util.ArrayList;
@@ -242,6 +241,7 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
 
         if (HyPlus.getInstance().hypixelApi == null) {
 
+            // TODO: make this use hyplus instance
             HyPlus.getInstance().displayIgMessage(null, "§6§l[HyPlus]§4§l [WARN]: §7You don't have an API-Key set. Not every function is enabled.§r");
             return;
 
@@ -258,5 +258,7 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
 
 
     }
+
+    public FriendList getFriendList() { return this.fl; }
 
 }

@@ -36,7 +36,7 @@ public class HyGuiConnecting extends GuiScreen {
         draw.bindTexture(bg.getTextureIcon());
         int Wwidth = Minecraft.getMinecraft().displayWidth;
         int Wheight = Minecraft.getMinecraft().displayHeight;
-        System.out.println("DRAWING! W: " + Wwidth + " | H: " + Wheight + " | 8192x4602");
+        // DEBUG System.out.println("DRAWING! W: " + Wwidth + " | H: " + Wheight + " | 8192x4602");
         GlStateManager.pushMatrix();
         float x = (float)width/(512*2);  //512 -> my texture size
         float y = (float)height/(384*2); //384 -> my texture size

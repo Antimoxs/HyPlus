@@ -1,9 +1,9 @@
 package dev.antimoxs.hyplus.objects;
 
-import dev.antimoxs.hypixelapi.exceptions.ApiRequestException;
-import dev.antimoxs.hypixelapi.objects.player.Player;
-import dev.antimoxs.hypixelapi.requests.MojangRequest;
-import dev.antimoxs.hypixelapi.response.PlayerResponse;
+import dev.antimoxs.hypixelapiHP.exceptions.ApiRequestException;
+import dev.antimoxs.hypixelapiHP.objects.player.Player;
+import dev.antimoxs.hypixelapiHP.requests.MojangRequest;
+import dev.antimoxs.hypixelapiHP.response.PlayerResponse;
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.HyUtilities;
 
@@ -11,12 +11,14 @@ public class HySimplePlayer {
 
     private String name = "#UndefinedPlayer#";
     private String rank = "#rank#";
+    private String plusColor = "&c";
+    private boolean goldenName = true;
 
     private Player playerObject = null;
 
     public HySimplePlayer() {}
 
-    public HySimplePlayer(String name, String rank, String plusColor) {
+    public HySimplePlayer(String name, String rank, String plusColor, boolean goldenName) {
 
         this.name = name;
         if (rank != null) {
@@ -43,9 +45,9 @@ public class HySimplePlayer {
             case "": return "&7";
             case "VIP": return "&a[VIP]";
             case "VIP+": return "&a[VIP&6+&a]";
-            case "MVP": return "&a[VIP]";
-            case "MVP+": return "&a[VIP]";
-            case "MVP++": return "&a[VIP]";
+            case "MVP": return "&b[MVP]";
+            case "MVP+": return "&b[MVP" + plusColor + "+&b]";
+            case "MVP++": return goldenName ? "&6[MVP" + plusColor + "++&6]" : "&b[MVP" + plusColor + "++&b]";
 
         }
 
@@ -90,9 +92,15 @@ public class HySimplePlayer {
 
     public void requestPlayerObject() {
 
+        requestPlayerObject(MojangRequest.getUUID(name));
+
+    }
+    public void requestPlayerObject(String uuid) {
+
         try {
 
-            PlayerResponse p = HyPlus.getInstance().hypixelApi.createPlayerRequestUUID(MojangRequest.getUUID(name));
+            // DEBUG System.out.println("Requesting Player: " + uuid);
+            PlayerResponse p = HyPlus.getInstance().hypixelApi.createPlayerRequestUUID(uuid);
 
             if (p.success) {
 
@@ -101,7 +109,7 @@ public class HySimplePlayer {
             }
             else {
 
-                System.out.println("Failed player OBJ lookup: " + p.cause);
+                // DEBUG System.out.println("Failed player OBJ lookup: " + p.cause);
 
             }
 

@@ -2,14 +2,15 @@ package dev.antimoxs.hyplus.events;
 
 
 import dev.antimoxs.hyplus.modules.friends.HyFriendRequest;
-import dev.antimoxs.hyplus.modules.partyManager.HyParty;
-import dev.antimoxs.hyplus.modules.partyManager.HyPartyMessageType;
+import dev.antimoxs.hyplus.modules.party.HyParty;
+import dev.antimoxs.hyplus.modules.party.HyPartyMessageType;
 import dev.antimoxs.hyplus.objects.HyServerLocation;
 import net.minecraft.network.play.server.S01PacketJoinGame;
 
 public interface IHyPlusEvent {
 
     default void onLocationChange(HyServerLocation location) {}
+    default void onGameStatusChange() {}
     default void onInternalLocationResponse(String json) {}
 
     default void onPrivateMessageSent(String message, String content) {}
@@ -27,5 +28,9 @@ public interface IHyPlusEvent {
     default void onPartyDataPacket(HyParty party) {}
 
     default void onInternalPartyMessage(String message, HyPartyMessageType type) {}
+
+    default void onGameStart(HyServerLocation location) {}
+
+    default void onPlayerSpawn(PlayerSpawnEvent event) {}
 
 }

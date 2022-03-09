@@ -4,7 +4,7 @@ public class AtmxColors {
 
     /*
      *   Colors-sheet in the AtmxUtilities library
-     *   Copyright Antimoxs 2021
+     *   Copyright Antimoxs 2022
      *   https://antimoxs.dev
      */
 

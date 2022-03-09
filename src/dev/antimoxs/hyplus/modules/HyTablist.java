@@ -20,7 +20,7 @@ public class HyTablist implements IHyPlusModule, IHyPlusEvent {
 
     public void sendTabList() {
 
-        System.out.println("[HyTablist] Sending HyPlus tab-banner.");
+        // DEBUG System.out.println("[HyTablist] Sending HyPlus tab-banner.");
         // https://i.imgur.com/VyPn1Sm.png
         JsonObject object2 = new JsonObject();
         object2.addProperty("url", BANNER_LINK_2);

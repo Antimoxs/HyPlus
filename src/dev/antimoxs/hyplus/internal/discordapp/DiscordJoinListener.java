@@ -13,7 +13,7 @@ public class DiscordJoinListener implements DiscordEventHandlers.joinGame_callba
 
     public void apply(String secret) {
 
-        System.out.println("[HyDISCORD] TRYING TO JOIN: " + secret);
+        // DEBUG System.out.println("[HyDISCORD] TRYING TO JOIN: " + secret);
         discordApp.redeemJoinKey(UUID.fromString(secret), "mc.hypixel.net");
 
     }

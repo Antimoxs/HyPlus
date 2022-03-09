@@ -2,9 +2,9 @@ package dev.antimoxs.hyplus.modules;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dev.antimoxs.hypixelapi.exceptions.ApiRequestException;
-import dev.antimoxs.hypixelapi.response.StatusResponse;
-import dev.antimoxs.hypixelapi.util.hypixelFetcher;
+import dev.antimoxs.hypixelapiHP.exceptions.ApiRequestException;
+import dev.antimoxs.hypixelapiHP.response.StatusResponse;
+import dev.antimoxs.hypixelapiHP.util.hypixelFetcher;
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.HyUtilities;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
@@ -47,7 +47,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
         Thread t = new Thread(() -> {
 
-            System.out.println("[LocationDetection] Updating location... (Api: " + HYPLUS_LD_API + ")");
+            // DEBUG System.out.println("[LocationDetection] Updating location... (Api: " + HYPLUS_LD_API + ")");
             if (HYPLUS_LD_API.getValueBoolean()) {
 
                 getLocationAPI(forceUpdate);
@@ -59,7 +59,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
                 lastLocrawForced = forceUpdate;
                 getLocationServer();
                 wait.ms(3000L);
-                HyPlus.getInstance().displayIgMessage(null, "[LocationDetection] Server: " + currentLocation.server);
+                // DEBUG HyPlus.getInstance().displayIgMessage(null, "[LocationDetection] Server: " + currentLocation.server);
                 if (currentLocation.server.equals("limbo")) getLocationServer(); // check twice in case rawloc returned fake-limbo
 
             }
@@ -81,11 +81,11 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
         this.responseWaiter++;
         HyPlus.getInstance().sendMessageIngameChat("/locraw");
 
-        System.out.println("WAITING FOR RESPONSE");
+        // DEBUG System.out.println("WAITING FOR RESPONSE");
         while (this.responseWaiter > 0) {
             System.out.println(this.responseWaiter);
         } // wait for hypixel's response
-        System.out.println("RESPONSE FROM HYPIXEL! CONTINUE...");
+        // DEBUG System.out.println("RESPONSE FROM HYPIXEL! CONTINUE...");
 
         return;
 
@@ -146,7 +146,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
         }
         catch (ApiRequestException e) {
 
-            System.out.println("An API error occured: " + e.getReason());
+            // DEBUG System.out.println("An API error occured: " + e.getReason());
 
         }
 
@@ -171,17 +171,22 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
         serverLoccation.rawloc = serverLoccation.gametype;
         serverLoccation.rawmod = serverLoccation.mode;
 
+        if (currentLocation.gametype != serverLoccation.gametype) refreshLabyChatStatus(serverLoccation.rawloc);
 
         if (!currentLocation.getJson().equals(serverLoccation.getJson()) || lastLocrawForced) {
 
+            currentLocation = serverLoccation;
             HyPlus.getInstance().hyEventManager.callLocationChange(serverLoccation);
             lastLocrawForced = false;
 
         }
+        else {
+            currentLocation = serverLoccation;
+        }
 
-        if (currentLocation.gametype != serverLoccation.gametype) refreshLabyChatStatus(serverLoccation.rawloc);
 
-        currentLocation = serverLoccation;
+
+
 
 
 
@@ -296,6 +301,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
     }
 
 
+    // basically check for atlas
     private HyServerLocation additionalScoreboardCheck(HyServerLocation location) {
 
         Scoreboard sb = Minecraft.getMinecraft().theWorld.getScoreboard();

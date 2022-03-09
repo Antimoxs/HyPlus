@@ -1,14 +1,12 @@
 package dev.antimoxs.utilities.time;
 
 import dev.antimoxs.utilities.AtmxUtilitiesConfig;
-import dev.antimoxs.utilities.logger.AtmxLogType;
-import dev.antimoxs.utilities.logger.AtmxLogger;
 
 public class wait {
 
     /*
      *   TimeUtils for the AtmxUtilities library
-     *   Copyright Antimoxs 2021
+     *   Copyright Antimoxs 2022
      *   https://antimoxs.dev
      */
 
@@ -23,7 +21,7 @@ public class wait {
         try {
             Thread.sleep(ms);
         } catch (InterruptedException e) {
-            AtmxLogger.log(AtmxLogType.WARNING, "Atmx#System", "Failed to wait in thread.");
+            System.out.println("[ATMX#System] Failed to wait in thread.");
             return false;
         }
 

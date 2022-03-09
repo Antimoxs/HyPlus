@@ -17,6 +17,7 @@ import net.minecraft.network.PacketBuffer;
 import java.io.File;
 import java.util.UUID;
 
+
 public class DiscordAppExtender extends DiscordApp {
 
 
@@ -64,7 +65,7 @@ public class DiscordAppExtender extends DiscordApp {
                                 DiscordApp.libraryFile = libraryFile;
 
                                 try {
-                                    System.out.println("INIT DC HANDLERS");
+                                    // DEBUG System.out.println("INIT DC HANDLERS");
                                     DiscordRPCLibrary.initialize(APPLICATION_ID, handlers, 2, (String)null);
                                     initialized = true;
                                     onLibraryLoaded();
@@ -114,7 +115,7 @@ public class DiscordAppExtender extends DiscordApp {
             boolean singlePlayer = Minecraft.getMinecraft().isSingleplayer();
             if (singlePlayer) {
 
-                System.out.println("Why are we in singleplayer? We should be on Hypixel!");
+                // DEBUG System.out.println("Why are we in singleplayer? We should be on Hypixel!");
                 this.shutdown();
 
             }
@@ -144,7 +145,8 @@ public class DiscordAppExtender extends DiscordApp {
     // We're overriding LabyMod's method for joining to adapt it to the party system on hypixel.
     @Override
     public void redeemJoinKey(UUID joinKey, String serverDomain) {
-        System.out.println("Joining Hypixel via Discord key...");
+
+        HyPlus.getInstance().log("Joining Hypixel via Discord key...");
         Debug.log(Debug.EnumDebugMode.DISCORD, "Redeem join secret key: " + joinKey.toString() + " on " + serverDomain);
         this.queuedJoinKey = joinKey;
 
@@ -156,8 +158,7 @@ public class DiscordAppExtender extends DiscordApp {
             String name = HyPlus.getInstance().hyPartyManager.rematchInvite(this.queuedJoinKey);
             HyPlus.getInstance().sendMessageIngameChat("/party join " + name);
             HyPlus.getInstance().hyPartyManager.getParty().setPublic(true);
-            HyPlus.getInstance().sendMessageIngameChat("/pl");
-            //hyPlus.hyPartyManager.updateParty(false); <- not needed lol
+            HyPlus.getInstance().sendMessageIngameChat("/pl"); // <- update the party :)
             // Hypixel does not use it anyways so lets save data LabyMod.getInstance().getLabyModAPI().sendJsonMessageToServer("discord_rpc", obj);
 
         }
