@@ -1,5 +1,6 @@
 package dev.antimoxs.hyplus.listener;
 
+import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.modules.serverConnector.HyGuiConnecting;
 import net.labymod.core.LabyModCore;
 import net.labymod.main.LabyMod;
@@ -30,11 +31,11 @@ public class HyListenerGuiOpen {
                 if (event.gui instanceof HyGuiConnecting) return;
 
                 // yes it's useless just testing tho
-                // DEBUG System.out.println("\n\n\n\n\n\n HYPIXEL HERE WE COME\n\n\n\n\n\n");
+                HyPlus.debugLog("\n\n\n\n\n\n HYPIXEL HERE WE COME\n\n\n\n\n\n");
                 //Minecraft.getMinecraft().displayGuiScreen(new GuiServerConnecting((HyGuiConnecting) event.gui));
 
                 try {
-                    // DEBUG System.out.println("Replacing GUI");
+                    HyPlus.debugLog("Replacing GUI");
                     guiScreen = new HyGuiConnecting(guiScreen, event.gui instanceof GuiDownloadTerrain ? "Joining..." : "Connecting to Hypixel...");
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
@@ -54,7 +55,7 @@ public class HyListenerGuiOpen {
                 if (event.gui instanceof HyGuiConnecting) return;
 
                 // yes it's useless just testing tho
-                // DEBUG System.out.println("\n\n\n\n\n\n HYPIXEL HERE WE COME\n\n\n\n\n\n");
+                HyPlus.debugLog("\n\n\n\n\n\n HYPIXEL HERE WE COME\n\n\n\n\n\n");
                 //Minecraft.getMinecraft().displayGuiScreen(new GuiServerConnecting((HyGuiConnecting) event.gui));
 
                 try {

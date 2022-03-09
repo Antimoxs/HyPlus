@@ -1,5 +1,6 @@
 package dev.antimoxs.hyplus.modules.serverConnector;
 
+import dev.antimoxs.hyplus.HyPlus;
 import net.labymod.core.LabyModCore;
 import net.labymod.main.LabyMod;
 import net.labymod.settings.elements.ControlElement;
@@ -36,7 +37,7 @@ public class HyGuiConnecting extends GuiScreen {
         draw.bindTexture(bg.getTextureIcon());
         int Wwidth = Minecraft.getMinecraft().displayWidth;
         int Wheight = Minecraft.getMinecraft().displayHeight;
-        // DEBUG System.out.println("DRAWING! W: " + Wwidth + " | H: " + Wheight + " | 8192x4602");
+        HyPlus.debugLog("DRAWING! W: " + Wwidth + " | H: " + Wheight + " | 8192x4602");
         GlStateManager.pushMatrix();
         float x = (float)width/(512*2);  //512 -> my texture size
         float y = (float)height/(384*2); //384 -> my texture size

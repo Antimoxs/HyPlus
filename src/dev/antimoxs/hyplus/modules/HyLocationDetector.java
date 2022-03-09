@@ -47,7 +47,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
         Thread t = new Thread(() -> {
 
-            // DEBUG System.out.println("[LocationDetection] Updating location... (Api: " + HYPLUS_LD_API + ")");
+            HyPlus.debugLog("[LocationDetection] Updating location... (Api: " + HYPLUS_LD_API + ")");
             if (HYPLUS_LD_API.getValueBoolean()) {
 
                 getLocationAPI(forceUpdate);
@@ -81,11 +81,11 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
         this.responseWaiter++;
         HyPlus.getInstance().sendMessageIngameChat("/locraw");
 
-        // DEBUG System.out.println("WAITING FOR RESPONSE");
+        HyPlus.debugLog("WAITING FOR RESPONSE");
         while (this.responseWaiter > 0) {
             System.out.println(this.responseWaiter);
         } // wait for hypixel's response
-        // DEBUG System.out.println("RESPONSE FROM HYPIXEL! CONTINUE...");
+        HyPlus.debugLog("RESPONSE FROM HYPIXEL! CONTINUE...");
 
         return;
 
@@ -146,7 +146,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
         }
         catch (ApiRequestException e) {
 
-            // DEBUG System.out.println("An API error occured: " + e.getReason());
+            HyPlus.debugLog("An API error occured: " + e.getReason());
 
         }
 

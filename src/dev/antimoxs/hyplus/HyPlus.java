@@ -36,10 +36,10 @@ public class HyPlus extends LabyModAddon {
      */
     private static HyPlus instance;
 
-    private final String version = "0.5.68";
+    private final String version = "0.6.0";
     private final String lastupdated = "09. March 2022";
     public HyAbout hyAbout = new HyAbout(
-            new kvp("DevBuild :P", 3)
+            new kvp("Initial Release", 3)
     );
     public HypixelApi hypixelApi;
 
@@ -362,6 +362,22 @@ public class HyPlus extends LabyModAddon {
     public void log(String s) {
 
         System.out.println("[HyPlus] " + s);
+
+    }
+
+    /**
+     *
+     * Debug log :)
+     *
+     */
+    private static boolean debug = false;
+    public static void debugLog(String s) {
+
+        if (debug) {
+
+            HyPlus.getInstance().log(s);
+
+        }
 
     }
 

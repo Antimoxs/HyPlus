@@ -11,7 +11,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
     @Override
     public boolean onReceive(String s, String s1) {
 
-        // DEBUG System.out.println("[AdvancedChatLog][" + s.replaceAll("\n","{\\n}") + "]");
+        HyPlus.debugLog("[AdvancedChatLog][" + s.replaceAll("\n","{\\n}") + "]");
 
         // Check if we are enabled.
         if (!HyPlus.getInstance().hyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return false;
@@ -79,7 +79,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
 
                 if (s.startsWith("§9§m----------------------------------------------------§r§9")) {
 
-                    // DEBUG System.out.println("[HyFriend] It's a friend request bois!!!");
+                    HyPlus.debugLog("[HyFriend] It's a friend request bois!!!");
 
                     String s2 = HyUtilities.matchOutColorCode(s);
 
@@ -116,7 +116,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // "§9§m-----------------------------§r"
                 if (s.equals("§9§m-----------------------------§r")) {
 
-                    // DEBUG System.out.println("###PARTYLINE");
+                    HyPlus.debugLog("###PARTYLINE");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.LINE);
                     return hideMsg;
                     //return true;
@@ -126,7 +126,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // "§cYou are not currently in a party.§r"
                 if (s.toLowerCase().startsWith("§cyou are not currently in a party.§r")) {
 
-                    // DEBUG System.out.println("###NOPARTY");
+                    HyPlus.debugLog("###NOPARTY");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.EMPTY);
                     return hideMsg;
                     //return true;
@@ -135,7 +135,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // "§aCreated a public party! Players can join with §r§6§l/party join Antimoxs§r"
                 if (s.toLowerCase().startsWith("§acreated a public party! players can join with §r§6§l/party join")) {
 
-                    // DEBUG System.out.println("###PUBLIC");
+                    HyPlus.debugLog("###PUBLIC");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.PUBLIC_CREATED);
                     return false;
                     //return true;
@@ -144,7 +144,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // "§eParty is capped at 25 players.§r"
                 if (s.toLowerCase().startsWith("§eparty is capped at")) {
 
-                    // DEBUG System.out.println("###CAPPED");
+                    HyPlus.debugLog("###CAPPED");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.PUBLIC_CAPPED);
                     return false;
                     //return true;
@@ -153,7 +153,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // §eThe party is no longer public§r
                 if (s.toLowerCase().startsWith("§ethe party is no longer public§r")) {
 
-                    // DEBUG System.out.println("###PUBLICOFF");
+                    HyPlus.debugLog("###PUBLICOFF");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.PUBLIC_OFF);
                     return false;
                     //return true;
@@ -162,7 +162,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // "§6Party Members (1)§r"
                 if (s.toLowerCase().startsWith("§6party members (")) {
 
-                    // DEBUG System.out.println("###MEMBERSCOUNT");
+                    HyPlus.debugLog("###MEMBERSCOUNT");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.LIST_COUNT);
                     return hideMsg;
                     //return true;
@@ -171,7 +171,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // "§eParty Leader: §r§6[MVP§r§5++§r§6] Antimoxs §r§a●§r"
                 if (s.toLowerCase().startsWith("§eparty leader:")) {
 
-                    // DEBUG System.out.println("###LEADER");
+                    HyPlus.debugLog("###LEADER");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.LIST_LEADER);
                     return hideMsg;
                     //return true;
@@ -180,7 +180,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // "§eParty Members: §r§b[MVP§r§2+§r§b] cuddlig§r§a ● §r§b[MVP§r§c+§r§b] valentinsan§r§a ● §r"
                 if (s.toLowerCase().startsWith("§eparty members:")) {
 
-                    // DEBUG System.out.println("###MEMBERS");
+                    HyPlus.debugLog("###MEMBERS");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.LIST_MEMBERS);
                     return hideMsg;
                     //return true;
@@ -189,7 +189,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // "§eParty Moderators: §r§b[MVP] nobodycared§r§a ● §r"
                 if (s.toLowerCase().startsWith("§eparty moderators:")) {
 
-                    // DEBUG System.out.println("###MODERATORS");
+                    HyPlus.debugLog("###MODERATORS");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.LIST_MODS);
                     return hideMsg;
                     //return true;
@@ -198,7 +198,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // §b[MVP] nobodycared §r§ejoined the party.§r
                 if (s.toLowerCase().endsWith("§r§ejoined the party.§r")) {
 
-                    // DEBUG System.out.println("###JOINED");
+                    HyPlus.debugLog("###JOINED");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.PLAYER_JOINED);
                     return false;
                     //return true;
@@ -207,7 +207,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // §cThe party is now muted. §r
                 if (s.toLowerCase().startsWith("§cthe party is now muted. §r")) {
 
-                    // DEBUG System.out.println("###MUTED");
+                    HyPlus.debugLog("###MUTED");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.MUTED_ON);
                     return false;
                     //return true;
@@ -217,7 +217,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // §aDie Party ist nicht mehr länger stummgeschaltet.§r
                 if (s.startsWith("§a") && s.toLowerCase().contains("party") && !s.contains("§r§6§l/party join")) {
 
-                    // DEBUG System.out.println("###UNMUTED");
+                    HyPlus.debugLog("###UNMUTED");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.MUTED_OFF);
                     return false;
                     //return true;
@@ -226,7 +226,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // §cThe party was disbanded because the party leader disconnected.§r
                 if (s.toLowerCase().startsWith("§cthe party was disbanded because the party leader disconnected.§r")) {
 
-                    // DEBUG System.out.println("###DISBAND");
+                    HyPlus.debugLog("###DISBAND");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.DISBAND);
                     return false;
                     //return true;
@@ -235,7 +235,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // §eThe party was transferred to §r§b[MVP§r§2+§r§b] cuddlig §r§eby §r§6[MVP§r§5++§r§6] Antimoxs§r
                 if (s.toLowerCase().startsWith("§ethe party was transferred to ")) {
 
-                    // DEBUG System.out.println("###TRANSFERRED");
+                    HyPlus.debugLog("###TRANSFERRED");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.TRANSFERRED);
                     return false;
                     //return true;
@@ -244,7 +244,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // §6[MVP§r§5++§r§6] Antimoxs §r§ahat die Option All Invite aktiviert§r
                 if (s.contains("§r§a") && s.toLowerCase().contains("all invite")) {
 
-                    // DEBUG System.out.println("#ALLINVON");
+                    HyPlus.debugLog("#ALLINVON");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.ALLINV_ON);
                     return false;
 
@@ -252,7 +252,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // §6[MVP§r§5++§r§6] Antimoxs §r§chat All Invite deaktiviert§r
                 if (s.contains("§r§c") && s.toLowerCase().contains("all invite")) {
 
-                    // DEBUG System.out.println("#ALLINVOFF");
+                    HyPlus.debugLog("#ALLINVOFF");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.ALLINV_OFF);
                     return false;
 
@@ -260,7 +260,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // private
                 if (s.contains("§r§a") && s.toLowerCase().contains("private game") && s.endsWith("§r") && !s.replace("§f+", "").contains("§f") && !s.contains("§7")) {
 
-                    // DEBUG System.out.println("#PGAMEON");
+                    HyPlus.debugLog("#PGAMEON");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.PGAMES_ON);
                     return false;
 
@@ -268,7 +268,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // §6[MVP§r§5++§r§6] Antimoxs §r§chat All Invite deaktiviert§r
                 if (s.contains("§r§c") && s.toLowerCase().contains("private game") && s.endsWith("§r") && !s.replace("§f+", "").contains("§f") && !s.contains("§7")) {
 
-                    // DEBUG System.out.println("#PGAMEOFF");
+                    HyPlus.debugLog("#PGAMEOFF");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.PGAMES_OFF);
                     return false;
 
@@ -276,13 +276,13 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // general update
                 if (s.contains("§e") && s.toLowerCase().contains("party") && s.endsWith("§r")) {
 
-                    // DEBUG System.out.println("#PARTYUPDATE");
+                    HyPlus.debugLog("#PARTYUPDATE");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.UPDATE);
 
                 }
                 else if (s.contains("§c") && s.toLowerCase().contains("party") && s.endsWith("§r")) {
 
-                    // DEBUG System.out.println("#PARTYEMPTY?");
+                    HyPlus.debugLog("#PARTYEMPTY?");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.EMPTY);
 
                 }

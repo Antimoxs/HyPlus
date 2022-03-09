@@ -306,7 +306,7 @@ public class Hypixel extends Server implements IHyPlusEvent {
 
         if (!Minecraft.getMinecraft().getCurrentServerData().serverIP.toLowerCase().endsWith("hypixel.net")) {
 
-            // DEBUG System.out.println("This is not Hypixel.");
+            HyPlus.debugLog("This is not Hypixel.");
             return;
 
         }

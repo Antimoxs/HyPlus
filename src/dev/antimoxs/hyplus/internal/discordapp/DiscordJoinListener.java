@@ -1,5 +1,6 @@
 package dev.antimoxs.hyplus.internal.discordapp;
 
+import dev.antimoxs.hyplus.HyPlus;
 import net.labymod.discordapp.api.DiscordEventHandlers;
 
 import java.util.UUID;
@@ -13,7 +14,7 @@ public class DiscordJoinListener implements DiscordEventHandlers.joinGame_callba
 
     public void apply(String secret) {
 
-        // DEBUG System.out.println("[HyDISCORD] TRYING TO JOIN: " + secret);
+        HyPlus.debugLog("[HyDISCORD] TRYING TO JOIN: " + secret);
         discordApp.redeemJoinKey(UUID.fromString(secret), "mc.hypixel.net");
 
     }

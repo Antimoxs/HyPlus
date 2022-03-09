@@ -34,7 +34,7 @@ public class HyEventManager {
         // calling externals
         sendAddonPacketSelfAPI("location", location.getJson());
 
-        // DEBUG System.out.println("[HyEvent] location-change");
+        HyPlus.debugLog("[HyEvent] location-change");
 
     }
     public void callGameStatusChange(String s) {
@@ -49,7 +49,7 @@ public class HyEventManager {
         // calling externals
         //sendAddonPacketSelfAPI("location", location.getJson());
 
-        // DEBUG System.out.println("[HyEvent] status-change: " + s);
+        HyPlus.debugLog("[HyEvent] status-change: " + s);
 
     }
     public void callLocationResponse(String json) {
@@ -96,7 +96,7 @@ public class HyEventManager {
         // calling externals
         sendAddonPacketSelfAPI("friendrequest", request.getJson());
 
-        // DEBUG System.out.println("FRIEND REQUEST AUTO ACCEPT: " + accepted);
+        HyPlus.debugLog("FRIEND REQUEST AUTO ACCEPT: " + accepted);
 
         return accepted;
 
@@ -114,7 +114,7 @@ public class HyEventManager {
         // calling externals
         sendAddonPacketSelfAPI("packet-join", "{}");
 
-        // DEBUG System.out.println("[HyEvent] packet-join");
+        HyPlus.debugLog("[HyEvent] packet-join");
 
     }
 
@@ -204,7 +204,7 @@ public class HyEventManager {
         // calling externals
         sendAddonPacketSelfAPI("game-start", "{}");
 
-        // DEBUG System.out.println("[HyEvent] game-start");
+        HyPlus.debugLog("[HyEvent] game-start");
 
     }
 
@@ -229,7 +229,7 @@ public class HyEventManager {
         // calling externals !!! no externals on packets :)
         //sendAddonPacketSelfAPI("player-spawn", "{}");
 
-        // DEBUG System.out.println("[HyEvent] player-spawn");
+        HyPlus.debugLog("[HyEvent] player-spawn");
 
     }
 

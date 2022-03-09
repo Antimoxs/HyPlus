@@ -43,7 +43,7 @@ public class HyConfigManager {
         if (updateCheck) {
 
             updateCheck = false;
-            // DEBUG System.out.println("Some properties updated, reloading!");
+            HyPlus.debugLog("Some properties updated, reloading!");
             loadConfig(0, false);
             return;
 
@@ -99,7 +99,6 @@ public class HyConfigManager {
 
         if (HyPlus.getInstance().getConfig().has(property)) {
 
-            //TBCLogger.log(TBCLoggingType.INFORMATION, config.name, "Loaded '" + property + "'");
             if (reset) {
 
                 HyPlus.getInstance().getConfig().remove(property);
@@ -118,18 +117,18 @@ public class HyConfigManager {
 
             }
 
-            // DEBUG System.out.println("Loaded '" + property + "'.");
+            HyPlus.debugLog("Loaded '" + property + "'.");
 
         } else {
 
             if (reset) {
 
-                // DEBUG System.out.println("Property '" + property + "' were put to default.");
+                HyPlus.debugLog("Property '" + property + "' were put to default.");
 
             }
             else {
 
-                // DEBUG System.out.println("Property '" + property + "' not yet in config, creating!");
+                HyPlus.debugLog("Property '" + property + "' not yet in config, creating!");
 
             }
 

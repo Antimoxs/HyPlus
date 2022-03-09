@@ -65,7 +65,7 @@ public class DiscordAppExtender extends DiscordApp {
                                 DiscordApp.libraryFile = libraryFile;
 
                                 try {
-                                    // DEBUG System.out.println("INIT DC HANDLERS");
+                                    HyPlus.debugLog("INIT DC HANDLERS");
                                     DiscordRPCLibrary.initialize(APPLICATION_ID, handlers, 2, (String)null);
                                     initialized = true;
                                     onLibraryLoaded();
@@ -115,7 +115,7 @@ public class DiscordAppExtender extends DiscordApp {
             boolean singlePlayer = Minecraft.getMinecraft().isSingleplayer();
             if (singlePlayer) {
 
-                // DEBUG System.out.println("Why are we in singleplayer? We should be on Hypixel!");
+                HyPlus.debugLog("Why are we in singleplayer? We should be on Hypixel!");
                 this.shutdown();
 
             }

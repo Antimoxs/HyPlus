@@ -99,7 +99,7 @@ public class HySimplePlayer {
 
         try {
 
-            // DEBUG System.out.println("Requesting Player: " + uuid);
+            HyPlus.debugLog("Requesting Player: " + uuid);
             PlayerResponse p = HyPlus.getInstance().hypixelApi.createPlayerRequestUUID(uuid);
 
             if (p.success) {
@@ -109,7 +109,7 @@ public class HySimplePlayer {
             }
             else {
 
-                // DEBUG System.out.println("Failed player OBJ lookup: " + p.cause);
+                HyPlus.debugLog("Failed player OBJ lookup: " + p.cause);
 
             }
 

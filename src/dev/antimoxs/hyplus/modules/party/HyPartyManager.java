@@ -532,7 +532,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
         if (member.trim().toCharArray().length < 6) {
 
-            // DEBUG System.out.println("SMALL: " + member + " | " + cropped);
+            HyPlus.debugLog("SMALL: " + member + " | " + cropped);
             rank = null;
             name = cropped;
 
@@ -571,7 +571,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
             int max = this.party.isPublic() ? this.party.getCap() : this.party.getCount();
             int count = this.party.getCount();
             String name = this.party.getPartyLeader().getPlayerBlank();
-            // DEBUG System.out.println("LEADERNAME: '" + name + "'");
+            HyPlus.debugLog("LEADERNAME: '" + name + "'");
 
             if (name.equals("#UndefinedPlayer#")) return;
 
@@ -594,12 +594,12 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
             if (sendPacket) {
 
-                // DEBUG System.out.println("Sending party update packet to all members :)");
+                HyPlus.debugLog("Sending party update packet to all members :)");
                 ArrayList<UUID> uuids = new ArrayList<>();
                 for (HySimplePlayer player : this.party.getAllMembers()) {
 
                     String uuid = player.getPlayerObject().uuid;
-                    // DEBUG System.out.println("REQUEST FOR '" + player.getPlayerBlank() + "' returned: " + uuid);
+                    HyPlus.debugLog("REQUEST FOR '" + player.getPlayerBlank() + "' returned: " + uuid);
                     try {
                         uuids.add(UUID.fromString(HyUtilities.dashUUID(uuid)));
                     }
@@ -642,7 +642,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
     private void generateInvite(String uuidJoin) {
 
         System.out.println(uuidJoin);
-        HyPlus.getInstance().displayIgMessage("PublicPartyUUID", uuidJoin);
+        // DEBUG HyPlus.getInstance().displayIgMessage("PublicPartyUUID", uuidJoin);
         HyPlus.getInstance().discordApp.getRichPresence().updateJoinSecret(true, HyUtilities.dashUUID(uuidJoin));
 
     }
@@ -650,7 +650,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
     public String rematchInvite(UUID invite) {
 
         String r = MojangRequest.getName(invite.toString());
-        // DEBUG System.out.println("JOINING TO: " + r);
+        HyPlus.debugLog("JOINING TO: " + r);
         return r;
 
     }

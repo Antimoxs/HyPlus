@@ -282,7 +282,7 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
                                             progress = (int) (double) quest.getActiveChallenge().objectives.get(objective.id);
 
                                         }
-                                        // DEBUG System.out.println(q.description + " | " + progress + "/" + objective.integer);
+                                        HyPlus.debugLog(q.description + " | " + progress + "/" + objective.integer);
                                         double percent = ((double) progress / (double) objective.integer) * 100;
 
                                         QuestData data = new QuestData(HyPlus.getInstance(), q, progress, (int) percent, objective);
@@ -295,7 +295,7 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
 
                                     if (HYPLUS_CTR_COMPLETED.getValueBoolean()) {
 
-                                        // DEBUG System.out.println(q.description + " | " + "completed");
+                                        HyPlus.debugLog(q.description + " | " + "completed");
                                         QuestData data = new QuestData(HyPlus.getInstance(), q, 0, 100, null);
 
                                         dspc.put(data.getL(true), data);

@@ -88,7 +88,7 @@ public class ModRichPresenceExtender {
     // Update the current timestamps
     public void updateTimestamps(boolean start, long timestamp) {
 
-        // DEBUG System.out.println("[HP-RPC] updated times: " + timestamp);
+        HyPlus.debugLog("[HP-RPC] updated times: " + timestamp);
         if (start) {
 
             this.timeEnd = 0;
@@ -116,7 +116,7 @@ public class ModRichPresenceExtender {
     // Update ths current game information
     public void updateServer(String server) {
 
-        // DEBUG System.out.println("[HP-RPC] updated s  : " + server);
+        HyPlus.debugLog("[HP-RPC] updated s  : " + server);
         if (this.server != server) {
 
             this.server = server;
@@ -127,7 +127,7 @@ public class ModRichPresenceExtender {
     }
     public void updateMode(String mode) {
 
-        // DEBUG System.out.println("[HP-RPC] updated mode: " + mode);
+        HyPlus.debugLog("[HP-RPC] updated mode: " + mode);
         if (this.gameMode != mode) {
 
             this.gameMode = mode;
@@ -138,7 +138,7 @@ public class ModRichPresenceExtender {
     }
     public void updateMap(String map) {
 
-        // DEBUG System.out.println("[HP-RPC] updated map: " + map);
+        HyPlus.debugLog("[HP-RPC] updated map: " + map);
         if (this.gameMap != map) {
 
             this.gameMap = map;
@@ -149,7 +149,7 @@ public class ModRichPresenceExtender {
     }
     public boolean updateType(String type) {
 
-        // DEBUG System.out.println("[HP-RPC] updated type: " + type);
+        HyPlus.debugLog("[HP-RPC] updated type: " + type);
         if (this.gameType != type) {
 
             this.gameType = type;
@@ -162,7 +162,7 @@ public class ModRichPresenceExtender {
     }
     public boolean updateState(HyGameStatus.State state) {
 
-        // DEBUG System.out.println("[HP-RPC] updated state: " + state.name);
+        HyPlus.debugLog("[HP-RPC] updated state: " + state.name);
         if (this.playState != state) {
 
             this.playState = state;

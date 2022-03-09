@@ -70,7 +70,7 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
             LabyMod.getInstance().getDiscordApp().shutdown();
             if (!HyPlus.getInstance().discordApp.init()) {
 
-                // DEBUG System.out.println("Can't start HyPlus DiscordRPC?");
+                HyPlus.debugLog("Can't start HyPlus DiscordRPC?");
                 LabyMod.getInstance().getDiscordApp().initialize();
                 return false;
 
@@ -124,7 +124,7 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
 
         }
 
-        // DEBUG System.out.println("[HYDP] STATE IS: " + HYPLUS_DP_STATE.getValueBoolean());
+        HyPlus.debugLog("[HYDP] STATE IS: " + HYPLUS_DP_STATE.getValueBoolean());
 
         // Check if Limbo
         if (locationIn.isLimbo()) {
