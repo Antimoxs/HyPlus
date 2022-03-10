@@ -22,8 +22,8 @@ public class HyBetterMsg implements IHyPlusModule, IHyPlusEvent {
 
     // BetterMsg
 
-    public HySetting HYPLUS_BETTERMSG_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_BETTERMSG_TOGGLE", "Better Msg", "Toggle prettier private messages.", true, true, Material.PAINTING);
-    public HySetting HYPLUS_BETTERMSG_STYLE = new HySetting(HySettingType.STRING, "HYPLUS_BETTERMSG_STYLE", "Private message style", "Select the message style.", "SWITCH", "SWITCH", Material.PAPER);
+    public static final HySetting HYPLUS_BETTERMSG_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_BETTERMSG_TOGGLE", "Better Msg", "Toggle prettier private messages.", true, true, Material.PAINTING);
+    public static final HySetting HYPLUS_BETTERMSG_STYLE = new HySetting(HySettingType.STRING, "HYPLUS_BETTERMSG_STYLE", "Private message style", "Select the message style.", "SWITCH", "SWITCH", Material.PAPER);
 
     @Override
     public List<SettingsElement> getModuleSettings() {

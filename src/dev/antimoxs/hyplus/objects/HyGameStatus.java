@@ -14,7 +14,7 @@ public class HyGameStatus {
         INGAME("Playing"),
         IDLING("Idling");
 
-        public String name;
+        public final String name;
 
         State(String name) {
 

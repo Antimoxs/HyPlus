@@ -26,14 +26,12 @@ import java.util.UUID;
 
 public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
+    public static final HySetting HYPLUS_PM_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_PM_TOGGLE", "PartyManager", "Toggle the party-manager.", true, true, Material.CAKE);
+    public static final HySetting HYPLUS_PM_SHOW = new HySetting(HySettingType.BOOLEAN, "HYPLUS_PM_SHOW", "Show in DiscordPresence", "Toggle the display of the current party state in the Discord.", true, true, Material.PAPER);
+    public static final HySetting HYPLUS_PM_JOIN = new HySetting(HySettingType.BOOLEAN, "HYPLUS_PM_JOIN", "Allow party joins.", "Allow players to join ur party. (Only public party)", true, true, Material.GOLD_BOOTS);
+    public static final HySetting HYPLUS_PM_DC_UPDATE = new HySetting(HySettingType.INT, "HYPLUS_PM_DC_UPDATE", "Discord Callback interval.", "Set the interval for Callback checks.", 2, 2, Material.WATCH);
 
     private HyParty party = new HyParty();
-
-    public final HySetting HYPLUS_PM_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_PM_TOGGLE", "PartyManager", "Toggle the party-manager.", true, true, Material.CAKE);
-    public final HySetting HYPLUS_PM_SHOW = new HySetting(HySettingType.BOOLEAN, "HYPLUS_PM_SHOW", "Show in DiscordPresence", "Toggle the display of the current party state in the Discord.", true, true, Material.PAPER);
-    public final HySetting HYPLUS_PM_JOIN = new HySetting(HySettingType.BOOLEAN, "HYPLUS_PM_JOIN", "Allow party joins.", "Allow players to join ur party. (Only public party)", true, true, Material.GOLD_BOOTS);
-    public final HySetting HYPLUS_PM_DC_UPDATE = new HySetting(HySettingType.INT, "HYPLUS_PM_DC_UPDATE", "Discord Callback interval.", "Set the interval for Callback checks.", 2, 2, Material.WATCH);
-
 
     @Override
     public String getModuleName() {

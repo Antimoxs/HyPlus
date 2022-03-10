@@ -4,7 +4,6 @@ import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.objects.HySetting;
 import dev.antimoxs.hyplus.objects.HySettingType;
 import net.labymod.settings.elements.BooleanElement;
-import net.labymod.settings.elements.ControlElement;
 import net.labymod.settings.elements.SettingsElement;
 import net.labymod.settings.elements.StringElement;
 import net.labymod.utils.Material;
@@ -14,9 +13,9 @@ import java.util.List;
 
 public class HyGeneral implements IHyPlusModule {
 
-    public final HySetting HYPLUS_GENERAL_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_GENERAL_TOGGLE", "HyPlus enabled", "Toggle all features of the HyPlus addon.", true, true, Material.REDSTONE);
-    public final HySetting HYPLUS_GENERAL_LOOP_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_GENERAL_LOOP_TOGGLE", "HyLoop", "Toggle the HyLoop.", true, true, Material.FISHING_ROD);
-    public final HySetting HYPLUS_GENERAL_APIKEY = new HySetting(HySettingType.STRING, "HYPLUS_GENERAL_APIKEY", "Hypixel API-Key", "Set the HypixelAPI key. (Needed for a range of features.)", "", "", Material.TRIPWIRE_HOOK);
+    public static final HySetting HYPLUS_GENERAL_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_GENERAL_TOGGLE", "HyPlus enabled", "Toggle all features of the HyPlus addon.", true, true, Material.REDSTONE);
+    public static final HySetting HYPLUS_GENERAL_LOOP_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_GENERAL_LOOP_TOGGLE", "HyLoop", "Toggle the HyLoop.", true, true, Material.FISHING_ROD);
+    public static final HySetting HYPLUS_GENERAL_APIKEY = new HySetting(HySettingType.STRING, "HYPLUS_GENERAL_APIKEY", "Hypixel API-Key", "Set the HypixelAPI key. (Needed for a range of features.)", "", "", Material.TRIPWIRE_HOOK);
 
     @Override
     public String getModuleName() {
@@ -78,7 +77,7 @@ public class HyGeneral implements IHyPlusModule {
 
     public String getApiKey() {
 
-        return this.HYPLUS_GENERAL_APIKEY.getValueString();
+        return HYPLUS_GENERAL_APIKEY.getValueString();
 
     }
 

@@ -3,6 +3,8 @@ package dev.antimoxs.hyplus.listener;
 
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.Hypixel;
+import dev.antimoxs.hyplus.modules.HyGeneral;
+import dev.antimoxs.hyplus.modules.party.HyPartyManager;
 import net.labymod.api.events.MessageSendEvent;
 import net.labymod.utils.Consumer;
 import net.labymod.utils.ServerData;
@@ -16,7 +18,7 @@ public class HyListenerChatSend implements MessageSendEvent, Consumer<ServerData
         if (!HyPlus.getInstance().hypixel.checkOnServer()) return false;
 
         // Check if we are enabled.
-        if (!HyPlus.getInstance().hyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return false;
+        if (!HyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return false;
 
         String[] command = s.split(" ");
 
@@ -29,7 +31,7 @@ public class HyListenerChatSend implements MessageSendEvent, Consumer<ServerData
             case "/party": {
 
                 HyPlus.getInstance().hyPartyManager.overriddenPartyCommands(s);
-                return HyPlus.getInstance().hyPartyManager.HYPLUS_PM_TOGGLE.getValueBoolean();
+                return HyPartyManager.HYPLUS_PM_TOGGLE.getValueBoolean();
 
             }
 

@@ -6,9 +6,7 @@ import dev.antimoxs.hyplus.objects.HySetting;
 import dev.antimoxs.hyplus.objects.HySettingType;
 import net.labymod.settings.Settings;
 import net.labymod.settings.elements.BooleanElement;
-import net.labymod.settings.elements.ControlElement;
 import net.labymod.settings.elements.SettingsElement;
-import net.labymod.settings.elements.StringElement;
 import net.labymod.utils.Material;
 
 import java.util.ArrayList;
@@ -16,8 +14,8 @@ import java.util.List;
 
 public class HyAdvanced implements IHyPlusModule{
 
-    public final HySetting HYPLUS_ADVANCED_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_ADVANCED_TOGGLE", "Advanced settings", "View advanced settings", true, true, Material.COMMAND);
-    public final HySetting HYPLUS_ADVANCED_API = new HySetting(HySettingType.BOOLEAN, "HYPLUS_ADVANCED_API", "External HyPlus API", "Toggle the HyPlus API for other addons.", true, true, Material.COMMAND);
+    public static final HySetting HYPLUS_ADVANCED_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_ADVANCED_TOGGLE", "Advanced settings", "View advanced settings", true, true, Material.COMMAND);
+    public static final HySetting HYPLUS_ADVANCED_API = new HySetting(HySettingType.BOOLEAN, "HYPLUS_ADVANCED_API", "External HyPlus API", "Toggle the HyPlus API for other addons.", true, true, Material.COMMAND);
 
 
     @Override

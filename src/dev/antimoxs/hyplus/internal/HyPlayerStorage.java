@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class HyPlayerStorage {
 
-    private static HashMap<UUID, HySimplePlayer> players = new HashMap<>();
+    private static final HashMap<UUID, HySimplePlayer> players = new HashMap<>();
 
 
     public static HySimplePlayer getPlayerByUUID(UUID uuid) {

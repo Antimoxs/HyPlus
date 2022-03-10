@@ -1,11 +1,5 @@
 package dev.antimoxs.hyplus;
 
-import dev.antimoxs.hypixelapiHP.exceptions.ApiRequestException;
-import dev.antimoxs.hypixelapiHP.objects.player.statGames.PSGDuels;
-import dev.antimoxs.hypixelapiHP.requests.MojangRequest;
-import dev.antimoxs.hypixelapiHP.response.PlayerResponse;
-import dev.antimoxs.hypixelapiHP.util.kvp;
-import dev.antimoxs.hyplus.modules.headStats.HyPlayerTag;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
 import dev.antimoxs.hyplus.objects.HyGameStatus;
 import dev.antimoxs.hyplus.objects.HyServerLocation;
@@ -14,7 +8,6 @@ import net.labymod.ingamegui.moduletypes.ColoredTextModule;
 import net.labymod.main.LabyMod;
 import net.labymod.servermanager.ChatDisplayAction;
 import net.labymod.servermanager.Server;
-import net.labymod.settings.elements.HeaderElement;
 import net.labymod.settings.elements.SettingsElement;
 import net.labymod.utils.Consumer;
 import net.minecraft.client.Minecraft;
@@ -28,7 +21,6 @@ import net.minecraft.util.ChatComponentText;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Hypixel extends Server implements IHyPlusEvent {
 
@@ -217,18 +209,17 @@ public class Hypixel extends Server implements IHyPlusEvent {
     }
 
     @Override
-    public ChatDisplayAction handleChatMessage(String s, String s1) throws Exception {
-        ChatDisplayAction cda = ChatDisplayAction.NORMAL;
-        return cda;
+    public ChatDisplayAction handleChatMessage(String s, String s1) {
+        return ChatDisplayAction.NORMAL;
     }
 
     @Override
-    public void handlePluginMessage(String s, PacketBuffer packetBuffer) throws Exception {
+    public void handlePluginMessage(String s, PacketBuffer packetBuffer) {
 
     }
 
     @Override
-    public void handleTabInfoMessage(TabListEvent.Type type, String s, String s1) throws Exception {
+    public void handleTabInfoMessage(TabListEvent.Type type, String s, String s1) {
 
 
 

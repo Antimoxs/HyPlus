@@ -28,7 +28,7 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
 
     private int delay = 3;
     private boolean active = true;
-    private HashMap<UUID, HyPlayerTag> playerTags = new HashMap<>();
+    private final HashMap<UUID, HyPlayerTag> playerTags = new HashMap<>();
     private JsonArray nextTags = new JsonArray();
 
     // PlayerTagChanger

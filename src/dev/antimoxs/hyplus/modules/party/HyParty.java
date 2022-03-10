@@ -17,8 +17,8 @@ public class HyParty {
     private int cap = -1;
 
     private HySimplePlayer partyLeader = new HySimplePlayer();
-    private HashMap<String, HySimplePlayer> partyMods = new HashMap<>();
-    private HashMap<String, HySimplePlayer> partyMembers = new HashMap<>();
+    private final HashMap<String, HySimplePlayer> partyMods = new HashMap<>();
+    private final HashMap<String, HySimplePlayer> partyMembers = new HashMap<>();
 
     public void setExists(boolean exists) { this.exists = exists; }
     public void setPublic(boolean isPublic) { this.isPublic = isPublic; }

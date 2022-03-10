@@ -8,11 +8,12 @@ public class HySetting {
 
     private final HySettingType type;
     private final String configname;
+    private final Object defaultValue;
+    private final ControlElement.IconData icon;
+    private final String displayName;
+    private final String description;
+
     private Object value;
-    private Object defaultValue;
-    private ControlElement.IconData icon;
-    private String displayName;
-    private String description;
 
     public HySetting(HySettingType type, String configname, String displayName, String desc, Object value, Object defaultValue, String iconPath) {
 
@@ -86,7 +87,6 @@ public class HySetting {
         this.value = defaultValue;
 
     }
-
 
     public int getDefaultInt() {
 

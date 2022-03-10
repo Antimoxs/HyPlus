@@ -19,34 +19,17 @@ import java.util.List;
 
 public class HyFriend implements IHyPlusModule, IHyPlusEvent {
 
-
+    public static final HySetting HYPLUS_AUTOFRIEND_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND", "Autofriend", "Auto-accept friend invites.", true, true, Material.SKULL);
+    private static final HySetting HYPLUS_AUTOFRIEND_AA_NON = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_NON", "Nons", "Accept invites from no-ranks.", true, true, Material.LEATHER_BOOTS);
+    private static final HySetting HYPLUS_AUTOFRIEND_AA_VIP = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_VIP", "VIPs", "Accept invites from VIPs.", true, true, Material.CHAINMAIL_BOOTS);
+    private static final HySetting HYPLUS_AUTOFRIEND_AA_VIPP = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_VIPP", "VIP+s", "Accept invites from VIP+s.", true, true, Material.GOLD_BOOTS);
+    private static final HySetting HYPLUS_AUTOFRIEND_AA_MVP = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_MVP", "MVPs", "Accept invites from MVPs.", true, true, Material.IRON_BOOTS);
+    private static final HySetting HYPLUS_AUTOFRIEND_AA_MVPP = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_MVPP", "MVP+s", "Accept invites from MVP+s.", true, true, Material.DIAMOND_BOOTS);
+    private static final HySetting HYPLUS_AUTOFRIEND_AA_MVPPP = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_MVPPP", "MVP++s", "Accept invites from MVP++s.", true, true, Material.NETHER_STAR);
+    private static final HySetting HYPLUS_AUTOFRIEND_AA_YT = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_YT", "YTs", "Accept invites from YTs.", true, true, Material.PAINTING);
+    private static final HySetting HYPLUS_AUTOFRIEND_AA_STAFF = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_STAFF", "Staff", "Accept invites from Staff.", true, true, Material.COMMAND);
 
     private FriendList fl;
-
-    // AutoFriendModule
-    //public boolean HYPLUS_AUTOFRIEND_TOGGLE = true;
-/*
-    public CheckBox.EnumCheckBoxValue HYPLUS_AUTOFRIEND_AA_NON = CheckBox.EnumCheckBoxValue.ENABLED;
-    public CheckBox.EnumCheckBoxValue HYPLUS_AUTOFRIEND_AA_VIP = CheckBox.EnumCheckBoxValue.ENABLED;
-    public CheckBox.EnumCheckBoxValue HYPLUS_AUTOFRIEND_AA_VIPP = CheckBox.EnumCheckBoxValue.ENABLED;
-    public CheckBox.EnumCheckBoxValue HYPLUS_AUTOFRIEND_AA_MVP = CheckBox.EnumCheckBoxValue.ENABLED;
-    public CheckBox.EnumCheckBoxValue HYPLUS_AUTOFRIEND_AA_MVPP = CheckBox.EnumCheckBoxValue.ENABLED;
-    public CheckBox.EnumCheckBoxValue HYPLUS_AUTOFRIEND_AA_MVPPP = CheckBox.EnumCheckBoxValue.ENABLED;
-    public CheckBox.EnumCheckBoxValue HYPLUS_AUTOFRIEND_AA_YT = CheckBox.EnumCheckBoxValue.ENABLED;
-    public CheckBox.EnumCheckBoxValue HYPLUS_AUTOFRIEND_AA_STAFF = CheckBox.EnumCheckBoxValue.ENABLED;
-
-
- */
-    public final HySetting HYPLUS_AUTOFRIEND_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND", "Autofriend", "Auto-accept friend invites.", true, true, Material.SKULL);
-    private final HySetting HYPLUS_AUTOFRIEND_AA_NON = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_NON", "Nons", "Accept invites from no-ranks.", true, true, Material.LEATHER_BOOTS);
-    private final HySetting HYPLUS_AUTOFRIEND_AA_VIP = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_VIP", "VIPs", "Accept invites from VIPs.", true, true, Material.CHAINMAIL_BOOTS);
-    private final HySetting HYPLUS_AUTOFRIEND_AA_VIPP = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_VIPP", "VIP+s", "Accept invites from VIP+s.", true, true, Material.GOLD_BOOTS);
-    private final HySetting HYPLUS_AUTOFRIEND_AA_MVP = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_MVP", "MVPs", "Accept invites from MVPs.", true, true, Material.IRON_BOOTS);
-    private final HySetting HYPLUS_AUTOFRIEND_AA_MVPP = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_MVPP", "MVP+s", "Accept invites from MVP+s.", true, true, Material.DIAMOND_BOOTS);
-    private final HySetting HYPLUS_AUTOFRIEND_AA_MVPPP = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_MVPPP", "MVP++s", "Accept invites from MVP++s.", true, true, Material.NETHER_STAR);
-    private final HySetting HYPLUS_AUTOFRIEND_AA_YT = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_YT", "YTs", "Accept invites from YTs.", true, true, Material.PAINTING);
-    private final HySetting HYPLUS_AUTOFRIEND_AA_STAFF = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_STAFF", "Staff", "Accept invites from Staff.", true, true, Material.COMMAND);
-
 
     @Override
     public List<SettingsElement> getModuleSettings() {

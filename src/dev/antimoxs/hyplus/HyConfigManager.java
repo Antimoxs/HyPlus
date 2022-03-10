@@ -1,5 +1,6 @@
 package dev.antimoxs.hyplus;
 
+import dev.antimoxs.hyplus.modules.HyGeneral;
 import dev.antimoxs.hyplus.modules.HyModuleManager;
 import dev.antimoxs.hyplus.modules.IHyPlusModule;
 import dev.antimoxs.hyplus.modules.betterMsg.HyBetterMsgType;
@@ -16,58 +17,29 @@ public class HyConfigManager {
 
         if (retry >= 10) {
 
-            HyPlus.getInstance().onDisable();
-            HyPlus.getInstance().hyGeneral.HYPLUS_GENERAL_TOGGLE.changeConfigValue(HyPlus.getInstance(), false);
+            HyGeneral.HYPLUS_GENERAL_TOGGLE.changeConfigValue(HyPlus.getInstance(), false);
             HyPlus.getInstance().hyGeneral.checkConfig(false);
             System.out.println("--- Unable to properly read HyPlus config file. ---");
             return;
 
         }
 
-        // Check if all needed config entries are set to prevent errors
-
-        //hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_API_TOGGLE", false);
-        //hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_ABOUT_UPDATE", true);
-        //hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_ABOUT", 0);
-        //hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_VERSION", "-");
-
-        //hyPlus.hyConfigManager.checkConfig(reset, "HYPLUS_DUELS_ANTIBLUR", 0);
-
-
-        for (IHyPlusModule module : HyPlus.getInstance().hyModuleManager.getModules()) {
-
-            module.checkConfig(reset);
-
-        }
-
-        if (updateCheck) {
-
-            updateCheck = false;
-            HyPlus.debugLog("Some properties updated, reloading!");
-            loadConfig(0, false);
-            return;
-
-        }
-
         try {
 
+            for (IHyPlusModule module : HyPlus.getInstance().hyModuleManager.getModules()) {
 
-            // transferring values from config to settings-class
+                module.checkConfig(reset);
 
-            // External API
-            //hyPlus.hySettings.HYPLUS_API_TOGGLE = hyPlus.getConfig().get("HYPLUS_API_TOGGLE").getAsBoolean();
+            }
 
+            if (updateCheck) {
 
-            // About
-            //hyPlus.hySettings.HYPLUS_ABOUT_UPDATE = true;
+                updateCheck = false;
+                HyPlus.debugLog("Some properties updated, reloading!");
+                loadConfig(0, false);
+                return;
 
-
-
-
-            // Duels
-            //hyPlus.hySettings.HYPLUS_DUELS_ANTIBLUR = hyPlus.getConfig().get("HYPLUS_DUELS_ANTIBLUR").getAsBoolean();
-
-
+            }
 
         } catch (Exception e) {
 
@@ -82,20 +54,13 @@ public class HyConfigManager {
         System.out.println("HyPlus Config loaded.");
         HyPlus.getInstance().saveConfig();
 
-        //this.onDisable();
-        //this.onEnable();
-
-        //"f0678253-89db-45bb-9730-b5eb952481ea"
-
-
     }
 
     public void checkConfig(boolean reset, HySetting setting) {
 
         String property = setting.getConfigName();
 
-
-        //System.out.println("Checking for '" + property + "'...");
+        HyPlus.debugLog("Checking for '" + property + "'...");
 
         if (HyPlus.getInstance().getConfig().has(property)) {
 
@@ -142,8 +107,6 @@ public class HyConfigManager {
 
             }
 
-
-
             updateCheck = true;
 
         }
@@ -159,7 +122,6 @@ public class HyConfigManager {
 
         }
 
-
         if (value instanceof String) {
             HyPlus.getInstance().getConfig().addProperty(property, (String) value);
         } else if (value instanceof Integer) {
@@ -171,7 +133,6 @@ public class HyConfigManager {
         } else {
             System.out.println("uhm this is not indented neither wanted. fix asap? (changer)" + property + " " + value);
         }
-
 
     }
 

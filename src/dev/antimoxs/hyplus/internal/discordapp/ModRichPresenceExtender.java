@@ -1,14 +1,15 @@
 package dev.antimoxs.hyplus.internal.discordapp;
 
 import dev.antimoxs.hyplus.HyPlus;
+import dev.antimoxs.hyplus.modules.HyDiscordPresence;
+import dev.antimoxs.hyplus.modules.party.HyPartyManager;
 import dev.antimoxs.hyplus.objects.HyGameStatus;
-import dev.antimoxs.hyplus.objects.HyServerLocation;
 import net.labymod.discordapp.api.DiscordRPCLibrary;
 import net.labymod.discordapp.api.DiscordRichPresence;
 
-public class ModRichPresenceExtender {
+import java.util.Objects;
 
-    private DiscordRichPresence drp = new DiscordRichPresence();
+public class ModRichPresenceExtender {
 
     private boolean updateRequired = true;
 
@@ -19,7 +20,7 @@ public class ModRichPresenceExtender {
      * MurderMystery: Playing
      * DoubleUp (3 of 3)
      * 04:02 left
-     *
+     * <p>
      * LabyMod - HyPlus
      * gameType: gameState
      * gameMode party
@@ -53,7 +54,7 @@ public class ModRichPresenceExtender {
     private boolean joinSecret = false;
     private String joinSecretS = "";
 
-    private DiscordAppExtender discord;
+    private final DiscordAppExtender discord;
 
     public ModRichPresenceExtender(DiscordAppExtender discord) {
 
@@ -72,7 +73,7 @@ public class ModRichPresenceExtender {
             this.partySize = partySize;
             updateRequired = true;
         }
-        if (this.partyID != partyID) {
+        if (!Objects.equals(this.partyID, partyID)) {
             this.partyID = partyID;
             updateRequired = true;
         }
@@ -117,7 +118,7 @@ public class ModRichPresenceExtender {
     public void updateServer(String server) {
 
         HyPlus.debugLog("[HP-RPC] updated s  : " + server);
-        if (this.server != server) {
+        if (!Objects.equals(this.server, server)) {
 
             this.server = server;
             this.updateRequired = true;
@@ -128,7 +129,7 @@ public class ModRichPresenceExtender {
     public void updateMode(String mode) {
 
         HyPlus.debugLog("[HP-RPC] updated mode: " + mode);
-        if (this.gameMode != mode) {
+        if (!Objects.equals(this.gameMode, mode)) {
 
             this.gameMode = mode;
             this.updateRequired = true;
@@ -139,7 +140,7 @@ public class ModRichPresenceExtender {
     public void updateMap(String map) {
 
         HyPlus.debugLog("[HP-RPC] updated map: " + map);
-        if (this.gameMap != map) {
+        if (!Objects.equals(this.gameMap, map)) {
 
             this.gameMap = map;
             this.updateRequired = true;
@@ -150,7 +151,7 @@ public class ModRichPresenceExtender {
     public boolean updateType(String type) {
 
         HyPlus.debugLog("[HP-RPC] updated type: " + type);
-        if (this.gameType != type) {
+        if (!Objects.equals(this.gameType, type)) {
 
             this.gameType = type;
             this.updateRequired = true;
@@ -241,35 +242,35 @@ public class ModRichPresenceExtender {
     public DiscordRichPresence build() {
 
         // settings:
-        boolean sgame = HyPlus.getInstance().hyDiscordPresence.HYPLUS_DP_GAME.getValueBoolean();
-        boolean smode = HyPlus.getInstance().hyDiscordPresence.HYPLUS_DP_MODE.getValueBoolean();
-        boolean stime = HyPlus.getInstance().hyDiscordPresence.HYPLUS_DP_TIME.getValueBoolean();
-        boolean sstate = HyPlus.getInstance().hyDiscordPresence.HYPLUS_DP_STATE.getValueBoolean();
-        boolean sparty = HyPlus.getInstance().hyPartyManager.HYPLUS_PM_SHOW.getValueBoolean();
+        boolean sgame = HyDiscordPresence.HYPLUS_DP_GAME.getValueBoolean();
+        boolean smode = HyDiscordPresence.HYPLUS_DP_MODE.getValueBoolean();
+        boolean stime = HyDiscordPresence.HYPLUS_DP_TIME.getValueBoolean();
+        boolean sstate = HyDiscordPresence.HYPLUS_DP_STATE.getValueBoolean();
+        boolean sparty = HyPartyManager.HYPLUS_PM_SHOW.getValueBoolean();
 
-        drp = new DiscordRichPresence();
+        DiscordRichPresence drp = new DiscordRichPresence();
 
         // Discord Presence Images
-        this.drp.largeImageText = sgame ? this.largeImageText : "Playing on Hypixel.";
-        this.drp.smallImageText = this.smallImageText;
-        this.drp.largeImageKey = sgame ? this.largeImage : "hypixel";
-        this.drp.smallImageKey = this.smallImage;
+        drp.largeImageText = sgame ? this.largeImageText : "Playing on Hypixel.";
+        drp.smallImageText = this.smallImageText;
+        drp.largeImageKey = sgame ? this.largeImage : "hypixel";
+        drp.smallImageKey = this.smallImage;
 
         // Game Information
-        this.drp.details = sgame ? this.gameType + (sstate ? (this.playState == HyGameStatus.State.UNDEFINED ? "" : ": " + this.playState.name) : "") : "Playing on Hypixel.";
-        this.drp.state = smode && sgame ? (this.gameType.equals(this.gameMode) ? null : this.gameMode) : "HyPlus by Antimoxs.";
+        drp.details = sgame ? this.gameType + (sstate ? (this.playState == HyGameStatus.State.UNDEFINED ? "" : ": " + this.playState.name) : "") : "Playing on Hypixel.";
+        drp.state = smode && sgame ? (this.gameType.equals(this.gameMode) ? null : this.gameMode) : "HyPlus by Antimoxs.";
 
         // Party Indicators
         if (sparty) {
-            this.drp.partyId = this.partyID;
-            this.drp.partyMax = party ? this.partyMax : 0;
-            this.drp.partySize = this.partySize;
+            drp.partyId = this.partyID;
+            drp.partyMax = party ? this.partyMax : 0;
+            drp.partySize = this.partySize;
         }
         else {
 
-            this.drp.partyId = null;
-            this.drp.partyMax = 0;
-            this.drp.partySize = 0;
+            drp.partyId = null;
+            drp.partyMax = 0;
+            drp.partySize = 0;
 
         }
 
@@ -277,16 +278,16 @@ public class ModRichPresenceExtender {
 
         if (this.timestamp && stime) {
 
-            this.drp.endTimestamp = this.timeEnd;
-            this.drp.startTimestamp = this.timeStart;
+            drp.endTimestamp = this.timeEnd;
+            drp.startTimestamp = this.timeStart;
 
         }
 
         // Join secret
-        this.drp.joinSecret = joinSecret && sparty ? joinSecretS : null;
+        drp.joinSecret = joinSecret && sparty ? joinSecretS : null;
 
-        this.drp.instance = 1;
-        return this.drp;
+        drp.instance = 1;
+        return drp;
 
     }
 

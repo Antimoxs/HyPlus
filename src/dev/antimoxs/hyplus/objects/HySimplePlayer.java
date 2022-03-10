@@ -27,6 +27,8 @@ public class HySimplePlayer {
         else {
             this.rank = "";
         }
+        this.plusColor = plusColor;
+        this.goldenName = goldenName;
 
     }
 

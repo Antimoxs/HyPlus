@@ -2,7 +2,12 @@ package dev.antimoxs.hyplus.listener;
 
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.HyUtilities;
+import dev.antimoxs.hyplus.modules.HyGeneral;
+import dev.antimoxs.hyplus.modules.HyLocationDetector;
+import dev.antimoxs.hyplus.modules.betterMsg.HyBetterMsg;
+import dev.antimoxs.hyplus.modules.friends.HyFriend;
 import dev.antimoxs.hyplus.modules.friends.HyFriendRequest;
+import dev.antimoxs.hyplus.modules.party.HyPartyManager;
 import dev.antimoxs.hyplus.modules.party.HyPartyMessageType;
 import net.labymod.api.events.MessageReceiveEvent;
 
@@ -14,13 +19,13 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
         HyPlus.debugLog("[AdvancedChatLog][" + s.replaceAll("\n","{\\n}") + "]");
 
         // Check if we are enabled.
-        if (!HyPlus.getInstance().hyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return false;
+        if (!HyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return false;
 
         // Making sure we are on hypixel.
         if (HyPlus.getInstance().hypixel.checkOnServer()) {
 
             // Checking if we have API-mode disabled and detection activated. (location)
-            if ((!HyPlus.getInstance().hyLocationDetector.HYPLUS_LD_API.getValueBoolean()) && HyPlus.getInstance().hyLocationDetector.HYPLUS_LD_TOGGLE.getValueBoolean()) {
+            if ((!HyLocationDetector.HYPLUS_LD_API.getValueBoolean()) && HyLocationDetector.HYPLUS_LD_TOGGLE.getValueBoolean()) {
 
                 // Filtering for our locraw message
                 if (s.startsWith("§f{\"")) {
@@ -42,12 +47,12 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
             }
 
             // Let's check for status indicating
-            if (HyPlus.getInstance().hyLocationDetector.HYPLUS_LD_TOGGLE.getValueBoolean()) {
+            if (HyLocationDetector.HYPLUS_LD_TOGGLE.getValueBoolean()) {
                 if (s.startsWith("§r§e§r§e")) HyPlus.getInstance().hyEventManager.callGameStatusChange("Chat detect");
             }
 
             // Checking for MSG message
-            if (HyPlus.getInstance().hyBetterMsg.HYPLUS_BETTERMSG_TOGGLE.getValueBoolean()) {
+            if (HyBetterMsg.HYPLUS_BETTERMSG_TOGGLE.getValueBoolean()) {
 
                 if (s.startsWith("§dFrom ")) {
 
@@ -68,7 +73,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
             }
 
             // Checking if it's a friend request
-            if (HyPlus.getInstance().hyFriend.HYPLUS_AUTOFRIEND_TOGGLE.getValueBoolean()) {
+            if (HyFriend.HYPLUS_AUTOFRIEND_TOGGLE.getValueBoolean()) {
 
 
 
@@ -105,9 +110,9 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
             }
 
             // Checking for party message
-            if (HyPlus.getInstance().hyPartyManager.HYPLUS_PM_TOGGLE.getValueBoolean()) {
+            if (HyPartyManager.HYPLUS_PM_TOGGLE.getValueBoolean()) {
 
-                boolean hideMsg = HyPlus.getInstance().hyPartyManager.HYPLUS_PM_TOGGLE.getValueBoolean();
+                boolean hideMsg = HyPartyManager.HYPLUS_PM_TOGGLE.getValueBoolean();
 
                 /*
                 * Disgusting if chain :[

@@ -1,6 +1,7 @@
 package dev.antimoxs.hyplus.listener;
 
 import dev.antimoxs.hyplus.HyPlus;
+import dev.antimoxs.hyplus.modules.HyGeneral;
 import dev.antimoxs.hyplus.modules.quickplay.HyQuickPlayMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -14,7 +15,7 @@ public class HyListenerKeyInput {
     public void onKeyInput(InputEvent.KeyInputEvent event) {
 
         // Check if we are enabled.
-        if (!HyPlus.getInstance().hyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return;
+        if (!HyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return;
 
         //System.out.println("KEY: " + Keyboard.getEventKey());
 

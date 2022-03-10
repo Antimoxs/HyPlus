@@ -23,9 +23,9 @@ import java.util.List;
 
 public class HyHeadStats implements IHyPlusModule, IHyPlusEvent {
 
-    public HySetting HYPLUS_HS_GENERAL = new HySetting(HySettingType.BOOLEAN, "HP_HS_GENERAL", "Head-stats", "Display floating head stats", true, true, Material.BOOKSHELF);
-    public HySetting HYPLUS_HS_HPXL_LEVEL = new HySetting(HySettingType.BOOLEAN, "HP_HS_HPXL_LEVEL", "Hypixel Level", "Display level", true, true, Material.PAPER);
-    public HySetting HYPLUS_HS_BW_STARS = new HySetting(HySettingType.BOOLEAN, "HP_HS_BW_STARS", "BedWars stars", "Display BedWarsStars", true, true, Material.BED);
+    public static final HySetting HYPLUS_HS_GENERAL = new HySetting(HySettingType.BOOLEAN, "HP_HS_GENERAL", "Head-stats", "Display floating head stats", true, true, Material.BOOKSHELF);
+    public static final HySetting HYPLUS_HS_HPXL_LEVEL = new HySetting(HySettingType.BOOLEAN, "HP_HS_HPXL_LEVEL", "Hypixel Level", "Display level", true, true, Material.PAPER);
+    public static final HySetting HYPLUS_HS_BW_STARS = new HySetting(HySettingType.BOOLEAN, "HP_HS_BW_STARS", "BedWars stars", "Display BedWarsStars", true, true, Material.BED);
 
     @Override
     public String getModuleName() {

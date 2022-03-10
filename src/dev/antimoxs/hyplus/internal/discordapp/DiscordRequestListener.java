@@ -34,7 +34,7 @@ public class DiscordRequestListener implements DiscordEventHandlers.joinRequest_
 
     public void apply(DiscordJoinRequest request) {
         Debug.log(Debug.EnumDebugMode.DISCORD, "Join request: " + request.username + "#" + request.userId);
-        LabyModCore.getMinecraft().displayMessageInChatCustomAction(LanguageManager.translate("discordrpc_join_request_chat", new Object[]{request.username}), 2, "/hydiscordrpc accept " + request.userId);
+        LabyModCore.getMinecraft().displayMessageInChatCustomAction(LanguageManager.translate("discordrpc_join_request_chat", request.username), 2, "/hydiscordrpc accept " + request.userId);
         String imageURL = String.format("https://cdn.discordapp.com/avatars/%s/%s.png", request.userId, request.avatar);
         String username = ModColor.cl('3') + request.username + ModColor.cl('8') + "#" + ModColor.cl('7') + request.discriminator;
         String message = ModColor.cl('a') + LanguageManager.translate("discordrpc_join_request_achievement");

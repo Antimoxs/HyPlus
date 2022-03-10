@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 public class QuickplayMenu extends Gui {
+
     private static final int ANIMATION_SPEED = 100;
     private static Field fieldPressTime;
     private static Field fieldLeftClickCounter;

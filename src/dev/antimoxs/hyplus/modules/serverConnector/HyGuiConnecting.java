@@ -10,11 +10,9 @@ import net.minecraft.client.gui.*;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ChatComponentText;
 import org.apache.logging.log4j.LogManager;
 
 import java.lang.reflect.Method;
-import java.util.logging.Logger;
 
 public class HyGuiConnecting extends GuiScreen {
 
@@ -61,7 +59,7 @@ public class HyGuiConnecting extends GuiScreen {
                 Class<?> clazz = ((GuiConnecting) parent).getClass();
                 Method m = clazz.getDeclaredMethod("a", GuiButton.class);
                 m.setAccessible(true);
-                m.invoke((GuiConnecting) parent ,new GuiButton(0, 0, 0, ""));
+                m.invoke(parent,new GuiButton(0, 0, 0, ""));
 
             }
 
@@ -87,7 +85,7 @@ public class HyGuiConnecting extends GuiScreen {
     @Override
     public void initGui() {
         this.buttonList.clear();
-        this.buttonList.add(new GuiButton(0, this.width / 2 - 100, this.height / 4 + 120 + 12, I18n.format("gui.cancel", new Object[0])));
+        this.buttonList.add(new GuiButton(0, this.width / 2 - 100, this.height / 4 + 120 + 12, I18n.format("gui.cancel")));
     }
 
     @Override

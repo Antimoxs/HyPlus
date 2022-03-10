@@ -15,8 +15,8 @@ import java.util.List;
 
 public class HyQuickPlay implements IHyPlusModule {
 
-    public final HySetting HYPLUS_QUICKPLAY_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_QUICKPLAY_TOGGLE", "Quickplay", "Toggles if the quickplay hotkey is enabled.", true, true, Material.POTION);
-    public final HySetting HYPLUS_QUICKPLAY_KEY = new HySetting(HySettingType.INT, "HYPLUS_QUICKPLAY_KEY", "Quickplay menu key", "Set the activation key for the quickplay menu", 89, 89, Material.ACACIA_STAIRS);
+    public static final HySetting HYPLUS_QUICKPLAY_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_QUICKPLAY_TOGGLE", "Quickplay", "Toggles if the quickplay hotkey is enabled.", true, true, Material.POTION);
+    public static final HySetting HYPLUS_QUICKPLAY_KEY = new HySetting(HySettingType.INT, "HYPLUS_QUICKPLAY_KEY", "Quickplay menu key", "Set the activation key for the quickplay menu", 89, 89, Material.ACACIA_STAIRS);
 
     @Override
     public List<SettingsElement> getModuleSettings() {

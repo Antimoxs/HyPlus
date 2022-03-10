@@ -2,6 +2,7 @@ package dev.antimoxs.hyplus.listener;
 
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.events.PlayerSpawnEvent;
+import dev.antimoxs.hyplus.modules.HyGeneral;
 import net.labymod.utils.Consumer;
 import net.minecraft.network.play.server.*;
 
@@ -11,7 +12,7 @@ public class HyListenerPacket implements Consumer<Object> {
     public void accept(Object o) {
 
         // Check if we are enabled.
-        if (!HyPlus.getInstance().hyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return;
+        if (!HyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return;
 
         if (HyPlus.getInstance().hypixel.checkOnServer()) {
 

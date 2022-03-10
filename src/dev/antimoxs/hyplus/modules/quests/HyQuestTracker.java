@@ -30,21 +30,20 @@ import java.util.List;
 
 public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
 
+    // ChallengeTracker
+    public static final HySetting HYPLUS_CTR_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_TOGGLE", "QuestTracker", "Toggle the quest-tracker.", true, true, Material.BOW);
+    public static final HySetting HYPLUS_CTR_DAILY = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_DAILY", "Show daily quests", "Toggle the display of daily quests.", true, true, Material.WATCH);
+    public static final HySetting HYPLUS_CTR_WEEKLY = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_WEEKLY", "Show weekly quests", "Toggle the display of weekly quests.", true, true, Material.PAPER);
+    public static final HySetting HYPLUS_CTR_COMPLETED = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_COMPLETED", "Show completed quests", "Toggle the display of daily quests.", true, true, Material.GOLD_INGOT);
+    public static final HySetting HYPLUS_CTR_SORTORDER = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_SORTORDER", "Reversed sort order", "Reverse the sort order.", true, true, Material.ARROW);
+    public static final HySetting HYPLUS_CTR_DP_DAILY = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_DP_DAILY", "Announce daily reset time", "Toggle the announcement of the daily reset time.", true, true, Material.EMERALD);
+    public static final HySetting HYPLUS_CTR_DP_WEEKLY = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_DP_WEEKLY", "Announce weekly reset time", "Toggle the announcement of the weekly reset time.", true, true, Material.DIAMOND);
+
     boolean active = true;
     public boolean updateReq = true;
 
-    public TreeMap<Integer, QuestData> dspc = new TreeMap<>();
-    public TreeMap<Integer, QuestData> dspc2 = new TreeMap<>();
-
-
-    // ChallengeTracker
-    public final HySetting HYPLUS_CTR_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_TOGGLE", "QuestTracker", "Toggle the quest-tracker.", true, true, Material.BOW);
-    public final HySetting HYPLUS_CTR_DAILY = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_DAILY", "Show daily quests", "Toggle the display of daily quests.", true, true, Material.WATCH);
-    public final HySetting HYPLUS_CTR_WEEKLY = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_WEEKLY", "Show weekly quests", "Toggle the display of weekly quests.", true, true, Material.PAPER);
-    public final HySetting HYPLUS_CTR_COMPLETED = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_COMPLETED", "Show completed quests", "Toggle the display of daily quests.", true, true, Material.GOLD_INGOT);
-    public final HySetting HYPLUS_CTR_SORTORDER = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_SORTORDER", "Reversed sort order", "Reverse the sort order.", true, true, Material.ARROW);
-    public final HySetting HYPLUS_CTR_DP_DAILY = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_DP_DAILY", "Announce daily reset time", "Toggle the announcement of the daily reset time.", true, true, Material.EMERALD);
-    public final HySetting HYPLUS_CTR_DP_WEEKLY = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_DP_WEEKLY", "Announce weekly reset time", "Toggle the announcement of the weekly reset time.", true, true, Material.DIAMOND);
+    public final TreeMap<Integer, QuestData> dspc = new TreeMap<>();
+    public final TreeMap<Integer, QuestData> dspc2 = new TreeMap<>();
 
     @Override
     public String getModuleName() {
@@ -98,12 +97,9 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
 
         ArrayList<SettingsElement> subSettings = new ArrayList<>();
 
-        ButtonElement ctr_refesh = new ButtonElement("Reload Quests", new ControlElement.IconData(Material.FEATHER), new Consumer<ButtonElement>() {
-            @Override
-            public void accept(ButtonElement buttonElement) {
-                updateChallanges(HyPlus.getInstance().hyLocationDetector.getCurrentLocation().rawloc.toLowerCase());
-            }
-        }, "Reload", "Reload current quests.", Color.CYAN);
+        ButtonElement ctr_refesh = new ButtonElement(
+                "Reload Quests", new ControlElement.IconData(Material.FEATHER), buttonElement -> updateChallanges(HyPlus.getInstance().hyLocationDetector.getCurrentLocation().rawloc.toLowerCase()), "Reload", "Reload current quests.", Color.CYAN
+        );
 
         BooleanElement ctr_show_daily = new BooleanElement(HYPLUS_CTR_DAILY.getDisplayName(), HYPLUS_CTR_DAILY.getIcon(), (booleanElement) -> {
 
@@ -223,12 +219,6 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
                             int minsW = minutesW % 60;
                             int hoursW = (minutesW-minsW)/60;
 
-
-                            //System.out.println("resets in: " + hours + "h " + mins + "m " + seconds + "s");
-                            //HyPlus.displayIgMessage("ResetTime", UnixConverter.toDate(unixTime*1000, "MM/dd/yyyy HH:mm:ss"));
-                            //HyPlus.displayIgMessage("ResetTimeWeekly", UnixConverter.toDate(unixTimeWeek*1000, "MM/dd/yyyy HH:mm:ss"));
-                            //HyPlus.displayIgMessage("Time Now:", UnixConverter.toDate(unixNow*1000, "MM/dd/yyyy HH:mm:ss"));
-
                             if (HYPLUS_CTR_DP_DAILY.getValueBoolean()) HyPlus.getInstance().displayIgMessage(getModuleName(), "Daily Quests reset in: "  + hours + "h " + mins + "m " + seconds + "s");
                             if (HYPLUS_CTR_DP_WEEKLY.getValueBoolean()) HyPlus.getInstance().displayIgMessage(getModuleName(), "Weekly Quests reset in: "  + hoursW + "h " + minsW + "m " + secondsW + "s");
                             QuestsResponse qs = HyPlus.getInstance().hypixelApi.createQuestsRequest();
@@ -303,7 +293,7 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
                                     }
                                     else {
 
-                                        // DEBUG HyPlus.getInstance().displayIgMessage(getModuleName(), "no completed"); // remove before release
+                                        if (HyPlus.DEBUG) HyPlus.getInstance().displayIgMessage(getModuleName(), "no completed");
 
                                     }
 
@@ -314,7 +304,7 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
 
                         }
 
-                    } catch (ApiRequestException e) {
+                    } catch (ApiRequestException ignored) {
 
 
                     }

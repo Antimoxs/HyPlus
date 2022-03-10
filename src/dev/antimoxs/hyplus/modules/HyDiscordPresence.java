@@ -4,17 +4,15 @@ import dev.antimoxs.hypixelapiHP.exceptions.ApiRequestException;
 import dev.antimoxs.hypixelapiHP.response.GamelistResponse;
 import dev.antimoxs.hypixelapiHP.util.hypixelFetcher;
 import dev.antimoxs.hyplus.HyPlus;
-import dev.antimoxs.hyplus.HyUtilities;
 import dev.antimoxs.hyplus.Hypixel;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
+import dev.antimoxs.hyplus.modules.party.HyPartyManager;
 import dev.antimoxs.hyplus.objects.*;
 import dev.antimoxs.utilities.time.wait;
 import net.labymod.main.LabyMod;
 import net.labymod.settings.Settings;
 import net.labymod.settings.elements.*;
 import net.labymod.utils.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.scoreboard.ScorePlayerTeam;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -22,26 +20,23 @@ import java.util.List;
 
 public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
 
+    // Presence settings
+
+    public static final HySetting HYPLUS_DP_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_TOGGLE", "Discord Presence", "Toggle the Hypixel Discord Presence", true, true, Material.PAPER);
+    public static final HySetting HYPLUS_DP_DELAY = new HySetting(HySettingType.INT, "HYPLUS_DP_DELAY", "Update delay", "Delays the Discord presence update for x seconds.", 0, 0, Material.REDSTONE_WIRE);
+    public static final HySetting HYPLUS_DP_GAME = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_GAME", "Show Game", "Toggle the display of your game. (If off, it also deactivates the mode.)", true, true, Material.REDSTONE);
+    public static final HySetting HYPLUS_DP_MODE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_MODE", "Show mode", "Toggle the display of your game-mode.", true, true, Material.LEATHER_BOOTS);
+    public static final HySetting HYPLUS_DP_LOBBY = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_LOBBY", "Show Lobby number §l*", "Toggle the display of the lobbynumber when you are in a lobby. (Only works when using ingame detection.)", true, true, Material.WEB);
+    public static final HySetting HYPLUS_DP_MAP = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_MAP", "Show Map", "Toggle the display of the current map.", true, true, Material.MAP);
+    public static final HySetting HYPLUS_DP_TIME = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_TIME", "Show Time", "Toggle the display of the elapsed play time.", true, true, Material.WATCH);
+    public static final HySetting HYPLUS_DP_SPECIFIC = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_SPECIFIC", "Show specific information", "Toggle the display of special information such round.", false, false, Material.NETHER_STAR);
+    public static final HySetting HYPLUS_DP_STATE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_STATE", "Show playing state", "Toggle the display of the playing state", true, true, Material.SIGN);
+
     private final ControlElement.IconData icon_update = new ControlElement.IconData(Material.BOOK_AND_QUILL);
     private HyGameStatus currentStatus = new HyGameStatus();
     private GamelistResponse indexedGames = null;
 
     public int delay = 0;
-    //String lastgame = "";
-    long starttime = 0L;
-
-    // Presence settings
-
-    public HySetting HYPLUS_DP_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_TOGGLE", "Discord Presence", "Toggle the Hypixel Discord Presence", true, true, Material.PAPER);
-    public HySetting HYPLUS_DP_DELAY = new HySetting(HySettingType.INT, "HYPLUS_DP_DELAY", "Update delay", "Delays the Discord presence update for x seconds.", 0, 0, Material.REDSTONE_WIRE);
-    public HySetting HYPLUS_DP_GAME = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_GAME", "Show Game", "Toggle the display of your game. (If off, it also deactivates the mode.)", true, true, Material.REDSTONE);
-    public HySetting HYPLUS_DP_MODE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_MODE", "Show mode", "Toggle the display of your game-mode.", true, true, Material.LEATHER_BOOTS);
-    public HySetting HYPLUS_DP_LOBBY = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_LOBBY", "Show Lobby number §l*", "Toggle the display of the lobbynumber when you are in a lobby. (Only works when using ingame detection.)", true, true, Material.WEB);
-    public HySetting HYPLUS_DP_MAP = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_MAP", "Show Map", "Toggle the display of the current map.", true, true, Material.MAP);
-    public HySetting HYPLUS_DP_TIME = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_TIME", "Show Time", "Toggle the display of the elapsed play time.", true, true, Material.WATCH);
-    public HySetting HYPLUS_DP_SPECIFIC = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_SPECIFIC", "Show specific information", "Toggle the display of special information such round.", false, false, Material.NETHER_STAR);
-    public HySetting HYPLUS_DP_STATE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_DP_STATE", "Show playing state", "Toggle the display of the playing state", true, true, Material.SIGN);
-
 
     public boolean presenceCheck() {
 
@@ -155,8 +150,8 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
                 //HyPlus.getInstance().discordApp.getRichPresence().updateTimestamps(true, System.currentTimeMillis());
 
             }
-            String s1 = this.HYPLUS_DP_LOBBY.getValueBoolean() ? " " + locationIn.getLobbyNumber() : "";
-            HyPlus.getInstance().discordApp.getRichPresence().updateImageL(gameImage, "Online on " + (this.HYPLUS_DP_MODE.getValueBoolean() ? game + " lobby" + s1 : "Hypixel"));
+            String s1 = HYPLUS_DP_LOBBY.getValueBoolean() ? " " + locationIn.getLobbyNumber() : "";
+            HyPlus.getInstance().discordApp.getRichPresence().updateImageL(gameImage, "Online on " + (HYPLUS_DP_MODE.getValueBoolean() ? game + " lobby" + s1 : "Hypixel"));
             HyPlus.getInstance().discordApp.getRichPresence().updateMode("Lobby" + s1);
             HyPlus.getInstance().discordApp.getRichPresence().updateRichPresence();
             return;
@@ -168,7 +163,7 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
         String map = updateMap("Hypixel", mode);
 
         // set custom message when on housing
-        if (locationIn.gametype.toLowerCase().equals("housing")) mode = "Visiting a world.";
+        if (locationIn.gametype.equalsIgnoreCase("housing")) mode = "Visiting a world.";
 
         // update gamestate
         updateGameState(Hypixel.getGameStatus(locationIn), game, mode, map, locationIn);
@@ -212,7 +207,6 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
 
     /**
      * Update the current game data displayed on discord !!! should run async
-     * @return
      */
     public void updateGameState(HyGameStatus status) {
 
@@ -243,7 +237,7 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
             }
             if (HYPLUS_DP_STATE.getValueBoolean() && status.state == HyGameStatus.State.INGAME) {
 
-                HyPlus.getInstance().discordApp.getRichPresence().updateState(this.HYPLUS_DP_STATE.getValueBoolean() ? status.state : HyGameStatus.State.UNDEFINED);
+                HyPlus.getInstance().discordApp.getRichPresence().updateState(HYPLUS_DP_STATE.getValueBoolean() ? status.state : HyGameStatus.State.UNDEFINED);
                 if (game.equals("limbo") || locationIn.isLimbo()) return;
                 String s1 = HYPLUS_DP_MODE.getValueBoolean() ? " " + mode : "";
                 String s2 = HYPLUS_DP_MAP.getValueBoolean() ? " on " + map : "";
@@ -256,7 +250,7 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
 
             // update state
             HyGameStatus.State currStatus = HYPLUS_DP_STATE.getValueBoolean() ? status.state : HyGameStatus.State.UNDEFINED;
-            if (HyPlus.getInstance().discordApp.getRichPresence().updateState(this.HYPLUS_DP_STATE.getValueBoolean() ? (game.equals("limbo") || locationIn.isLimbo() ? HyGameStatus.State.IDLING : currStatus) : HyGameStatus.State.UNDEFINED)) {
+            if (HyPlus.getInstance().discordApp.getRichPresence().updateState(HYPLUS_DP_STATE.getValueBoolean() ? (game.equals("limbo") || locationIn.isLimbo() ? HyGameStatus.State.IDLING : currStatus) : HyGameStatus.State.UNDEFINED)) {
 
                 if (HYPLUS_DP_STATE.getValueBoolean() && status.state == HyGameStatus.State.PREGAME) {
 
@@ -307,7 +301,6 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
                 }
 
                 HyPlus.getInstance().discordApp.getRichPresence().updateTimestamps(true, System.currentTimeMillis());
-                return;
 
             }
             // otherwise we just run normal update
@@ -331,13 +324,11 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
 
                             HyPlus.getInstance().discordApp.getRichPresence().updateTimestamps(false, status.endingTimestamp);
 
-                        } else if (status.startingTimestamp != 0L) {
+                        }
+                        else {
 
-                            HyPlus.getInstance().discordApp.getRichPresence().updateTimestamps(false, status.startingTimestamp); // start countdown
-
-                        } else {
-
-                            HyPlus.getInstance().discordApp.getRichPresence().updateTimestamps(true, status.startingTimestamp);
+                            // start countdown ?
+                            HyPlus.getInstance().discordApp.getRichPresence().updateTimestamps(status.startingTimestamp == 0L, status.startingTimestamp);
 
                         }
                         return;
@@ -358,7 +349,6 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
                         }
 
                         HyPlus.getInstance().discordApp.getRichPresence().updateTimestamps(true, System.currentTimeMillis());
-                        return;
 
                     }
 
@@ -453,8 +443,8 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
 
         HeaderElement dp_lobbyNNote = new HeaderElement("§l* Only in lobbies and over §lingame§r detection.");
 
-        AdvancedElement adv_all = new AdvancedElement(HyPlus.getInstance().hyPartyManager.HYPLUS_PM_TOGGLE.getDisplayName(), HyPlus.getInstance().hyPartyManager.HYPLUS_PM_TOGGLE.getConfigName(), HyPlus.getInstance().hyPartyManager.HYPLUS_PM_TOGGLE.getIcon());
-        adv_all.setDescriptionText(HyPlus.getInstance().hyPartyManager.HYPLUS_PM_TOGGLE.getDescription());
+        AdvancedElement adv_all = new AdvancedElement(HyPartyManager.HYPLUS_PM_TOGGLE.getDisplayName(), HyPartyManager.HYPLUS_PM_TOGGLE.getConfigName(), HyPartyManager.HYPLUS_PM_TOGGLE.getIcon());
+        adv_all.setDescriptionText(HyPartyManager.HYPLUS_PM_TOGGLE.getDescription());
         adv_all.setSettingEnabled(true);
 
         Settings party_sub = new Settings();
@@ -506,11 +496,7 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
     @Override
     public void onLocationChange(HyServerLocation location) {
 
-        Thread t = new Thread(() -> {
-
-            updatePresence(location);
-
-        });
+        Thread t = new Thread(() -> updatePresence(location));
         Runtime.getRuntime().addShutdownHook(t);
         t.start();
 

@@ -36,8 +36,8 @@ public class HyPlus extends LabyModAddon {
      */
     private static HyPlus instance;
 
-    private final String version = "0.6.1";
-    private final String lastupdated = "10. March 2022";
+    private static final String VERSION = "0.6.3";
+    private static final String LASTUPDATED = "10. March 2022";
     public HyAbout hyAbout = new HyAbout(
             new kvp("Initial Release", 3)
     );
@@ -91,7 +91,7 @@ public class HyPlus extends LabyModAddon {
      * @return The current version as String
      */
     public String getVersion() {
-        return this.version;
+        return VERSION;
     }
 
     /**
@@ -99,7 +99,7 @@ public class HyPlus extends LabyModAddon {
      * @return Date as String
      */
     public String getLastUpdated() {
-        return this.lastupdated;
+        return LASTUPDATED;
     }
 
     /**
@@ -126,7 +126,7 @@ public class HyPlus extends LabyModAddon {
                 "██╔══██║  ╚██╔╝  ██╔═══╝ ██║     ██║   ██║╚════██║\n" +
                 "██║  ██║   ██║   ██║     ███████╗╚██████╔╝███████║\n" +
                 "╚═╝  ╚═╝   ╚═╝   ╚═╝     ╚══════╝ ╚═════╝ ╚══════╝\n" +
-                "      Version " + version + "           by Antimoxs\n" +
+                "      Version " + VERSION + "           by Antimoxs\n" +
                 "\n");
 
         // let's try starting the addon
@@ -182,7 +182,7 @@ public class HyPlus extends LabyModAddon {
         this.getApi().registerForgeListener(hyListenerKeyInput);
         this.getApi().registerForgeListener(hyListenerGuiOpen);
 
-        log("Registeres events.");
+        log("Registered events.");
 
         // register server support for hypixel
         this.getApi().registerServerSupport(this, hypixel);
@@ -255,12 +255,11 @@ public class HyPlus extends LabyModAddon {
 
     /**
      * Fills list with the addon-settings for laby
-     * @param list
      */
     @Override
     protected void fillSettings(List<SettingsElement> list) {
 
-        list.add(new HeaderElement("HyPlus settings for version " + version));
+        list.add(new HeaderElement("HyPlus settings for version " + VERSION));
 
         for (IHyPlusModule module : hyModuleManager.getModules()) {
 
@@ -290,8 +289,8 @@ public class HyPlus extends LabyModAddon {
     private void loop() {
 
         // Check if we are enabled and loop is on.
-        if (!hyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return;
-        if (!hyGeneral.HYPLUS_GENERAL_LOOP_TOGGLE.getValueBoolean()) return;
+        if (!HyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return;
+        if (!HyGeneral.HYPLUS_GENERAL_LOOP_TOGGLE.getValueBoolean()) return;
 
         // try-catch block to prevent any loop interruptions
         try {
@@ -370,10 +369,10 @@ public class HyPlus extends LabyModAddon {
      * Debug log :)
      *
      */
-    private static boolean debug = false;
+    public static final boolean DEBUG = false;
     public static void debugLog(String s) {
 
-        if (debug) {
+        if (DEBUG) {
 
             HyPlus.getInstance().log(s);
 

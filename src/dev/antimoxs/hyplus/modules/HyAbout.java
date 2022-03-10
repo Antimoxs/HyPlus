@@ -15,7 +15,7 @@ import java.util.List;
 
 public class HyAbout implements IHyPlusModule {
 
-    private ArrayList<kvp> changes = new ArrayList<kvp>();
+    private final ArrayList<kvp> changes = new ArrayList<kvp>();
 
     public HyAbout(kvp... update) {
 
