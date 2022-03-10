@@ -1,4 +1,4 @@
-package dev.antimoxs.hyplus.objects;
+package dev.antimoxs.hyplus.api.location;
 
 import com.google.gson.annotations.Expose;
 

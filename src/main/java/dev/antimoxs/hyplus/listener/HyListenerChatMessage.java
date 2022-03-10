@@ -2,11 +2,11 @@ package dev.antimoxs.hyplus.listener;
 
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.HyUtilities;
+import dev.antimoxs.hyplus.api.friends.HyFriendRequest;
 import dev.antimoxs.hyplus.modules.HyGeneral;
 import dev.antimoxs.hyplus.modules.HyLocationDetector;
 import dev.antimoxs.hyplus.modules.betterMsg.HyBetterMsg;
 import dev.antimoxs.hyplus.modules.friends.HyFriend;
-import dev.antimoxs.hyplus.modules.friends.HyFriendRequest;
 import dev.antimoxs.hyplus.modules.party.HyPartyManager;
 import dev.antimoxs.hyplus.modules.party.HyPartyMessageType;
 import net.labymod.api.events.MessageReceiveEvent;

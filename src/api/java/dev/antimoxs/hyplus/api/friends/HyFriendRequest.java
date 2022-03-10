@@ -1,4 +1,4 @@
-package dev.antimoxs.hyplus.modules.friends;
+package dev.antimoxs.hyplus.api.friends;
 
 public class HyFriendRequest {
 

@@ -4,6 +4,7 @@ import dev.antimoxs.hypixelapiHP.exceptions.ApiRequestException;
 import dev.antimoxs.hypixelapiHP.objects.friends.FriendList;
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.HyUtilities;
+import dev.antimoxs.hyplus.api.friends.HyFriendRequest;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
 import dev.antimoxs.hyplus.modules.IHyPlusModule;
 import dev.antimoxs.hyplus.objects.HySetting;

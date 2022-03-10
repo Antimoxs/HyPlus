@@ -1,12 +1,11 @@
 package dev.antimoxs.hyplus.modules.party;
 
-import com.google.gson.JsonObject;
 import dev.antimoxs.hypixelapiHP.requests.MojangRequest;
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.HyUtilities;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
 import dev.antimoxs.hyplus.modules.IHyPlusModule;
-import dev.antimoxs.hyplus.objects.HyServerLocation;
+import dev.antimoxs.hyplus.api.location.HyServerLocation;
 import dev.antimoxs.hyplus.objects.HySetting;
 import dev.antimoxs.hyplus.objects.HySettingType;
 import dev.antimoxs.hyplus.objects.HySimplePlayer;

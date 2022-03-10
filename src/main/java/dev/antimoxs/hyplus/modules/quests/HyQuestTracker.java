@@ -10,7 +10,7 @@ import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
 import dev.antimoxs.hyplus.modules.IHyPlusModule;
 import dev.antimoxs.hyplus.objects.ButtonElement;
-import dev.antimoxs.hyplus.objects.HyServerLocation;
+import dev.antimoxs.hyplus.api.location.HyServerLocation;
 import dev.antimoxs.hyplus.objects.HySetting;
 import dev.antimoxs.hyplus.objects.HySettingType;
 import net.labymod.main.LabyMod;
@@ -19,7 +19,6 @@ import net.labymod.settings.elements.BooleanElement;
 import net.labymod.settings.elements.ControlElement;
 import net.labymod.settings.elements.HeaderElement;
 import net.labymod.settings.elements.SettingsElement;
-import net.labymod.utils.Consumer;
 import net.labymod.utils.Material;
 
 import java.awt.*;

@@ -38,7 +38,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.java.srcDirs = [ "src/main/java" ]
 
 version = "1.0"
 group= "dev.antimoxs.hyplus" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -67,7 +67,6 @@ repositories {
         name = "AntimoxsRepo"
         url = uri("https://repo.antimoxs.dev")
     }
-    jcenter()
     flatDir {
         dirs 'libs'
     }

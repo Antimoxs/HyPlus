@@ -1,12 +1,9 @@
 package dev.antimoxs.hyplus.modules;
 
 import com.google.gson.JsonObject;
-import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
-import dev.antimoxs.hyplus.objects.HyServerLocation;
-import dev.antimoxs.utilities.time.wait;
+import dev.antimoxs.hyplus.api.location.HyServerLocation;
 import net.labymod.main.LabyMod;
-import net.minecraft.network.play.server.S01PacketJoinGame;
 
 public class HyTablist implements IHyPlusModule, IHyPlusEvent {
 

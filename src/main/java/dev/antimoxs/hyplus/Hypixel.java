@@ -2,7 +2,7 @@ package dev.antimoxs.hyplus;
 
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
 import dev.antimoxs.hyplus.objects.HyGameStatus;
-import dev.antimoxs.hyplus.objects.HyServerLocation;
+import dev.antimoxs.hyplus.api.location.HyServerLocation;
 import net.labymod.api.events.TabListEvent;
 import net.labymod.ingamegui.moduletypes.ColoredTextModule;
 import net.labymod.main.LabyMod;

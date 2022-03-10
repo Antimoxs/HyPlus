@@ -5,6 +5,7 @@ import dev.antimoxs.hypixelapiHP.response.GamelistResponse;
 import dev.antimoxs.hypixelapiHP.util.hypixelFetcher;
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.Hypixel;
+import dev.antimoxs.hyplus.api.location.HyServerLocation;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
 import dev.antimoxs.hyplus.modules.party.HyPartyManager;
 import dev.antimoxs.hyplus.objects.*;
