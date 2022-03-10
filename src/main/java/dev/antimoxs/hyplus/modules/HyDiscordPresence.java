@@ -140,7 +140,7 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
         }
 
         String game = this.indexedGames == null ? hypixelFetcher.fetchGame(locationIn.gametype) : this.indexedGames.getGame(locationIn.gametype).name;
-        String gameImage = this.indexedGames == null ? hypixelFetcher.fetchGame(locationIn.gametype) : this.indexedGames.getGame(locationIn.gametype).databaseName.toLowerCase();
+        String gameImage = this.indexedGames == null ? hypixelFetcher.fetchGame(locationIn.gametype).toLowerCase() : this.indexedGames.getGame(locationIn.gametype).databaseName.toLowerCase();
         // check if lobby
         if (locationIn.isLobby()) {
 
