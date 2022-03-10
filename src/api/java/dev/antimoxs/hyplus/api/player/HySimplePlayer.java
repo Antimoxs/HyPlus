@@ -1,11 +1,10 @@
-package dev.antimoxs.hyplus.objects;
+package dev.antimoxs.hyplus.api.player;
 
-import dev.antimoxs.hypixelapiHP.exceptions.ApiRequestException;
-import dev.antimoxs.hypixelapiHP.objects.player.Player;
-import dev.antimoxs.hypixelapiHP.requests.MojangRequest;
-import dev.antimoxs.hypixelapiHP.response.PlayerResponse;
-import dev.antimoxs.hyplus.HyPlus;
-import dev.antimoxs.hyplus.HyUtilities;
+import dev.antimoxs.hypixelapi.exceptions.ApiRequestException;
+import dev.antimoxs.hypixelapi.objects.player.Player;
+import dev.antimoxs.hypixelapi.requests.MojangRequest;
+import dev.antimoxs.hypixelapi.response.PlayerResponse;
+
 
 public class HySimplePlayer {
 
@@ -13,8 +12,6 @@ public class HySimplePlayer {
     private String rank = "#rank#";
     private String plusColor = "&c";
     private boolean goldenName = true;
-
-    private Player playerObject = null;
 
     public HySimplePlayer() {}
 
@@ -57,18 +54,6 @@ public class HySimplePlayer {
 
     }
 
-    public Player getPlayerObject() {
-
-        if (this.playerObject == null) {
-
-            requestPlayerObject();
-
-        }
-
-        return playerObject;
-
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -76,8 +61,6 @@ public class HySimplePlayer {
     public void setRank(String rank) {
         this.rank = rank;
     }
-
-    public void setPlayerObject(Player player) { this.playerObject = player; }
 
     public String getPlayer() {
 
@@ -87,40 +70,41 @@ public class HySimplePlayer {
 
     public String getPlayerBlank() {
 
-        String name = HyUtilities.matchOutColorCode(this.name);
+        String name = matchOutColorCode(this.name);
         return name.split(" ")[name.startsWith("[") ? 1 : 0];
 
     }
 
-    public void requestPlayerObject() {
+    public static String matchOutColorCode(String s) {
 
-        requestPlayerObject(MojangRequest.getUUID(name));
+
+        s = s.replaceAll("§0", "");
+        s = s.replaceAll("§1", "");
+        s = s.replaceAll("§2", "");
+        s = s.replaceAll("§3", "");
+        s = s.replaceAll("§4", "");
+        s = s.replaceAll("§5", "");
+        s = s.replaceAll("§6", "");
+        s = s.replaceAll("§7", "");
+        s = s.replaceAll("§8", "");
+        s = s.replaceAll("§9", "");
+        s = s.replaceAll("§a", "");
+        s = s.replaceAll("§b", "");
+        s = s.replaceAll("§c", "");
+        s = s.replaceAll("§d", "");
+        s = s.replaceAll("§e", "");
+        s = s.replaceAll("§f", "");
+        s = s.replaceAll("§g", "");
+
+        s = s.replaceAll("§k", "");
+        s = s.replaceAll("§l", "");
+        s = s.replaceAll("§m", "");
+        s = s.replaceAll("§n", "");
+        s = s.replaceAll("§o", "");
+        s = s.replaceAll("§r", "");
+
+        return s;
 
     }
-    public void requestPlayerObject(String uuid) {
-
-        try {
-
-            HyPlus.debugLog("Requesting Player: " + uuid);
-            PlayerResponse p = HyPlus.getInstance().hypixelApi.createPlayerRequestUUID(uuid);
-
-            if (p.success) {
-
-                this.playerObject = p.getPlayer();
-
-            }
-            else {
-
-                HyPlus.debugLog("Failed player OBJ lookup: " + p.cause);
-
-            }
-
-        } catch (ApiRequestException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public boolean hasPlayerObject() { return this.playerObject == null; }
 
 }

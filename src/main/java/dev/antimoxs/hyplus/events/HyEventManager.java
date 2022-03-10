@@ -4,7 +4,7 @@ import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.api.friends.HyFriendRequest;
 import dev.antimoxs.hyplus.api.location.HyServerLocation;
 import dev.antimoxs.hyplus.modules.HyAdvanced;
-import dev.antimoxs.hyplus.modules.party.HyParty;
+import dev.antimoxs.hyplus.api.party.HyParty;
 import dev.antimoxs.hyplus.modules.party.HyPartyMessageType;
 import net.labymod.labyconnect.packets.PacketAddonDevelopment;
 import net.labymod.main.LabyMod;

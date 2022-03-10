@@ -11,7 +11,7 @@ import dev.antimoxs.hyplus.internal.HyPlayerStorage;
 import dev.antimoxs.hyplus.modules.IHyPlusModule;
 import dev.antimoxs.hyplus.objects.HySetting;
 import dev.antimoxs.hyplus.objects.HySettingType;
-import dev.antimoxs.hyplus.objects.HySimplePlayer;
+import dev.antimoxs.hyplus.api.player.HySimplePlayer;
 import net.labymod.settings.Settings;
 import net.labymod.settings.elements.BooleanElement;
 import net.labymod.settings.elements.HeaderElement;
@@ -99,14 +99,14 @@ public class HyHeadStats implements IHyPlusModule, IHyPlusEvent {
 
                 HySimplePlayer player = new HySimplePlayer();
                 player.setName(MojangRequest.getName(event.playerUUID.toString()));
-                player.requestPlayerObject(event.playerUUID.toString());
+                HyPlayerStorage.requestPlayer(event.playerUUID);
                 HyPlayerStorage.addPlayer(event.playerUUID, player);
 
             }
 
             if (HYPLUS_HS_HPXL_LEVEL.getValueBoolean()) {
 
-                int nexp = HyPlayerStorage.getPlayerByUUID(event.playerUUID).getPlayerObject().networkExp;
+                int nexp = HyPlayerStorage.getPlayerObject(event.playerUUID).networkExp;
                 String level = "Level " + ((int)(LevelCalculator.getExactLevel(nexp)*10))/10;
                 HyPlus.getInstance().hyPlayerTagExchanger.getTagForPlayer(event.playerUUID).setValue(new kvp(level, 1));
 
@@ -117,7 +117,7 @@ public class HyHeadStats implements IHyPlusModule, IHyPlusEvent {
             }
             if (HYPLUS_HS_BW_STARS.getValueBoolean()) {
 
-                int xp = HyPlayerStorage.getPlayerByUUID(event.playerUUID).getPlayerObject().stats.Bedwars.exp;
+                int xp = HyPlayerStorage.getPlayerObject(event.playerUUID).stats.Bedwars.exp;
                 if (xp != 0) {
                     int stars = BedWarsCalculator.getLevelForExp(xp);
                     String level = "BedWars " + stars;

@@ -2,7 +2,7 @@ package dev.antimoxs.hyplus.events;
 
 
 import dev.antimoxs.hyplus.api.friends.HyFriendRequest;
-import dev.antimoxs.hyplus.modules.party.HyParty;
+import dev.antimoxs.hyplus.api.party.HyParty;
 import dev.antimoxs.hyplus.modules.party.HyPartyMessageType;
 import dev.antimoxs.hyplus.api.location.HyServerLocation;
 import net.minecraft.network.play.server.S01PacketJoinGame;

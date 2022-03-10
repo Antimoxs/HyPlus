@@ -1,7 +1,7 @@
-package dev.antimoxs.hyplus.modules.party;
+package dev.antimoxs.hyplus.api.party;
 
 import com.google.gson.Gson;
-import dev.antimoxs.hyplus.objects.HySimplePlayer;
+import dev.antimoxs.hyplus.api.player.HySimplePlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;

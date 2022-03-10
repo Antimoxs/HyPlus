@@ -2,7 +2,7 @@ package dev.antimoxs.hyplus.listener;
 
 import com.google.gson.Gson;
 import dev.antimoxs.hyplus.HyPlus;
-import dev.antimoxs.hyplus.modules.party.HyParty;
+import dev.antimoxs.hyplus.api.party.HyParty;
 import net.labymod.labyconnect.packets.PacketAddonDevelopment;
 import net.labymod.utils.Consumer;
 

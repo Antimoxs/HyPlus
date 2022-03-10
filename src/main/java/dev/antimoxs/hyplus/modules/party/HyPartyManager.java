@@ -3,12 +3,13 @@ package dev.antimoxs.hyplus.modules.party;
 import dev.antimoxs.hypixelapiHP.requests.MojangRequest;
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.HyUtilities;
+import dev.antimoxs.hyplus.api.party.HyParty;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
 import dev.antimoxs.hyplus.modules.IHyPlusModule;
 import dev.antimoxs.hyplus.api.location.HyServerLocation;
 import dev.antimoxs.hyplus.objects.HySetting;
 import dev.antimoxs.hyplus.objects.HySettingType;
-import dev.antimoxs.hyplus.objects.HySimplePlayer;
+import dev.antimoxs.hyplus.api.player.HySimplePlayer;
 import dev.antimoxs.utilities.time.wait;
 import net.labymod.labyconnect.packets.PacketAddonDevelopment;
 import net.labymod.main.LabyMod;
@@ -595,7 +596,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
                 ArrayList<UUID> uuids = new ArrayList<>();
                 for (HySimplePlayer player : this.party.getAllMembers()) {
 
-                    String uuid = player.getPlayerObject().uuid;
+                    String uuid = MojangRequest.getUUID(player.getPlayerBlank());
                     HyPlus.debugLog("REQUEST FOR '" + player.getPlayerBlank() + "' returned: " + uuid);
                     try {
                         uuids.add(UUID.fromString(HyUtilities.dashUUID(uuid)));
