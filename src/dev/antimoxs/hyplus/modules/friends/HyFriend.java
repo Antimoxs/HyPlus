@@ -68,7 +68,7 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
         aa_non.setHasDefault( false );
         aa_non.setUpdateListener((accepted) -> {
 
-            HYPLUS_AUTOFRIEND_AA_NON.changeConfigValue(HyPlus.getInstance(), HyUtilities.validateCheckbox(accepted));
+            HYPLUS_AUTOFRIEND_AA_NON.changeConfigValue(HyPlus.getInstance(), HyUtilities.validateCheckbox(accepted, 1));
             checkConfig(false);
 
         });
@@ -78,7 +78,7 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
         aa_vip.setHasDefault( false );
         aa_vip.setUpdateListener((accepted) -> {
 
-            HYPLUS_AUTOFRIEND_AA_VIP.changeConfigValue(HyPlus.getInstance(), HyUtilities.validateCheckbox(accepted));
+            HYPLUS_AUTOFRIEND_AA_VIP.changeConfigValue(HyPlus.getInstance(), HyUtilities.validateCheckbox(accepted, 1));
             checkConfig(false);
 
         });
@@ -88,7 +88,7 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
         aa_vipp.setHasDefault( false );
         aa_vipp.setUpdateListener((accepted) -> {
 
-            HYPLUS_AUTOFRIEND_AA_VIPP.changeConfigValue(HyPlus.getInstance(), HyUtilities.validateCheckbox(accepted));
+            HYPLUS_AUTOFRIEND_AA_VIPP.changeConfigValue(HyPlus.getInstance(), HyUtilities.validateCheckbox(accepted, 1));
             checkConfig(false);
 
         });
@@ -98,7 +98,7 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
         aa_mvp.setHasDefault( false );
         aa_mvp.setUpdateListener((accepted) -> {
 
-            HYPLUS_AUTOFRIEND_AA_MVP.changeConfigValue(HyPlus.getInstance(), HyUtilities.validateCheckbox(accepted));
+            HYPLUS_AUTOFRIEND_AA_MVP.changeConfigValue(HyPlus.getInstance(), HyUtilities.validateCheckbox(accepted, 1));
             checkConfig(false);
 
         });
@@ -108,7 +108,7 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
         aa_mvpp.setHasDefault( false );
         aa_mvpp.setUpdateListener((accepted) -> {
 
-            HYPLUS_AUTOFRIEND_AA_MVPP.changeConfigValue(HyPlus.getInstance(), HyUtilities.validateCheckbox(accepted));
+            HYPLUS_AUTOFRIEND_AA_MVPP.changeConfigValue(HyPlus.getInstance(), HyUtilities.validateCheckbox(accepted, 1));
             checkConfig(false);
 
         });
@@ -118,7 +118,7 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
         aa_mvppp.setHasDefault( false );
         aa_mvppp.setUpdateListener((accepted) -> {
 
-            HYPLUS_AUTOFRIEND_AA_MVPPP.changeConfigValue(HyPlus.getInstance(), HyUtilities.validateCheckbox(accepted));
+            HYPLUS_AUTOFRIEND_AA_MVPPP.changeConfigValue(HyPlus.getInstance(), HyUtilities.validateCheckbox(accepted, 1));
             checkConfig(false);
 
         });
@@ -128,7 +128,7 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
         aa_yt.setHasDefault( false );
         aa_yt.setUpdateListener((accepted) -> {
 
-            HYPLUS_AUTOFRIEND_AA_YT.changeConfigValue(HyPlus.getInstance(), HyUtilities.validateCheckbox(accepted));
+            HYPLUS_AUTOFRIEND_AA_YT.changeConfigValue(HyPlus.getInstance(), HyUtilities.validateCheckbox(accepted, 1));
             checkConfig(false);
 
         });
@@ -138,7 +138,7 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
         aa_staff.setHasDefault( false );
         aa_staff.setUpdateListener((accepted) -> {
 
-            HYPLUS_AUTOFRIEND_AA_STAFF.changeConfigValue(HyPlus.getInstance(), HyUtilities.validateCheckbox(accepted));
+            HYPLUS_AUTOFRIEND_AA_STAFF.changeConfigValue(HyPlus.getInstance(), HyUtilities.validateCheckbox(accepted, 1));
             checkConfig(false);
 
         });
