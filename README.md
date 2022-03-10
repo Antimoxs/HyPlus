@@ -27,6 +27,8 @@ Detailed descriptions for each function can be found in the wiki.
   - Current location
   - Gamemode image
   - Game time
+  - Party details
+  - Game invites for public parties
 - Challange tracker
   - Ingame gui with progress
   - Weekly and daily reset times
@@ -37,13 +39,16 @@ Detailed descriptions for each function can be found in the wiki.
 - Tablist image
 - Hypixel event API for other addons
 
+in beta:
+- HeadStats
+  - Hypixel Level
+  - Bedwars Level
+
 ***
 
 ### Planned features
 - Discord Presence
-  - Party data
   - Player stats
-  - Gameinvites for streamparties
 - Party manager
   - Party profiles
   - Autokick
@@ -52,8 +57,6 @@ Detailed descriptions for each function can be found in the wiki.
 - Quickplay
 - GameBadge (Statsdisplay)
 - Rank images
-- Playertags
-  - Levelhead
 - Friends detection
   - Auto-greetings 
   
