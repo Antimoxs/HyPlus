@@ -119,7 +119,16 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 * */
 
                 // "§9§m-----------------------------§r"
+                // "§9§m----------------------------------------------------- §r" <- new partyline?
                 if (s.equals("§9§m-----------------------------§r")) {
+
+                    HyPlus.debugLog("###PARTYLINE");
+                    HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.LINE);
+                    return hideMsg;
+                    //return true;
+
+                }
+                if (s.equals("§9§m-----------------------------------------------------§r")) {
 
                     HyPlus.debugLog("###PARTYLINE");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.LINE);
