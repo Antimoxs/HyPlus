@@ -31,6 +31,8 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
     public static final HySetting HYPLUS_PM_JOIN = new HySetting(HySettingType.BOOLEAN, "HYPLUS_PM_JOIN", "Allow party joins.", "Allow players to join ur party. (Only public party)", true, true, Material.GOLD_BOOTS);
     public static final HySetting HYPLUS_PM_DC_UPDATE = new HySetting(HySettingType.INT, "HYPLUS_PM_DC_UPDATE", "Discord Callback interval.", "Set the interval for Callback checks.", 2, 2, Material.WATCH);
 
+    public static final HySetting HYPLUS_PM_MESSAGE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_PM_MESSAGE", "Display Update-Message", "Display the party update message", true, true, Material.BOOK_AND_QUILL);
+
     private HyParty party = new HyParty();
 
     @Override
@@ -44,6 +46,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
         HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_PM_TOGGLE);
         HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_PM_SHOW);
         HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_PM_JOIN);
+        HyPlus.getInstance().hyConfigManager.checkConfig(reset, HYPLUS_PM_MESSAGE);
 
     }
 
@@ -98,6 +101,14 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
         }, HYPLUS_PM_JOIN.getValueBoolean());
         join.setDescriptionText(HYPLUS_PM_JOIN.getDescription());
 
+        BooleanElement msg = new BooleanElement(HYPLUS_PM_MESSAGE.getDisplayName(), HYPLUS_PM_MESSAGE.getIcon(), (booleanElement) -> {
+
+            HYPLUS_PM_MESSAGE.changeConfigValue(HyPlus.getInstance(), booleanElement);
+            checkConfig(false);
+            updateParty(false);
+
+        }, HYPLUS_PM_MESSAGE.getValueBoolean());
+        msg.setDescriptionText(HYPLUS_PM_MESSAGE.getDescription());
 
         SliderElement interval = new SliderElement(HYPLUS_PM_DC_UPDATE.getDisplayName(), HYPLUS_PM_DC_UPDATE.getIcon(), HYPLUS_PM_DC_UPDATE.getValueInt());
         interval.addCallback((sliderElement) -> {
@@ -114,6 +125,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
         subSettings.add(show);
         subSettings.add(join);
+        subSettings.add(msg);
         subSettings.add(interval);
 
         return subSettings;
@@ -628,7 +640,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
             }
 
-            HyPlus.getInstance().displayIgMessage("PartyManager", "Updating your party <3");
+            if (HYPLUS_PM_MESSAGE.getValueBoolean()) HyPlus.getInstance().displayIgMessage("PartyManager", "Updating your party <3");
 
 
         });
