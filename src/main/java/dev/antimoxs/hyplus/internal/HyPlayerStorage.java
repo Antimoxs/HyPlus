@@ -14,6 +14,12 @@ public class HyPlayerStorage {
     private static final HashMap<UUID, HySimplePlayer> players = new HashMap<>();
     private static final HashMap<UUID, Player> playerObjects = new HashMap<>();
 
+    public static void clearCache() {
+
+        if (!players.isEmpty()) players.clear();
+        if (!playerObjects.isEmpty()) playerObjects.clear();
+
+    }
 
     public static HySimplePlayer getPlayerByUUID(UUID uuid) {
 

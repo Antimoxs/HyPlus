@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
+import dev.antimoxs.hyplus.internal.HyPlayerStorage;
 import dev.antimoxs.hyplus.modules.IHyPlusModule;
 import dev.antimoxs.hyplus.objects.ButtonElement;
 import dev.antimoxs.hypixelapiHP.util.kvp;
@@ -12,11 +13,14 @@ import dev.antimoxs.hyplus.HyPlusConfig;
 import dev.antimoxs.hyplus.objects.HySetting;
 import dev.antimoxs.hyplus.objects.HySettingType;
 import net.labymod.api.events.ServerMessageEvent;
+import net.labymod.core.LabyModCore;
+import net.labymod.main.LabyMod;
 import net.labymod.settings.Settings;
 import net.labymod.settings.elements.*;
 import net.labymod.utils.Consumer;
 import net.labymod.utils.Material;
 import net.labymod.utils.ModColor;
+import net.minecraft.client.Minecraft;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -43,6 +47,9 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
     public void setSubtitle(UUID subtitlePlayer, String value) { setSubtitle(subtitlePlayer, value, 1.0d); }
     public void setSubtitle(UUID subtitlePlayer, String value, double size) {
 
+        // check if we would remove tag twice to avoid laby debug log msg spam :]
+        boolean hasSub = LabyMod.getInstance().getUserManager().getUsers().get(subtitlePlayer) != null && (LabyMod.getInstance().getUserManager().getUsers().get(subtitlePlayer).getSubTitle() == null);
+        if (hasSub && value == null) return;
 
         //System.out.println("SAVING TAG: " + subtitlePlayer);
         // List of all subtitles
@@ -200,6 +207,7 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
                         checkConfig(false);
                         emptySubtitles();
                         update(true);
+                        HyPlayerStorage.clearCache();
                         active = HYPLUS_PTC_TOGGLE.getValueBoolean();
 
                     }
@@ -230,8 +238,11 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
             nextTags = new JsonArray();
 
             //System.out.println("UPDATING TAGS: " + playerTags.size());
+
             for (UUID uuid : playerTags.keySet()) {
 
+                // skip players that are not in the world (anymore)
+                if (LabyModCore.getMinecraft().getWorld().getPlayerEntityByUUID(uuid) == null) continue;
                 setSubtitle(uuid, HYPLUS_PTC_CHANGER.getValueBoolean() ? playerTags.get(uuid).getNextValue() : playerTags.get(uuid).getStaticValue(), playerTags.get(uuid).getSize());
 
             }

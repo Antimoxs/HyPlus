@@ -1,6 +1,7 @@
 package dev.antimoxs.hyplus.modules.headStats;
 
 import dev.antimoxs.hypixelapiHP.util.kvp;
+import dev.antimoxs.hyplus.HyPlus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +15,7 @@ public class HyPlayerTag {
     int maxValues = 0;
     int currentValue = 0;
 
-    public HyPlayerTag(UUID uuid,  double size, kvp... value) {
+    public HyPlayerTag(UUID uuid, double size, kvp... value) {
 
         this.uuid = uuid;
 
@@ -73,9 +74,9 @@ public class HyPlayerTag {
             if (k.i == value.i) {
 
                 values.remove(k);
-                values.add(value);
 
             }
+            values.add(value);
 
         }
 
@@ -117,7 +118,7 @@ public class HyPlayerTag {
 
         }
 
-        //System.out.println("PlayerTag: " + currentValue + " / " + maxValues);
+        HyPlus.debugLog("PlayerTag: " + currentValue + " / " + maxValues);
         String re = values.get(currentValue).string;
 
         currentValue++;
