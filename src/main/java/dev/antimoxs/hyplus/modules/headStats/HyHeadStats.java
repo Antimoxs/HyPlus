@@ -94,47 +94,48 @@ public class HyHeadStats implements IHyPlusModule, IHyPlusEvent {
     @Override
     public void onPlayerSpawn(PlayerSpawnEvent event) {
 
-        try {
-            if (!HyPlayerStorage.playerInStorage(event.playerUUID)) {
+        if (HYPLUS_HS_GENERAL.getValueBoolean()) {
+            try {
+                if (!HyPlayerStorage.playerInStorage(event.playerUUID)) {
 
-                HySimplePlayer player = new HySimplePlayer();
-                player.setName(MojangRequest.getName(event.playerUUID.toString()));
-                HyPlayerStorage.requestPlayer(event.playerUUID);
-                HyPlayerStorage.addPlayer(event.playerUUID, player);
+                    HySimplePlayer player = new HySimplePlayer();
+                    player.setName(MojangRequest.getName(event.playerUUID.toString()));
+                    HyPlayerStorage.requestPlayer(event.playerUUID);
+                    HyPlayerStorage.addPlayer(event.playerUUID, player);
 
-            }
-
-            if (HYPLUS_HS_HPXL_LEVEL.getValueBoolean()) {
-
-                int nexp = HyPlayerStorage.getPlayerObject(event.playerUUID).networkExp;
-                String level = "Level " + ((int)(LevelCalculator.getExactLevel(nexp)*10))/10;
-                HyPlus.getInstance().hyPlayerTagExchanger.getTagForPlayer(event.playerUUID).setValue(new kvp(level, 1));
-
-            } else {
-
-                HyPlus.getInstance().hyPlayerTagExchanger.getTagForPlayer(event.playerUUID).removeValueById(1);
-
-            }
-            if (HYPLUS_HS_BW_STARS.getValueBoolean()) {
-
-                int xp = HyPlayerStorage.getPlayerObject(event.playerUUID).stats.Bedwars.exp;
-                if (xp != 0) {
-                    int stars = BedWarsCalculator.getLevelForExp(xp);
-                    String level = "BedWars " + stars;
-                    HyPlus.getInstance().hyPlayerTagExchanger.getTagForPlayer(event.playerUUID).setValue(new kvp(level, 2));
                 }
 
-            } else {
+                if (HYPLUS_HS_HPXL_LEVEL.getValueBoolean()) {
 
-                HyPlus.getInstance().hyPlayerTagExchanger.getTagForPlayer(event.playerUUID).removeValueById(1);
+                    int nexp = HyPlayerStorage.getPlayerObject(event.playerUUID).networkExp;
+                    String level = "Level " + ((int) (LevelCalculator.getExactLevel(nexp) * 10)) / 10;
+                    HyPlus.getInstance().hyPlayerTagExchanger.getTagForPlayer(event.playerUUID).setValue(new kvp(level, 1));
+
+                } else {
+
+                    HyPlus.getInstance().hyPlayerTagExchanger.getTagForPlayer(event.playerUUID).removeValueById(1);
+
+                }
+                if (HYPLUS_HS_BW_STARS.getValueBoolean()) {
+
+                    int xp = HyPlayerStorage.getPlayerObject(event.playerUUID).stats.Bedwars.exp;
+                    if (xp != 0) {
+                        int stars = BedWarsCalculator.getLevelForExp(xp);
+                        String level = "BedWars " + stars;
+                        HyPlus.getInstance().hyPlayerTagExchanger.getTagForPlayer(event.playerUUID).setValue(new kvp(level, 2));
+                    }
+
+                } else {
+
+                    HyPlus.getInstance().hyPlayerTagExchanger.getTagForPlayer(event.playerUUID).removeValueById(2);
+
+                }
+
+            } catch (Exception e) {
+
+                //HyPlus.getInstance().displayIgMessage(getModuleName(), "Failed to load headstats.");
 
             }
-
-        }
-        catch (Exception e) {
-
-            //HyPlus.getInstance().displayIgMessage(getModuleName(), "Failed to load headstats.");
-
         }
 
 
