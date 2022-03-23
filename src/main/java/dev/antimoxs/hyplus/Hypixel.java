@@ -4,6 +4,7 @@ import dev.antimoxs.hyplus.events.IHyPlusEvent;
 import dev.antimoxs.hyplus.objects.HyGameStatus;
 import dev.antimoxs.hyplus.api.location.HyServerLocation;
 import net.labymod.api.events.TabListEvent;
+import net.labymod.core.LabyModCore;
 import net.labymod.ingamegui.moduletypes.ColoredTextModule;
 import net.labymod.main.LabyMod;
 import net.labymod.servermanager.ChatDisplayAction;
@@ -11,18 +12,18 @@ import net.labymod.servermanager.Server;
 import net.labymod.settings.elements.SettingsElement;
 import net.labymod.utils.Consumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.util.ChatComponentText;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Hypixel extends Server implements IHyPlusEvent {
+
+    // TODO: convert to non mc class (PacketBuffer, Scoreboard)
 
     public boolean onServer = false;
 
@@ -30,37 +31,10 @@ public class Hypixel extends Server implements IHyPlusEvent {
         super("hypixel", "hypixel.net");
     }
 
-    public static void checkScoreboard(Hypixel hypixel) {
-
-        if (hypixel.onServer) {
-
-            Scoreboard scoreboard = Minecraft.getMinecraft().theWorld.getScoreboard();
-
-
-
-
-            for (NetworkPlayerInfo info : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
-
-                try {
-                    info.setDisplayName(new ChatComponentText(info.getGameProfile().getName()));
-                    //hypixel.HyPlus.displayIgMessage("Custom", info.getResponseTime() + "");
-                }
-                catch (NullPointerException e) {
-
-                    //hypixel.HyPlus.displayIgMessage("Custom", "null");
-
-                }
-
-            }
-
-        }
-
-    }
-
     // dev function for testing; not used in normal use
     public static void listSB(Hypixel hypixel) {
 
-        Scoreboard sb = Minecraft.getMinecraft().theWorld.getScoreboard();
+        Scoreboard sb = LabyModCore.getMinecraft().getWorld().getScoreboard();
         HyPlus.getInstance().displayIgMessage("sb", "Teams:");
         for (ScorePlayerTeam team : sb.getTeams()) {
 
@@ -97,7 +71,7 @@ public class Hypixel extends Server implements IHyPlusEvent {
 
         try {
 
-            Scoreboard sb = Minecraft.getMinecraft().theWorld.getScoreboard();
+            Scoreboard sb = LabyModCore.getMinecraft().getWorld().getScoreboard();
 
             HyGameStatus status = new HyGameStatus();
 
@@ -189,7 +163,7 @@ public class Hypixel extends Server implements IHyPlusEvent {
     @Override
     public void onJoin(net.minecraft.client.multiplayer.ServerData serverData) {
 
-        if (!Minecraft.getMinecraft().getCurrentServerData().serverIP.toLowerCase().endsWith("hypixel.net")) {
+        if (!Minecraft.getMinecraft().getCurrentServerData().serverName.toLowerCase().endsWith("hypixel.net")) {
 
             HyPlus.debugLog("This is not Hypixel.");
             return;
@@ -256,7 +230,7 @@ public class Hypixel extends Server implements IHyPlusEvent {
 
         if (Minecraft.getMinecraft().getCurrentServerData() == null) { return false; }
 
-        return Minecraft.getMinecraft().getCurrentServerData().serverIP.toLowerCase().endsWith("hypixel.net");
+        return Minecraft.getMinecraft().getCurrentServerData().serverName.toLowerCase().endsWith("hypixel.net");
     }
 
 }

@@ -5,7 +5,6 @@ import dev.antimoxs.hyplus.modules.serverConnector.HyGuiConnecting;
 import net.labymod.core.LabyModCore;
 import net.labymod.main.LabyMod;
 import net.labymod.settings.elements.ControlElement;
-import net.labymod.utils.DrawUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiDownloadTerrain;
 import net.minecraft.client.gui.GuiScreen;
@@ -18,14 +17,19 @@ public class HyListenerGuiOpen {
     // testing class
     public ControlElement.IconData bg = new ControlElement.IconData("textures/hyplus/hypixelbg.jpg");
 
+    // TODO: convert to non mc class (GuiScreen,GuiOpenEvent,GuiConnecting,GuiDownloadTerrain)
     @SubscribeEvent
     public void onGuiOpen(GuiOpenEvent event) {
 
         // Custom connection
         if (event.gui instanceof GuiConnecting) {
 
+
             GuiScreen guiScreen = LabyModCore.getForge().getGuiOpenEventGui(event);
-            if (Minecraft.getMinecraft().getCurrentServerData().serverName.endsWith("hypixel.net")) {
+
+            // TODO delete mc writing
+            if (Minecraft.getMinecraft().getCurrentServerData().serverName.toLowerCase().endsWith("hypixel.net")) {
+            //if (LabyMod.getInstance().getCurrentServerData().getIp().toLowerCase().endsWith("hypixel.net")) {
 
                 // Let's make sure it's not our gui :)
                 if (event.gui instanceof HyGuiConnecting) return;
@@ -49,7 +53,7 @@ public class HyListenerGuiOpen {
         else if (event.gui instanceof GuiDownloadTerrain) {
 
             GuiScreen guiScreen = LabyModCore.getForge().getGuiOpenEventGui(event);
-            if (Minecraft.getMinecraft().getCurrentServerData().serverName.endsWith("hypixel.net")) {
+            if (Minecraft.getMinecraft().getCurrentServerData().serverName.toLowerCase().endsWith("hypixel.net")) {
 
                 // Let's make sure it's not our gui :)
                 if (event.gui instanceof HyGuiConnecting) return;

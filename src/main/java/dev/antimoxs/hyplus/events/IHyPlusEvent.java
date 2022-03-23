@@ -20,6 +20,7 @@ public interface IHyPlusEvent {
         return false;
     }
 
+    // TODO: Convert to non mc class (S01PacketJoinGame)
     default void onPacketJoinGame(S01PacketJoinGame packet) {}
 
     default void onHypixelJoin() {}

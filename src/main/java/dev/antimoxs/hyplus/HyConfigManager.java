@@ -1,13 +1,8 @@
 package dev.antimoxs.hyplus;
 
 import dev.antimoxs.hyplus.modules.HyGeneral;
-import dev.antimoxs.hyplus.modules.HyModuleManager;
 import dev.antimoxs.hyplus.modules.IHyPlusModule;
-import dev.antimoxs.hyplus.modules.betterMsg.HyBetterMsgType;
 import dev.antimoxs.hyplus.objects.HySetting;
-import net.labymod.core.LabyModCore;
-import net.labymod.main.LabyMod;
-import net.labymod.support.util.Debug;
 
 public class HyConfigManager {
 

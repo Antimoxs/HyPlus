@@ -225,7 +225,6 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
 
         if (HyPlus.getInstance().hypixelApi == null) {
 
-            // TODO: make this use hyplus instance
             HyPlus.getInstance().displayIgMessage(null, "§6§l[HyPlus]§4§l [WARN]: §7You don't have an API-Key set. Not every function is enabled.§r");
             return;
 

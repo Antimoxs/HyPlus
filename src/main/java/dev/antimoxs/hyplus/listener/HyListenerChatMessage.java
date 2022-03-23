@@ -227,7 +227,6 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                     //return true;
 
                 }
-                // TODO: does this work?
                 // §aDie Party ist nicht mehr länger stummgeschaltet.§r
                 if (s.startsWith("§a") && s.toLowerCase().contains("party") && !s.contains("§r§6§l/party join")) {
 

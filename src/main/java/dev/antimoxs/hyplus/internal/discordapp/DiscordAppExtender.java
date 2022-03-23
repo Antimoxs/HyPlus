@@ -10,8 +10,6 @@ import net.labymod.discordapp.listeners.*;
 import net.labymod.main.LabyMod;
 import net.labymod.support.util.Debug;
 import net.labymod.utils.Consumer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.network.PacketBuffer;
 
 import java.io.File;
@@ -107,12 +105,11 @@ public class DiscordAppExtender extends DiscordApp {
     // Overriding LabyCode
 
 
-
+    // TODO: convert to non mc class (PacketBuffer)
     @Override
     public void receiveMessage(String channelName, PacketBuffer packetBuffer) {
         if (channelName.equals("MC|Brand")) {
-            ServerData serverData = Minecraft.getMinecraft().getCurrentServerData();
-            boolean singlePlayer = Minecraft.getMinecraft().isSingleplayer();
+            boolean singlePlayer = (LabyMod.getInstance().getServerManager().getCurrentServer() == null);
             if (singlePlayer) {
 
                 HyPlus.debugLog("Why are we in singleplayer? We should be on Hypixel!");

@@ -16,6 +16,7 @@ import java.lang.reflect.Method;
 
 public class HyGuiConnecting extends GuiScreen {
 
+    // TODO: convert to non mc class (net.minecraft.*)
     private final GuiScreen parent;
     private final String info;
     public final ControlElement.IconData bg = new ControlElement.IconData("textures/hyplus/hypixelbg.jpg");

@@ -15,6 +15,7 @@ import javax.naming.ldap.Control;
 
 public class HyQuickPlayButton extends GuiButton {
 
+        // TODO: convert to non mc class (net.minecraft.*)
         public ControlElement.IconData buttonTextures;
         /** Button width in pixels */
         public int width;

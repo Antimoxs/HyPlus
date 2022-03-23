@@ -2,7 +2,6 @@ package dev.antimoxs.hyplus.listener;
 
 
 import dev.antimoxs.hyplus.HyPlus;
-import dev.antimoxs.hyplus.Hypixel;
 import dev.antimoxs.hyplus.modules.HyGeneral;
 import dev.antimoxs.hyplus.modules.party.HyPartyManager;
 import net.labymod.api.events.MessageSendEvent;

@@ -13,6 +13,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class HyTrackboxBox extends GuiButton {
 
+    // TODO: convert to non mc class (net.minecraft.*)
     public ControlElement.IconData bg = new ControlElement.IconData("textures/hyplus/challenge_background.png");
     public ControlElement.IconData linebg = new ControlElement.IconData("textures/hyplus/challenge_linebg.png");
     public ControlElement.IconData line = new ControlElement.IconData("textures/hyplus/challenge_line.png");

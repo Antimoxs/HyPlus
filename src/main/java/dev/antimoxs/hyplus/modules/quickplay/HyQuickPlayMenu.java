@@ -9,6 +9,8 @@ import java.io.IOException;
 
 public class HyQuickPlayMenu extends GuiScreen {
 
+    // TODO: convert to non mc class (net.minecraft.*)
+
     private GuiButton mButtonClose;
     private GuiButton qpBW;
     private GuiButton qpSW;

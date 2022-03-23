@@ -1,16 +1,13 @@
 package dev.antimoxs.hyplus.listener;
 
-import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.modules.HyGeneral;
-import dev.antimoxs.hyplus.modules.quickplay.HyQuickPlayMenu;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
-import org.lwjgl.input.Keyboard;
 
 public class HyListenerKeyInput {
 
 
+    // TODO: convert to non mc class (SubscribeEvent,InputEvent)
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent event) {
 

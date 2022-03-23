@@ -8,6 +8,7 @@ import net.minecraft.network.play.server.*;
 
 public class HyListenerPacket implements Consumer<Object> {
 
+    // TODO: convert to non mc class ('packets')
     @Override
     public void accept(Object o) {
 

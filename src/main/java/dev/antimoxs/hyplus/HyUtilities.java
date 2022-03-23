@@ -2,7 +2,6 @@ package dev.antimoxs.hyplus;
 
 import dev.antimoxs.hyplus.objects.HySetting;
 import net.labymod.gui.elements.CheckBox;
-import net.labymod.labyconnect.packets.PacketAddonDevelopment;
 
 public class HyUtilities {
 

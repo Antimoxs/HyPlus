@@ -1,10 +1,11 @@
 package dev.antimoxs.hyplus.listener;
 
 import net.labymod.main.listeners.PluginMessageListener;
-import net.labymod.utils.Consumer;
 import net.minecraft.network.PacketBuffer;
 
 public class HyListenerPluginMessage extends PluginMessageListener {
+
+    // TODO: convert to non mc class (PacketBuffer)
 
     @Override
     public void receiveMessage(String channelName, PacketBuffer packetBuffer) {

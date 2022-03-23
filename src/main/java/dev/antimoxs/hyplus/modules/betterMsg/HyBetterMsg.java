@@ -8,10 +8,8 @@ import dev.antimoxs.hyplus.objects.HySettingType;
 import net.labymod.gui.elements.DropDownMenu;
 import net.labymod.settings.Settings;
 import net.labymod.settings.elements.BooleanElement;
-import net.labymod.settings.elements.ControlElement;
 import net.labymod.settings.elements.DropDownElement;
 import net.labymod.settings.elements.SettingsElement;
-import net.labymod.utils.Consumer;
 import net.labymod.utils.Material;
 
 import java.util.ArrayList;

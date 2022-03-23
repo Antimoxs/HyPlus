@@ -103,6 +103,7 @@ public class HyEventManager {
 
     }
 
+    // TODO: convert to non mc class (S01PacketJoinGame)
     public void callPacketJoinGame(S01PacketJoinGame packetJoinGame) {
 
         // calling internals

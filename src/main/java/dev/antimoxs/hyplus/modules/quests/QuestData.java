@@ -3,7 +3,7 @@ package dev.antimoxs.hyplus.modules.quests;
 import dev.antimoxs.hypixelapiHP.objects.resource.ResourceQuest;
 import dev.antimoxs.hypixelapiHP.objects.resource.ResourceQuestObjective;
 import dev.antimoxs.hyplus.HyPlus;
-import net.minecraft.client.Minecraft;
+import net.labymod.core.LabyModCore;
 
 public class QuestData extends ResourceQuest {
 
@@ -42,8 +42,8 @@ public class QuestData extends ResourceQuest {
 
     public int getL(boolean completed) {
 
-        int len = Minecraft.getMinecraft().fontRendererObj.getStringWidth(getText(completed)) + 10;
-        return HyPlus.hyQuestTracker.HYPLUS_CTR_SORTORDER.getValueBoolean() ? -len : len;
+        int len = LabyModCore.getMinecraft().getFontRenderer().getStringWidth(getText(completed)) + 10;
+        return HyQuestTracker.HYPLUS_CTR_SORTORDER.getValueBoolean() ? -len : len;
 
     }
 

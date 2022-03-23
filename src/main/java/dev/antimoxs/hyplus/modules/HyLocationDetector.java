@@ -13,11 +13,11 @@ import dev.antimoxs.hyplus.api.location.HyServerLocation;
 import dev.antimoxs.hyplus.objects.HySetting;
 import dev.antimoxs.hyplus.objects.HySettingType;
 import dev.antimoxs.utilities.time.wait;
+import net.labymod.core.LabyModCore;
 import net.labymod.main.LabyMod;
 import net.labymod.settings.Settings;
 import net.labymod.settings.elements.*;
 import net.labymod.utils.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.play.server.S01PacketJoinGame;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.Scoreboard;
@@ -265,9 +265,11 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
     }
 
     // basically check for atlas
+
+    // TODO: convert to non mc class (Scoreboard)
     private void additionalScoreboardCheck(HyServerLocation location) {
 
-        Scoreboard sb = Minecraft.getMinecraft().theWorld.getScoreboard();
+        Scoreboard sb = LabyModCore.getMinecraft().getWorld().getScoreboard();
         if (sb != null && !sb.getScoreObjectives().isEmpty()) {
 
             for (ScoreObjective ob : sb.getScoreObjectives()) {

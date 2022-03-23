@@ -1,17 +1,10 @@
 package dev.antimoxs.hyplus.objects;
 
-import net.labymod.api.permissions.Permissions;
 import net.labymod.core.LabyModCore;
-import net.labymod.ingamegui.Module;
 import net.labymod.main.LabyMod;
 import net.labymod.main.ModTextures;
-import net.labymod.main.lang.LanguageManager;
-import net.labymod.settings.LabyModModuleEditorGui;
 import net.labymod.settings.elements.ControlElement;
-import net.labymod.utils.Consumer;
-import net.labymod.utils.DrawUtils;
 import net.labymod.utils.ModColor;
-import net.labymod.utils.manager.TooltipHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
@@ -21,6 +14,7 @@ import java.util.List;
 
 public class AdvancedElement extends ControlElement {
 
+    // TODO: convert to non mc class (net.minecraft.client.*)
     protected ControlElement.IconData iconData;
     private GuiButton buttonAdvanced;
 

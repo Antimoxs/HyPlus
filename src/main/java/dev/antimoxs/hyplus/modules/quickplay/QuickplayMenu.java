@@ -39,6 +39,8 @@ import java.util.Map;
 
 public class QuickplayMenu extends Gui {
 
+    // TODO: convert to non mc class (net.minecraft.*)
+
     private static final int ANIMATION_SPEED = 100;
     private static Field fieldPressTime;
     private static Field fieldLeftClickCounter;
@@ -241,7 +243,7 @@ public class QuickplayMenu extends Gui {
                 int amount = 6;
                 int emoteIndex = this.page * amount;
                 int maxPages = (int)Math.ceil((double)totalEmotes / (double)amount);
-                boolean cooldown = this.emotesOnCooldown ? emoteCooldownEnd > System.currentTimeMillis() : false;
+                boolean cooldown = this.emotesOnCooldown && emoteCooldownEnd > System.currentTimeMillis();
                 boolean emotesEnabled = LabyMod.getSettings().emotes;
                 String localeKey = emotesEnabled ? (this.emotesLocked ? "emote_status_already_playing" : (totalEmotes == 0 ? (this.searchOpened ? "emote_status_not_found" : "emote_status_no_emotes") : (cooldown ? "emote_status_cooldown" : "emote_status_select"))) : "emote_status_disabled";
                 String title = (!this.emotesLocked && emotesEnabled ? "" : ModColor.cl('c')) + LabyMod.getMessage(localeKey, new Object[0]);

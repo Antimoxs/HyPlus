@@ -1,10 +1,5 @@
 package dev.antimoxs.hyplus.api.player;
 
-import dev.antimoxs.hypixelapi.exceptions.ApiRequestException;
-import dev.antimoxs.hypixelapi.objects.player.Player;
-import dev.antimoxs.hypixelapi.requests.MojangRequest;
-import dev.antimoxs.hypixelapi.response.PlayerResponse;
-
 
 public class HySimplePlayer {
 
