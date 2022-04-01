@@ -62,6 +62,8 @@ public class HyHeadStats implements IHyPlusModule, IHyPlusEvent {
 
         Settings subs = new Settings();
         subs.addAll(getSubSettings());
+        subs.addAll((ArrayList<SettingsElement>) HyPlus.getInstance().hyPlayerTagExchanger.getModuleSettings());
+
 
         toggle.setSubSettings(subs);
 
@@ -75,6 +77,7 @@ public class HyHeadStats implements IHyPlusModule, IHyPlusEvent {
 
         ArrayList<SettingsElement> subSettings = new ArrayList<>();
 
+        HeaderElement headStats = new HeaderElement("HeadStats settings");
         HeaderElement betaNotice = new HeaderElement("This feature is currently in beta.");
         HeaderElement betaNotice2 = new HeaderElement("When changing settings, rejoin to fully apply them!");
         BooleanElement level = new BooleanElement(HYPLUS_HS_HPXL_LEVEL.getDisplayName(), HyPlus.getInstance(), HYPLUS_HS_HPXL_LEVEL.getIcon(), HYPLUS_HS_HPXL_LEVEL.getConfigName(), HYPLUS_HS_HPXL_LEVEL.getDefaultBoolean());
@@ -82,6 +85,7 @@ public class HyHeadStats implements IHyPlusModule, IHyPlusEvent {
         BooleanElement bw_stars = new BooleanElement(HYPLUS_HS_BW_STARS.getDisplayName(), HyPlus.getInstance(), HYPLUS_HS_BW_STARS.getIcon(), HYPLUS_HS_BW_STARS.getConfigName(), HYPLUS_HS_BW_STARS.getDefaultBoolean());
         level.setDescriptionText(HYPLUS_HS_BW_STARS.getDescription());
 
+        subSettings.add(headStats);
         subSettings.add(betaNotice);
         subSettings.add(betaNotice2);
         subSettings.add(level);

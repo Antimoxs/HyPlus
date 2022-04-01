@@ -160,7 +160,7 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
 
     @Override
     public boolean showInSettings() {
-        return true;
+        return false;
     }
 
     @Override
@@ -217,6 +217,8 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
                 Color.ORANGE
         );
 
+        HeaderElement pte = new HeaderElement("Player subtitle changer settings");
+
         Settings changer_sub = new Settings();
         changer_sub.add(changer_toggle);
         changer_sub.add(changer_interval);
@@ -225,6 +227,7 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
         toggle.setSubSettings(changer_sub);
         toggle.setSettingEnabled(true);
 
+        moduleSettings.add(pte);
         moduleSettings.add(toggle);
 
         return moduleSettings;
@@ -241,9 +244,16 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
 
             for (UUID uuid : playerTags.keySet()) {
 
-                // skip players that are not in the world (anymore)
-                if (LabyModCore.getMinecraft().getWorld().getPlayerEntityByUUID(uuid) == null) continue;
-                setSubtitle(uuid, HYPLUS_PTC_CHANGER.getValueBoolean() ? playerTags.get(uuid).getNextValue() : playerTags.get(uuid).getStaticValue(), playerTags.get(uuid).getSize());
+                try {
+                    // skip players that are not in the world (anymore)
+                    if (LabyModCore.getMinecraft().getWorld().getPlayerEntityByUUID(uuid) == null) continue;
+                    setSubtitle(uuid, HYPLUS_PTC_CHANGER.getValueBoolean() ? playerTags.get(uuid).getNextValue() : playerTags.get(uuid).getStaticValue(), playerTags.get(uuid).getSize());
+                }
+                catch (Exception e) {
+
+                    HyPlus.debugLog("TagUpdaterThreadError: " + e.getMessage());
+
+                }
 
             }
 
