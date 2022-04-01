@@ -3,8 +3,7 @@ package dev.antimoxs.hypixelapiHP.objects.guild;
 import dev.antimoxs.hypixelapiHP.config;
 import dev.antimoxs.hypixelapiHP.exceptions.UnknownValueException;
 import dev.antimoxs.hypixelapiHP.requests.MojangRequest;
-import dev.antimoxs.utilities.logger.AtmxLogType;
-import dev.antimoxs.utilities.logger.AtmxLogger;
+import dev.antimoxs.hyplus.HyPlus;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -191,7 +190,7 @@ public class Guild {
         }
         catch (UnknownValueException e) {
 
-            AtmxLogger.log(AtmxLogType.WARNING, config.AppName, "Continuing without set values.");
+            HyPlus.debugLog("Continuing without set values.");
             return;
 
         }
@@ -440,7 +439,7 @@ public class Guild {
         }
         catch (UnknownValueException e) {
 
-            AtmxLogger.log(AtmxLogType.WARNING, config.AppName, "Continuing with new ArrayList...");
+            HyPlus.debugLog("Continuing with new ArrayList...");
             ArrayList<dev.antimoxs.hypixelapiHP.objects.guild.GuildMember> g = new ArrayList<dev.antimoxs.hypixelapiHP.objects.guild.GuildMember>();
             g.add(new dev.antimoxs.hypixelapiHP.objects.guild.GuildMember());
             return g;
