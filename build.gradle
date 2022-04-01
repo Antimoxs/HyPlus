@@ -40,7 +40,7 @@ targetCompatibility = 1.8
 
 sourceSets.main.java.srcDirs = [ "src/main/java" ]
 
-version = "1.0"
+version = ""
 group= "dev.antimoxs.hyplus" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "HyPlus"
 
@@ -70,6 +70,7 @@ repositories {
     flatDir {
         dirs 'libs'
     }
+    mavenCentral()
 
 }
 
@@ -86,7 +87,7 @@ configurations {
 dependencies {
 
 
-    compile "dev.antimoxs:hypixel-api:1.4.19"
+    compile 'org.json:json:20220320'
 
 
 
@@ -144,7 +145,7 @@ shadowJar {
     archiveVersion.set('')
 
     relocate 'com.google.gson', 'dev.antimoxs.libs.com.google.gson'
-    relocate 'io.quickchart', 'dev.antimoxs.libs.io.quickchart'
+    relocate 'org.json', 'dev.antimoxs.libs.org.json'
     relocate 'mozilla', 'dev.antimoxs.libs.mozilla'
     relocate 'org', 'dev.antimoxs.libs.org'
     exclude 'module-info.class'
