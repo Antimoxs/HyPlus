@@ -131,7 +131,7 @@ public class HyBetterMsg implements IHyPlusModule, IHyPlusEvent {
 
 
                 builder.append(name);
-                builder.append(" §f§l➤ §d§l> §7");
+                builder.append(" §f§l➤ §7");
                 break;
 
             }
