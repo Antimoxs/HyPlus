@@ -5,7 +5,7 @@ import dev.antimoxs.hypixelapiHP.ApiBuilder;
 import dev.antimoxs.hypixelapiHP.HypixelApi;
 import dev.antimoxs.hypixelapiHP.util.kvp;
 import dev.antimoxs.hyplus.events.*;
-import dev.antimoxs.hyplus.internal.discordapp.DiscordAppExtender;
+import dev.antimoxs.hyplus.internal.discordSdk.DiscordManager;
 import dev.antimoxs.hyplus.listener.*;
 import dev.antimoxs.hyplus.modules.*;
 import dev.antimoxs.hyplus.modules.betterMsg.HyBetterMsg;
@@ -24,6 +24,7 @@ import net.labymod.main.LabyMod;
 import net.labymod.settings.elements.*;
 import net.labymod.utils.Material;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -36,18 +37,22 @@ public class HyPlus extends LabyModAddon {
      */
     private static HyPlus instance;
 
-    private static final String VERSION = "0.6.17";
-    private static final String LASTUPDATED = "23. March 2022";
+    private static final String VERSION = "0.7.44";
+    private static final String LASTUPDATED = "01. April 2022";
     public HyAbout hyAbout = new HyAbout(
             new kvp("Initial Release", 3)
     );
     public HypixelApi hypixelApi;
 
+    public DiscordManager discordManager = new DiscordManager();
+
     // HyPlus internals
     public final HyEventManager hyEventManager = new HyEventManager();
     public final HyModuleManager hyModuleManager = new HyModuleManager();
     public final HyConfigManager hyConfigManager = new HyConfigManager();
-    public final DiscordAppExtender discordApp = new DiscordAppExtender();
+
+    // old discord
+    //public final DiscordAppExtender discordApp = new DiscordAppExtender();
 
     // HyPlus external listener
     public final HyListenerChatMessage hyChatMessageListener = new HyListenerChatMessage();
@@ -139,7 +144,12 @@ public class HyPlus extends LabyModAddon {
 
         }
 
+
     }
+
+
+
+
 
     /**
      * addon start method
