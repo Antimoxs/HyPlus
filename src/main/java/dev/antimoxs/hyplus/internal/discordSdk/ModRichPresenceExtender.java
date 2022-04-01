@@ -1,12 +1,14 @@
-package dev.antimoxs.hyplus.internal.discordapp;
+package dev.antimoxs.hyplus.internal.discordSdk;
 
+import com.jagrosh.discordipc.entities.RichPresence;
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.modules.HyDiscordPresence;
 import dev.antimoxs.hyplus.modules.party.HyPartyManager;
 import dev.antimoxs.hyplus.objects.HyGameStatus;
-import net.labymod.discordapp.api.DiscordRPCLibrary;
-import net.labymod.discordapp.api.DiscordRichPresence;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.Objects;
 
 public class ModRichPresenceExtender {
@@ -54,9 +56,9 @@ public class ModRichPresenceExtender {
     private boolean joinSecret = false;
     private String joinSecretS = "";
 
-    private final DiscordAppExtender discord;
+    private final DiscordManager discord;
 
-    public ModRichPresenceExtender(DiscordAppExtender discord) {
+    public ModRichPresenceExtender(DiscordManager discord) {
 
         this.discord = discord;
 
@@ -239,7 +241,8 @@ public class ModRichPresenceExtender {
 
     }
 
-    public DiscordRichPresence build() {
+    public RichPresence build() {
+
 
         // settings:
         boolean sgame = HyDiscordPresence.HYPLUS_DP_GAME.getValueBoolean();
@@ -248,6 +251,54 @@ public class ModRichPresenceExtender {
         boolean sstate = HyDiscordPresence.HYPLUS_DP_STATE.getValueBoolean();
         boolean sparty = HyPartyManager.HYPLUS_PM_SHOW.getValueBoolean();
 
+        RichPresence.Builder builder = new RichPresence.Builder();
+
+        // Discord Presence Images
+        builder.setLargeImage(sgame ? this.largeImage : "hypixel", sgame ? this.largeImageText : "Playing on Hypixel.");
+        builder.setSmallImage(this.smallImage, this.smallImageText);
+
+        // Game Information
+        builder.setDetails(sgame ? this.gameType + (sstate ? (this.playState == HyGameStatus.State.UNDEFINED ? "" : ": " + this.playState.name) : "") : "Playing on Hypixel.");
+        builder.setState(smode && sgame ? (this.gameType.equals(this.gameMode) ? null : this.gameMode) : "HyPlus by Antimoxs.");
+
+        // Party Indicators
+        if (sparty) {
+            builder.setParty(this.partyID, this.partySize, party ? this.partyMax : 0);
+        }
+
+        // Timestamps
+
+        if (this.timestamp && stime) {
+
+            if (this.timeEnd != 0) {
+
+                builder.setEndTimestamp(this.timeEnd);
+                builder.setStartTimestamp(null);
+
+            }
+            else if (this.timeStart != 0) {
+
+                builder.setStartTimestamp(this.timeStart);
+                builder.setEndTimestamp(null);
+
+            }
+
+
+        }
+
+        // Join secret
+        if (joinSecret && sparty) {
+
+            builder.setJoinSecret(joinSecretS);
+            //builder.setMatchSecret(joinSecretS);
+
+        }
+
+
+        return builder.build();
+
+
+        /*
         DiscordRichPresence drp = new DiscordRichPresence();
 
         // Discord Presence Images
@@ -289,13 +340,22 @@ public class ModRichPresenceExtender {
         drp.instance = 1;
         return drp;
 
+         */
+
+        //return activity;
+
+    }
+
+    private static OffsetDateTime fromMillis(long epochMillis) {
+        return OffsetDateTime.ofInstant(Instant.ofEpochMilli(epochMillis), ZoneId.systemDefault());
     }
 
 
     public void updateRichPresence() {
 
         if (updateRequired) {
-            DiscordRPCLibrary.updatePresence(this.build());
+
+            HyPlus.getInstance().discordManager.updateActivity(this.build());
             this.updateRequired = false;
         }
 
@@ -303,14 +363,8 @@ public class ModRichPresenceExtender {
 
     public void forceUpdate() {
         this.updateRequired = true;
-        discord.setConnected(true);
         updateRichPresence();
     }
 
-    public void runCallbacks() {
-
-        DiscordRPCLibrary.runCallbacks();
-
-    }
 
 }
