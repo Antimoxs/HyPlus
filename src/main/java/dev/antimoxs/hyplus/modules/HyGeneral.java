@@ -14,8 +14,8 @@ import java.util.List;
 public class HyGeneral implements IHyPlusModule {
 
     public static final HySetting HYPLUS_GENERAL_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_GENERAL_TOGGLE", "HyPlus enabled", "Toggle all features of the HyPlus addon.", true, true, Material.REDSTONE);
-    public static final HySetting HYPLUS_GENERAL_LOOP_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_GENERAL_LOOP_TOGGLE", "HyLoop", "Toggle the HyLoop.", true, true, Material.FISHING_ROD);
-    public static final HySetting HYPLUS_GENERAL_APIKEY = new HySetting(HySettingType.STRING, "HYPLUS_GENERAL_APIKEY", "Hypixel API-Key", "Set the HypixelAPI key. (Needed for a range of features.)", "", "", Material.TRIPWIRE_HOOK);
+    public static final HySetting HYPLUS_GENERAL_LOOP_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_GENERAL_LOOP_TOGGLE", "ModuleLoop (-performance)", "Toggle the HyLoop, used for module updates, ex. Discord callbacks (Low performance impact)", true, true, Material.FISHING_ROD);
+    public static final HySetting HYPLUS_GENERAL_APIKEY = new HySetting(HySettingType.STRING, "HYPLUS_GENERAL_APIKEY", "Hypixel API-Key", "Set the HypixelAPI key. (Needed for a range of features.) Get your key with '/api' ingame.", "", "", Material.TRIPWIRE_HOOK);
 
     @Override
     public String getModuleName() {
