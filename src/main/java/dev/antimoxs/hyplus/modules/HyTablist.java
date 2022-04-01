@@ -15,12 +15,14 @@ public class HyTablist implements IHyPlusModule, IHyPlusEvent {
     private static final String BANNER_LINK_1 = "https://i.imgur.com/nZttT7W.png";
     private static final String BANNER_LINK_2 = "https://i.imgur.com/1lydzgc.png";
 
+    private static final String BANNER_LINK_3 = "https://i.imgur.com/Zjdiglg.png"; // Hypixel logo only :)
+
     public void sendTabList() {
 
         // DEBUG System.out.println("[HyTablist] Sending HyPlus tab-banner.");
         // https://i.imgur.com/VyPn1Sm.png
         JsonObject object2 = new JsonObject();
-        object2.addProperty("url", BANNER_LINK_2);
+        object2.addProperty("url", BANNER_LINK_3);
         LabyMod.getInstance().getEventManager().callServerMessage("server_banner", object2);
 
     }
