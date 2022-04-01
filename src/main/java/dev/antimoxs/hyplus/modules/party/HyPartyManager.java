@@ -151,7 +151,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
             Thread t = new Thread(() -> {
 
-                HyPlus.getInstance().discordApp.getRichPresence().runCallbacks();
+                HyPlus.getInstance().discordManager.runCallbacks();
 
             });
             Runtime.getRuntime().addShutdownHook(t);
@@ -571,9 +571,9 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
             if (!this.party.doesExist() || !HYPLUS_PM_SHOW.getValueBoolean()) {
 
-                HyPlus.getInstance().discordApp.getRichPresence().updateParty(false, 0, 0, "");
-                HyPlus.getInstance().discordApp.getRichPresence().updateJoinSecret(false, null);
-                HyPlus.getInstance().discordApp.getRichPresence().updateRichPresence();
+                HyPlus.getInstance().discordManager.getRichPresence().updateParty(false, 0, 0, "");
+                HyPlus.getInstance().discordManager.getRichPresence().updateJoinSecret(false, null);
+                HyPlus.getInstance().discordManager.getRichPresence().updateRichPresence();
                 return;
 
             }
@@ -587,7 +587,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
 
             String id = MojangRequest.getUUID(name);
-            HyPlus.getInstance().discordApp.getRichPresence().updateParty(true, max, count, id);
+            HyPlus.getInstance().discordManager.getRichPresence().updateParty(true, max, count, id);
 
             if (this.party.isPublic() && HYPLUS_PM_JOIN.getValueBoolean()) {
 
@@ -596,11 +596,11 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
             }
             else {
 
-                HyPlus.getInstance().discordApp.getRichPresence().updateJoinSecret(false, null);
+                HyPlus.getInstance().discordManager.getRichPresence().updateJoinSecret(false, null);
 
             }
 
-            HyPlus.getInstance().discordApp.getRichPresence().updateRichPresence();
+            HyPlus.getInstance().discordManager.getRichPresence().updateRichPresence();
 
             if (sendPacket) {
 
@@ -653,7 +653,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
         System.out.println(uuidJoin);
         // DEBUG HyPlus.getInstance().displayIgMessage("PublicPartyUUID", uuidJoin);
-        HyPlus.getInstance().discordApp.getRichPresence().updateJoinSecret(true, HyUtilities.dashUUID(uuidJoin));
+        HyPlus.getInstance().discordManager.getRichPresence().updateJoinSecret(true, HyUtilities.dashUUID(uuidJoin));
 
     }
 
