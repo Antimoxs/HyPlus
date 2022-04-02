@@ -23,7 +23,7 @@ public class Player {
     public PlayerStats stats = new PlayerStats();
     public int karma = 0;
     public int networkExp = 0;
-    public HashMap<String, Integer> achievements = new HashMap<>();
+    public HashMap<String, Long> achievements = new HashMap<>();
     public String userLanguage = "";
     public dev.antimoxs.hypixelapiHP.objects.player.PlayerHousingMeta housingMeta = new PlayerHousingMeta();
     public String[] friendRequestsUuid = new String[0];
