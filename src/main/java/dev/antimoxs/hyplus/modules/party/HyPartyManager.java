@@ -279,10 +279,10 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
     @Override
     public void onPartyDataPacket(HyParty party) {
 
-        LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Updated party via packet.");
-        // check if we even in the party lol
         if (!party.isInParty(LabyMod.getInstance().getPlayerName())) return; // we're not in that party :sob:
         // updating party over packet
+        LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("PartyDetector", "Updated party via packet.");
+        // check if we even in the party lol
 
         this.party = party;
         updateParty(false);

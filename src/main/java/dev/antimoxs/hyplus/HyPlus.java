@@ -38,7 +38,7 @@ public class HyPlus extends LabyModAddon {
     private static HyPlus instance;
 
     private static final String VERSION = "1.0.0";
-    private static final String LASTUPDATED = "02. April 2022";
+    private static final String LASTUPDATED = "05. April 2022";
     public HyAbout hyAbout = new HyAbout(
             new kvp("Initial Release", 3)
     );
