@@ -8,8 +8,21 @@ Nearly all features can be toggled and customzed to fit your style and needs.
 
 ***
 
+## Setup
+1. Close all LabyMod 1.8 instances.
+2. Download the [`HyPlus.jar`](https://github.com/antimoxs/hyplus/releases/latest) and drop it into your `.minecraft/LabyMod/addons-1.8` folder.
+3. Start LabyMod 1.8.
+4. Get a Hypixel-API key. 
+  (Join Hypixel and do `/api`)
+5. Go to the HyPlus addon settings and insert your API-key.
+6. (Re)join Hypixel.
+
+Well done! You're ready to go. :D
+
 ## Feature overview
 Detailed descriptions for each function can be found in the wiki.
+
+If you miss a feature, feel free to submit your idea! Here on github or [directly over socials](https://socials.antimoxs.dev)
 
 ### Implemented features
 - Location detection
@@ -59,5 +72,10 @@ in beta:
 - Rank images
 - Friends detection
   - Auto-greetings 
+  - Auto-friend for sb
   
 ***
+
+### Known bugs/problems
+- Friend requests in Skyblock have a different message than the classic one and will ba added in a future update.
+- ChallangeTracker GUI will extend out-of-screen when snapped to bottom.
