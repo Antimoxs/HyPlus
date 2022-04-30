@@ -37,8 +37,8 @@ public class HyPlus extends LabyModAddon {
      */
     private static HyPlus instance;
 
-    private static final String VERSION = "1.0.0";
-    private static final String LASTUPDATED = "05. April 2022";
+    private static final String VERSION = "1.0.0beta";
+    private static final String LASTUPDATED = "30. April 2022";
     public HyAbout hyAbout = new HyAbout(
             new kvp("Initial Release", 3)
     );
@@ -244,6 +244,7 @@ public class HyPlus extends LabyModAddon {
             builder.addKey(hyGeneral.getApiKey());
             builder.setApplicationName("HyPlus");
             this.hypixelApi = builder.build(); // <- known to cause trouble for unknown reasons lol; just build it again
+
 
         } catch (Exception e) {
 

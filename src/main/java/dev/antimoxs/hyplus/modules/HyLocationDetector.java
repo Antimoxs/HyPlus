@@ -104,7 +104,6 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
             return;
 
         }
-
         try {
 
             // Get the data from the API
@@ -138,7 +137,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
         }
         catch (ApiRequestException e) {
 
-            HyPlus.debugLog("An API error occured: " + e.getReason());
+            HyPlus.debugLog("An API error occurred: " + e.getReason());
 
         }
 

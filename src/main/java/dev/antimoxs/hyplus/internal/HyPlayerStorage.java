@@ -1,8 +1,8 @@
 package dev.antimoxs.hyplus.internal;
 
+import dev.antimoxs.hypixelapiHP.objects.player.Player;
 import dev.antimoxs.hypixelapiHP.exceptions.ApiRequestException;
 import dev.antimoxs.hypixelapiHP.response.PlayerResponse;
-import dev.antimoxs.hypixelapiHP.objects.player.Player;
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.api.player.HySimplePlayer;
 

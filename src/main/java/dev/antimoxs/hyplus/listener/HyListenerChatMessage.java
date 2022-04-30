@@ -82,7 +82,9 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
 
                 //System.out.println("[HyFriend] [" + s + "][" + s1 + "]");
 
-                if (s.startsWith("§9§m----------------------------------------------------§r§9")) {
+                // §9§m-----------------------------------------------------§r§9
+
+                if (s.contains("§9§m-----------------------------------------------------§r§9") && s.contains("§r§e")) {
 
                     HyPlus.debugLog("[HyFriend] It's a friend request bois!!!");
 
@@ -116,18 +118,9 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
 
                 /*
                 * Disgusting if chain :[
-                * */
+                *
+                */
 
-                // "§9§m-----------------------------§r"
-                // "§9§m----------------------------------------------------- §r" <- new partyline?
-                if (s.equals("§9§m-----------------------------§r")) {
-
-                    HyPlus.debugLog("###PARTYLINE");
-                    HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.LINE);
-                    return hideMsg;
-                    //return true;
-
-                }
                 if (s.equals("§9§m-----------------------------------------------------§r")) {
 
                     HyPlus.debugLog("###PARTYLINE");
@@ -228,7 +221,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
 
                 }
                 // §aDie Party ist nicht mehr länger stummgeschaltet.§r
-                if (s.startsWith("§a") && s.toLowerCase().contains("party") && !s.contains("§r§6§l/party join")) {
+                if (s.startsWith("§a") && s.toLowerCase().contains("party") && !s.contains("§r§6§l/party join") && !s.contains("]")) {
 
                     HyPlus.debugLog("###UNMUTED");
                     HyPlus.getInstance().hyEventManager.callPartyMessageAsync(s, HyPartyMessageType.MUTED_OFF);

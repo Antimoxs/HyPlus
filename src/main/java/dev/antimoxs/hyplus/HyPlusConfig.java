@@ -14,7 +14,8 @@ public class HyPlusConfig {
 
         return new HyPlayerTag(UUID.fromString("df66f7ab-d5eb-4d25-8d95-0d65bec4caee"), 1.6d,
                 new kvp("§6§lHyPlus Creator", -1),
-                new kvp("§ddiscord.gg/ATdbUS4",-2));
+                new kvp("§ddiscord.gg/ATdbUS4",-2),
+                new kvp("§bantimoxs.dev", -3));
 
     }
 
