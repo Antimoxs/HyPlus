@@ -13,6 +13,9 @@ import net.labymod.api.events.MessageReceiveEvent;
 
 public class HyListenerChatMessage implements MessageReceiveEvent {
 
+    private static final String AUTOFRIEND_LINE = "§9§m-----------------------------------------------------";
+                                                // §m-----------------------------------------------------
+
     @Override
     public boolean onReceive(String s, String s1) {
 
@@ -84,7 +87,8 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
 
                 // §9§m-----------------------------------------------------§r§9
 
-                if (s.contains("§9§m-----------------------------------------------------§r§9") && s.contains("§r§e")) {
+                //if (s.contains("§9§m-----------------------------------------------------§r§9") && s.contains("§r§e")) {
+                if (s.startsWith(AUTOFRIEND_LINE) && s.contains("§r§e")) {
 
                     HyPlus.debugLog("[HyFriend] It's a friend request bois!!!");
 
