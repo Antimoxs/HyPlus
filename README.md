@@ -22,7 +22,7 @@ Well done! You're ready to go. :D
 ## Feature overview
 Detailed descriptions for each function can be found in the wiki.
 
-If you miss a feature, feel free to submit your idea! Here on github or [directly over socials](https://socials.antimoxs.dev)
+If you miss a feature, feel free to submit your idea! Here on [Github](https://github.com/Antimoxs/HyPlus/discussions/new?category=ideas) or [directly over socials](https://socials.antimoxs.dev)
 
 ### Implemented features
 - Location detection
