@@ -163,7 +163,7 @@ public class Hypixel extends Server implements IHyPlusEvent {
     @Override
     public void onJoin(net.minecraft.client.multiplayer.ServerData serverData) {
 
-        if (!Minecraft.getMinecraft().getCurrentServerData().serverName.toLowerCase().endsWith("hypixel.net")) {
+        if (!Minecraft.getMinecraft().getCurrentServerData().serverIP.toLowerCase().endsWith("hypixel.net")) {
 
             HyPlus.debugLog("This is not Hypixel.");
             return;
@@ -230,7 +230,7 @@ public class Hypixel extends Server implements IHyPlusEvent {
 
         if (Minecraft.getMinecraft().getCurrentServerData() == null) { return false; }
 
-        return Minecraft.getMinecraft().getCurrentServerData().serverName.toLowerCase().endsWith("hypixel.net");
+        return Minecraft.getMinecraft().getCurrentServerData().serverIP.toLowerCase().endsWith("hypixel.net");
     }
 
 }
