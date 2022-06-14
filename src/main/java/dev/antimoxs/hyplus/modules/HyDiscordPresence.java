@@ -37,6 +37,7 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
 
     private final ControlElement.IconData icon_update = new ControlElement.IconData(Material.BOOK_AND_QUILL);
     private HyGameStatus currentStatus = new HyGameStatus();
+    private String lastGameAndMode = "";
     private GamelistResponse indexedGames = null;
 
     public int delay = 0;
@@ -241,8 +242,25 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
     }
     public void updateGameState(HyGameStatus status, String game, String mode, String map, HyServerLocation locationIn) {
 
+        HyPlus.debugLog("[HYDP] Updating GameState");
+
         // check if its a new state
-        if (this.currentStatus.equals(status)) return;
+        if (this.currentStatus.equals(status) && lastGameAndMode.equals(game+mode+map)) {
+
+            // skyblock mode check
+
+            if (game.equalsIgnoreCase("skyblock")) {
+
+                String s1 = HYPLUS_DP_MODE.getValue() ? " " + mode : "";
+                String s2 = HYPLUS_DP_MAP.getValue() ? " on " + map : "";
+                HyPlus.getInstance().discordManager.getRichPresence().updateImageTextL("Playing " + game + s1 + s2 + ".");
+
+            }
+
+            return;
+
+        }
+        lastGameAndMode = game+mode+map;
         HyGameStatus.State lastState = this.currentStatus.state;
         this.currentStatus = status;
 
@@ -265,9 +283,13 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
                 String s2 = HYPLUS_DP_MAP.getValue() ? " on " + map : "";
                 HyPlus.getInstance().discordManager.getRichPresence().updateImageTextL("Playing " + game + s1 + s2 + ".");
 
+
             }
 
         }
+
+
+
         else {
 
             // update state

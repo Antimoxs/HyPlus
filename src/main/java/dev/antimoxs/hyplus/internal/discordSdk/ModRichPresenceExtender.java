@@ -212,6 +212,7 @@ public class ModRichPresenceExtender {
     }
     public void updateImageTextL(String text) {
 
+        HyPlus.debugLog("[HP-RPC] UpdatingImageTextL: " + text);
         if (!this.largeImageText.equals(text)) {
             this.largeImageText = text;
             this.updateRequired = true;
