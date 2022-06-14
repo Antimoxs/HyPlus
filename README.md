@@ -10,7 +10,7 @@ Nearly all features can be toggled and customzed to fit your style and needs.
 
 ## Setup
 1. Close all LabyMod 1.8 instances.
-2. Download the [`HyPlus.jar`](https://github.com/Antimoxs/HyPlus/releases/tag/1.0.0beta) and drop it into your `.minecraft/LabyMod/addons-1.8` folder.
+2. Download the [`HyPlus.jar`](https://github.com/Antimoxs/HyPlus/releases/latest) and drop it into your `.minecraft/LabyMod/addons-1.8` folder.
 3. Start LabyMod 1.8.
 4. Get a Hypixel-API key. 
   (Join Hypixel and do `/api`)
@@ -22,7 +22,7 @@ Well done! You're ready to go. :D
 ## Feature overview
 Detailed descriptions for each function can be found in the wiki.
 
-If you miss a feature, feel free to submit your idea! Here on github or [directly over socials](https://socials.antimoxs.dev)
+If you miss a feature, feel free to submit your idea! Here on [Github](https://github.com/Antimoxs/HyPlus/discussions/new?category=ideas) or [directly over socials](https://socials.antimoxs.dev)
 
 ### Implemented features
 - Location detection
