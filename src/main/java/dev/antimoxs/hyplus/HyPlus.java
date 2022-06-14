@@ -24,7 +24,6 @@ import net.labymod.main.LabyMod;
 import net.labymod.settings.elements.*;
 import net.labymod.utils.Material;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -37,8 +36,8 @@ public class HyPlus extends LabyModAddon {
      */
     private static HyPlus instance;
 
-    private static final String VERSION = "1.0.4";
-    private static final String LASTUPDATED = "28. May 2022";
+    private static final String VERSION = "1.0.6";
+    private static final String LASTUPDATED = "14. June 2022";
     public HyAbout hyAbout = new HyAbout(
             new kvp("Initial Release", 3)
     );
@@ -380,10 +379,9 @@ public class HyPlus extends LabyModAddon {
      * Debug log :)
      *
      */
-    public static final boolean DEBUG = false;
     public static void debugLog(String s) {
 
-        if (DEBUG) {
+        if (HyAdvanced.HYPLUS_ADVANCED_DEBUGLOG.getValueBoolean()) {
 
             HyPlus.getInstance().log(s);
 

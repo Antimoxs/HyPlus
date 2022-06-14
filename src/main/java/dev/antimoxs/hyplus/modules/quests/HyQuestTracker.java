@@ -8,6 +8,7 @@ import dev.antimoxs.hypixelapiHP.response.PlayerResponse;
 import dev.antimoxs.hypixelapiHP.response.QuestsResponse;
 import dev.antimoxs.hyplus.HyPlus;
 import dev.antimoxs.hyplus.events.IHyPlusEvent;
+import dev.antimoxs.hyplus.modules.HyAdvanced;
 import dev.antimoxs.hyplus.modules.IHyPlusModule;
 import dev.antimoxs.hyplus.objects.ButtonElement;
 import dev.antimoxs.hyplus.api.location.HyServerLocation;
@@ -292,7 +293,7 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
                                     }
                                     else {
 
-                                        if (HyPlus.DEBUG) HyPlus.getInstance().displayIgMessage(getModuleName(), "no completed");
+                                        if (HyAdvanced.HYPLUS_ADVANCED_DEBUGLOG.getValueBoolean()) HyPlus.getInstance().displayIgMessage(getModuleName(), "no completed");
 
                                     }
 
