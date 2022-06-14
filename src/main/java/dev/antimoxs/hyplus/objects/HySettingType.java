@@ -5,6 +5,8 @@ public enum HySettingType {
     STRING,
     BOOLEAN,
     INT,
-    CHAR
+    CHAR,
+
+    OTHER
 
 }
