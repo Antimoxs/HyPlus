@@ -37,9 +37,9 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
 
     // PlayerTagChanger
 
-    public final HySetting HYPLUS_PTC_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_PTC_TOGGLE", "Player subtitles / HeadStats", "Toggle player tags", true, true, Material.NAME_TAG);
-    public final HySetting HYPLUS_PTC_CHANGER = new HySetting(HySettingType.BOOLEAN, "HYPLUS_PTC_CHANGER", "Change tags", "Iterate through tags if there are multiple ones.", true, true, Material.REDSTONE);
-    public final HySetting HYPLUS_PTC_INTERVAL = new HySetting(HySettingType.INT, "HYPLUS_PTC_INTERVAL", "Tag changing interval", "Set the interval in which the tags are iterated.", 3, 3, Material.SIGN);
+    public final HySetting<Boolean> HYPLUS_PTC_TOGGLE = new HySetting<>("HYPLUS_PTC_TOGGLE", "Player subtitles / HeadStats", "Toggle player tags",true, Material.NAME_TAG);
+    public final HySetting<Boolean> HYPLUS_PTC_CHANGER = new HySetting<>("HYPLUS_PTC_CHANGER", "Change tags", "Iterate through tags if there are multiple ones.", true, Material.REDSTONE);
+    public final HySetting<Integer> HYPLUS_PTC_INTERVAL = new HySetting<>("HYPLUS_PTC_INTERVAL", "Tag changing interval", "Set the interval in which the tags are iterated.", 3, Material.SIGN);
 
 
 
@@ -176,17 +176,17 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
             update(!booleanElement);
 
 
-        }, HYPLUS_PTC_TOGGLE.getValueBoolean());
+        }, HYPLUS_PTC_TOGGLE.getValue());
         toggle.setDescriptionText(HYPLUS_PTC_TOGGLE.getDescription());
         BooleanElement changer_toggle = new BooleanElement(HYPLUS_PTC_CHANGER.getDisplayName(), HYPLUS_PTC_CHANGER.getIcon(), (booleanElement) -> {
 
             HYPLUS_PTC_CHANGER.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
-        }, HYPLUS_PTC_CHANGER.getValueBoolean());
+        }, HYPLUS_PTC_CHANGER.getValue());
         changer_toggle.setDescriptionText(HYPLUS_PTC_CHANGER.getDescription());
 
-        NumberElement changer_interval = new NumberElement(HYPLUS_PTC_INTERVAL.getDisplayName(), HYPLUS_PTC_INTERVAL.getIcon(), HYPLUS_PTC_INTERVAL.getValueInt());
+        NumberElement changer_interval = new NumberElement(HYPLUS_PTC_INTERVAL.getDisplayName(), HYPLUS_PTC_INTERVAL.getIcon(), HYPLUS_PTC_INTERVAL.getValue());
         changer_interval.setMinValue(1); // 1s
         changer_interval.setMaxValue(600); // 10min
         changer_interval.addCallback((accepted) -> {
@@ -208,7 +208,7 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
                         emptySubtitles();
                         update(true);
                         HyPlayerStorage.clearCache();
-                        active = HYPLUS_PTC_TOGGLE.getValueBoolean();
+                        active = HYPLUS_PTC_TOGGLE.getValue();
 
                     }
                 },
@@ -247,7 +247,7 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
                 try {
                     // skip players that are not in the world (anymore)
                     if (LabyModCore.getMinecraft().getWorld().getPlayerEntityByUUID(uuid) == null) continue;
-                    setSubtitle(uuid, HYPLUS_PTC_CHANGER.getValueBoolean() ? playerTags.get(uuid).getNextValue() : playerTags.get(uuid).getStaticValue(), playerTags.get(uuid).getSize());
+                    setSubtitle(uuid, HYPLUS_PTC_CHANGER.getValue() ? playerTags.get(uuid).getNextValue() : playerTags.get(uuid).getStaticValue(), playerTags.get(uuid).getSize());
                 }
                 catch (Exception e) {
 
@@ -289,12 +289,12 @@ public class HyPlayerTagExchanger implements IHyPlusModule, IHyPlusEvent, Server
     @Override
     public boolean loop() {
 
-        if (active && HYPLUS_PTC_TOGGLE.getValueBoolean()) {
+        if (active && HYPLUS_PTC_TOGGLE.getValue()) {
 
             if (delay <= 0) {
 
                 update(false);
-                delay = HYPLUS_PTC_INTERVAL.getValueInt();
+                delay = HYPLUS_PTC_INTERVAL.getValue();
 
             }
             else {

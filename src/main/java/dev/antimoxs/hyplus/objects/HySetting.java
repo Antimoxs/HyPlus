@@ -4,80 +4,47 @@ import dev.antimoxs.hyplus.HyPlus;
 import net.labymod.settings.elements.ControlElement;
 import net.labymod.utils.Material;
 
-public class HySetting {
+public class HySetting<T> {
 
-    private final HySettingType type;
     private final String configname;
-    private final Object defaultValue;
+    private final T defaultValue;
     private final ControlElement.IconData icon;
     private final String displayName;
     private final String description;
 
-    private Object value;
+    private T value;
 
-    public HySetting(HySettingType type, String configname, String displayName, String desc, Object value, Object defaultValue, String iconPath) {
+    public HySetting(String configname, String displayName, String desc, T defaultValue, String iconPath) {
 
         this.configname = configname;
-        this.type = type;
         this.displayName = displayName;
         this.description = desc;
-        this.value = value;
+        this.value = defaultValue;
         this.defaultValue = defaultValue;
         this.icon = new ControlElement.IconData(iconPath);
 
     }
 
-    public HySetting(HySettingType type, String configname, String displayName, String desc, Object value, Object defaultValue, Material material) {
+    public HySetting(String configname, String displayName, String desc, T defaultValue, Material material) {
 
         this.configname = configname;
-        this.type = type;
         this.displayName = displayName;
         this.description = desc;
-        this.value = value;
+        this.value = defaultValue;
         this.defaultValue = defaultValue;
         this.icon = new ControlElement.IconData(material);
 
     }
 
-    public void changeValue(Object value) {
+    public void changeValue(T value) {
 
         this.value = value;
 
     }
 
-    public int getValueInt() {
+    public T getValue() {
 
-        if (type == HySettingType.INT) return (int) value;
-        return -1;
-
-    }
-    public String getValueString() {
-
-        if (type == HySettingType.STRING) return (String) value;
-        return value.toString();
-
-    }
-    public boolean getValueBoolean() {
-
-        if (type == HySettingType.BOOLEAN) return (boolean) value;
-        return false;
-
-    }
-    public char getValueChar() {
-
-        if (type == HySettingType.CHAR) return (char) value;
-        return 'x';
-
-    }
-    public Object getValue(HySettingType type) {
-
-        if (this.type == type) {
-
-            return value;
-
-        }
-
-        return new Object();
+        return this.value;
 
     }
 
@@ -88,52 +55,19 @@ public class HySetting {
 
     }
 
-    public int getDefaultInt() {
+    public T getDefault() {
 
-        if (type == HySettingType.INT) return (int) defaultValue;
-        return -1;
-
-    }
-    public String getDefaultString() {
-
-        if (type == HySettingType.STRING) return (String) defaultValue;
-        return defaultValue.toString();
+        return this.defaultValue;
 
     }
-    public boolean getDefaultBoolean() {
 
-        if (type == HySettingType.BOOLEAN) return (boolean) defaultValue;
-        return false;
-
-    }
-    public char getDefaultChar() {
-
-        if (type == HySettingType.CHAR) return (char) defaultValue;
-        return 'x';
-
-    }
-    public Object getDefault(HySettingType type) {
-
-        if (this.type == type) {
-
-            return defaultValue;
-
-        }
-
-        return new Object();
-
-    }
 
     public String getConfigName() {
 
         return this.configname;
 
     }
-    public HySettingType getType() {
 
-        return this.type;
-
-    }
     public ControlElement.IconData getIcon() {
 
         return this.icon;
@@ -147,6 +81,17 @@ public class HySetting {
     public String getDescription() {
 
         return this.description;
+
+    }
+
+    public HySettingType getType() {
+
+        Class<?> clazz = this.defaultValue.getClass();
+        if (clazz.equals(String.class)) return HySettingType.STRING;
+        if (clazz.equals(Boolean.class)) return HySettingType.BOOLEAN;
+        if (clazz.equals(Integer.class)) return HySettingType.INT;
+        if (clazz.equals(Character.class)) return HySettingType.STRING;
+        return HySettingType.OTHER;
 
     }
 

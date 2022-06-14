@@ -20,8 +20,8 @@ public class HyBetterMsg implements IHyPlusModule, IHyPlusEvent {
 
     // BetterMsg
 
-    public static final HySetting HYPLUS_BETTERMSG_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_BETTERMSG_TOGGLE", "Better Msg", "Toggle prettier private messages.", true, true, Material.PAINTING);
-    public static final HySetting HYPLUS_BETTERMSG_STYLE = new HySetting(HySettingType.STRING, "HYPLUS_BETTERMSG_STYLE", "Private message style", "Select the message style.", "SWITCH", "SWITCH", Material.PAPER);
+    public static final HySetting<Boolean> HYPLUS_BETTERMSG_TOGGLE = new HySetting("HYPLUS_BETTERMSG_TOGGLE", "Better Msg", "Toggle prettier private messages.", true, Material.PAINTING);
+    public static final HySetting<String> HYPLUS_BETTERMSG_STYLE = new HySetting("HYPLUS_BETTERMSG_STYLE", "Private message style", "Select the message style.", "SWITCH",  Material.PAPER);
 
     @Override
     public List<SettingsElement> getModuleSettings() {
@@ -33,11 +33,11 @@ public class HyBetterMsg implements IHyPlusModule, IHyPlusEvent {
             HYPLUS_BETTERMSG_TOGGLE.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
-        }, HYPLUS_BETTERMSG_TOGGLE.getValueBoolean());
+        }, HYPLUS_BETTERMSG_TOGGLE.getValue());
         toggle.setDescriptionText(HYPLUS_BETTERMSG_TOGGLE.getDescription());
 
         DropDownMenu<HyBetterMsgType> styleDropDown = new DropDownMenu<HyBetterMsgType>(HYPLUS_BETTERMSG_STYLE.getDisplayName(), 0, 0, 0, 0).fill(HyBetterMsgType.values());
-        styleDropDown.setSelected(HyBetterMsgType.getByName(HYPLUS_BETTERMSG_STYLE.getValueString()));
+        styleDropDown.setSelected(HyBetterMsgType.getByName(HYPLUS_BETTERMSG_STYLE.getValue()));
 
         DropDownElement<HyBetterMsgType> styleElement = new DropDownElement<HyBetterMsgType>(HYPLUS_BETTERMSG_STYLE.getDisplayName(), styleDropDown);
         styleElement.setChangeListener((accept) -> {
@@ -87,7 +87,7 @@ public class HyBetterMsg implements IHyPlusModule, IHyPlusEvent {
         StringBuilder builder = new StringBuilder();
         builder.append("§d§lPrivate: ");
 
-        switch (HyBetterMsgType.getByName(HYPLUS_BETTERMSG_STYLE.getValueString())) {
+        switch (HyBetterMsgType.getByName(HYPLUS_BETTERMSG_STYLE.getValue())) {
 
             case ARROW: {
 
@@ -125,7 +125,7 @@ public class HyBetterMsg implements IHyPlusModule, IHyPlusEvent {
         StringBuilder builder = new StringBuilder();
         builder.append("§d§lPrivate: ");
 
-        switch (HyBetterMsgType.getByName(HYPLUS_BETTERMSG_STYLE.getValueString())) {
+        switch (HyBetterMsgType.getByName(HYPLUS_BETTERMSG_STYLE.getValue())) {
 
             case ARROW: {
 

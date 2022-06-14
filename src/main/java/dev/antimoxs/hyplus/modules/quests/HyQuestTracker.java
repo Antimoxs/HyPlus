@@ -31,13 +31,13 @@ import java.util.List;
 public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
 
     // ChallengeTracker
-    public static final HySetting HYPLUS_CTR_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_TOGGLE", "QuestTracker", "Toggle the quest-tracker.", true, true, Material.BOW);
-    public static final HySetting HYPLUS_CTR_DAILY = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_DAILY", "Show daily quests", "Toggle the display of daily quests.", true, true, Material.WATCH);
-    public static final HySetting HYPLUS_CTR_WEEKLY = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_WEEKLY", "Show weekly quests", "Toggle the display of weekly quests.", true, true, Material.PAPER);
-    public static final HySetting HYPLUS_CTR_COMPLETED = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_COMPLETED", "Show completed quests", "Toggle the display of daily quests.", true, true, Material.GOLD_INGOT);
-    public static final HySetting HYPLUS_CTR_SORTORDER = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_SORTORDER", "Reversed sort order", "Reverse the sort order.", true, true, Material.ARROW);
-    public static final HySetting HYPLUS_CTR_DP_DAILY = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_DP_DAILY", "Announce daily reset time", "Toggle the announcement of the daily reset time.", true, true, Material.EMERALD);
-    public static final HySetting HYPLUS_CTR_DP_WEEKLY = new HySetting(HySettingType.BOOLEAN, "HYPLUS_CTR_DP_WEEKLY", "Announce weekly reset time", "Toggle the announcement of the weekly reset time.", true, true, Material.DIAMOND);
+    public static final HySetting<Boolean> HYPLUS_CTR_TOGGLE = new HySetting<>("HYPLUS_CTR_TOGGLE", "QuestTracker", "Toggle the quest-tracker.", true, Material.BOW);
+    public static final HySetting<Boolean> HYPLUS_CTR_DAILY = new HySetting<>("HYPLUS_CTR_DAILY", "Show daily quests", "Toggle the display of daily quests.", true, Material.WATCH);
+    public static final HySetting<Boolean> HYPLUS_CTR_WEEKLY = new HySetting<>("HYPLUS_CTR_WEEKLY", "Show weekly quests", "Toggle the display of weekly quests.", true, Material.PAPER);
+    public static final HySetting<Boolean> HYPLUS_CTR_COMPLETED = new HySetting<>("HYPLUS_CTR_COMPLETED", "Show completed quests", "Toggle the display of daily quests.", true, Material.GOLD_INGOT);
+    public static final HySetting<Boolean> HYPLUS_CTR_SORTORDER = new HySetting<>("HYPLUS_CTR_SORTORDER", "Reversed sort order", "Reverse the sort order.", true, Material.ARROW);
+    public static final HySetting<Boolean> HYPLUS_CTR_DP_DAILY = new HySetting<>("HYPLUS_CTR_DP_DAILY", "Announce daily reset time", "Toggle the announcement of the daily reset time.", true, Material.EMERALD);
+    public static final HySetting<Boolean> HYPLUS_CTR_DP_WEEKLY = new HySetting<>("HYPLUS_CTR_DP_WEEKLY", "Announce weekly reset time", "Toggle the announcement of the weekly reset time.", true, Material.DIAMOND);
 
     boolean active = true;
     public boolean updateReq = true;
@@ -78,7 +78,7 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
             HYPLUS_CTR_TOGGLE.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
-        }, HYPLUS_CTR_TOGGLE.getValueBoolean());
+        }, HYPLUS_CTR_TOGGLE.getValue());
         toggle.setDescriptionText(HYPLUS_CTR_TOGGLE.getDescription());
 
 
@@ -106,7 +106,7 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
             HYPLUS_CTR_DAILY.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
-        }, HYPLUS_CTR_DAILY.getValueBoolean());
+        }, HYPLUS_CTR_DAILY.getValue());
         ctr_show_daily.setDescriptionText(HYPLUS_CTR_DAILY.getDescription());
 
         BooleanElement ctr_show_weekly = new BooleanElement(HYPLUS_CTR_WEEKLY.getDisplayName(), HYPLUS_CTR_WEEKLY.getIcon(), (booleanElement) -> {
@@ -114,7 +114,7 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
             HYPLUS_CTR_WEEKLY.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
-        }, HYPLUS_CTR_WEEKLY.getValueBoolean());
+        }, HYPLUS_CTR_WEEKLY.getValue());
         ctr_show_weekly.setDescriptionText(HYPLUS_CTR_WEEKLY.getDescription());
 
         BooleanElement ctr_show_completed = new BooleanElement(HYPLUS_CTR_COMPLETED.getDisplayName(), HYPLUS_CTR_COMPLETED.getIcon(), (booleanElement) -> {
@@ -122,7 +122,7 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
             HYPLUS_CTR_COMPLETED.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
-        }, HYPLUS_CTR_COMPLETED.getValueBoolean());
+        }, HYPLUS_CTR_COMPLETED.getValue());
         ctr_show_completed.setDescriptionText(HYPLUS_CTR_COMPLETED.getDescription());
 
         BooleanElement ctr_sortorder = new BooleanElement(HYPLUS_CTR_SORTORDER.getDisplayName(), HYPLUS_CTR_SORTORDER.getIcon(), (booleanElement) -> {
@@ -130,7 +130,7 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
             HYPLUS_CTR_SORTORDER.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
-        }, HYPLUS_CTR_SORTORDER.getValueBoolean());
+        }, HYPLUS_CTR_SORTORDER.getValue());
         ctr_sortorder.setDescriptionText(HYPLUS_CTR_SORTORDER.getDescription());
 
         HeaderElement ctr_info = new HeaderElement("Chat announcements");
@@ -140,7 +140,7 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
             HYPLUS_CTR_DP_DAILY.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
-        }, HYPLUS_CTR_DP_DAILY.getValueBoolean());
+        }, HYPLUS_CTR_DP_DAILY.getValue());
         ctr_display_daily.setDescriptionText(HYPLUS_CTR_DP_DAILY.getDescription());
 
         BooleanElement ctr_display_weekly = new BooleanElement(HYPLUS_CTR_DP_WEEKLY.getDisplayName(), HYPLUS_CTR_DP_WEEKLY.getIcon(), (booleanElement) -> {
@@ -148,7 +148,7 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
             HYPLUS_CTR_DP_WEEKLY.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
-        }, HYPLUS_CTR_DP_WEEKLY.getValueBoolean());
+        }, HYPLUS_CTR_DP_WEEKLY.getValue());
         ctr_display_weekly.setDescriptionText(HYPLUS_CTR_WEEKLY.getDescription());
 
 
@@ -170,7 +170,7 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
 
     public void updateChallanges(String gamemode) {
 
-        if (HYPLUS_CTR_TOGGLE.getValueBoolean()) {
+        if (HYPLUS_CTR_TOGGLE.getValue()) {
             Thread t = new Thread(() -> {
                 synchronized (dspc) {
 
@@ -219,8 +219,8 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
                             int minsW = minutesW % 60;
                             int hoursW = (minutesW-minsW)/60;
 
-                            if (HYPLUS_CTR_DP_DAILY.getValueBoolean()) HyPlus.getInstance().displayIgMessage(getModuleName(), "Daily Quests reset in: "  + hours + "h " + mins + "m " + seconds + "s");
-                            if (HYPLUS_CTR_DP_WEEKLY.getValueBoolean()) HyPlus.getInstance().displayIgMessage(getModuleName(), "Weekly Quests reset in: "  + hoursW + "h " + minsW + "m " + secondsW + "s");
+                            if (HYPLUS_CTR_DP_DAILY.getValue()) HyPlus.getInstance().displayIgMessage(getModuleName(), "Daily Quests reset in: "  + hours + "h " + mins + "m " + seconds + "s");
+                            if (HYPLUS_CTR_DP_WEEKLY.getValue()) HyPlus.getInstance().displayIgMessage(getModuleName(), "Weekly Quests reset in: "  + hoursW + "h " + minsW + "m " + secondsW + "s");
                             QuestsResponse qs = HyPlus.getInstance().hypixelApi.createQuestsRequest();
 
                             if (qs.getQuests().getQuestsForMode(gamemode).length == 0) {
@@ -242,13 +242,13 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
 
                                 if (q.requirements[0].type.equals("DailyResetQuestRequirement")) {
                                     //HyPlus.displayIgMessage(getModuleName(), "Daily");
-                                    if (!HYPLUS_CTR_DAILY.getValueBoolean()) continue;
+                                    if (!HYPLUS_CTR_DAILY.getValue()) continue;
                                     com = unixReset > quest.getLatestCompletion();
                                     //hyPlus.displayIgMessage(q.id, unixReset + " | " + quest.getLatestCompletion() + " | " + (unixReset - quest.getLatestCompletion()));
                                 }
                                 if (q.requirements[0].type.equals("WeeklyResetQuestRequirement")) {
                                     //HyPlus.displayIgMessage(getModuleName(), "Weekly");
-                                    if (!HYPLUS_CTR_WEEKLY.getValueBoolean()) continue;
+                                    if (!HYPLUS_CTR_WEEKLY.getValue()) continue;
                                     com = unixTimeWeek > quest.getLatestCompletion();
                                     //hyPlus.displayIgMessage(q.id, unixTimeWeek + " | " + quest.getLatestCompletion() + " | " + (unixTimeWeek - quest.getLatestCompletion()));
                                 }
@@ -283,7 +283,7 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
 
                                 } else {
 
-                                    if (HYPLUS_CTR_COMPLETED.getValueBoolean()) {
+                                    if (HYPLUS_CTR_COMPLETED.getValue()) {
 
                                         HyPlus.debugLog(q.description + " | " + "completed");
                                         QuestData data = new QuestData(HyPlus.getInstance(), q, 0, 100, null);
@@ -293,7 +293,7 @@ public class HyQuestTracker implements IHyPlusModule, IHyPlusEvent {
                                     }
                                     else {
 
-                                        if (HyAdvanced.HYPLUS_ADVANCED_DEBUGLOG.getValueBoolean()) HyPlus.getInstance().displayIgMessage(getModuleName(), "no completed");
+                                        if (HyAdvanced.HYPLUS_ADVANCED_DEBUGLOG.getValue()) HyPlus.getInstance().displayIgMessage(getModuleName(), "no completed");
 
                                     }
 

@@ -73,6 +73,7 @@ public class HyConfigManager {
                 case INT: setting.changeValue(HyPlus.getInstance().getConfig().get(property).getAsInt()); break;
                 case BOOLEAN: setting.changeValue(HyPlus.getInstance().getConfig().get(property).getAsBoolean()); break;
                 case CHAR: setting.changeValue(HyPlus.getInstance().getConfig().get(property).getAsCharacter()); break;
+                case OTHER:
                 default: System.out.println("uhm this is not indented nor wanted. fix asap? " + property); return;
 
             }
@@ -92,13 +93,33 @@ public class HyConfigManager {
 
             }
 
-            switch (setting.getType()) {
+            try {
 
-                case STRING: HyPlus.getInstance().getConfig().addProperty(property, setting.getDefaultString()); break;
-                case INT: HyPlus.getInstance().getConfig().addProperty(property, setting.getDefaultInt()); break;
-                case BOOLEAN: HyPlus.getInstance().getConfig().addProperty(property, setting.getDefaultBoolean()); break;
-                case CHAR: HyPlus.getInstance().getConfig().addProperty(property, setting.getDefaultChar()); break;
-                default: System.out.println("uhm this is not indented nor wanted. (create) fix asap? " + property); return;
+                switch (setting.getType()) {
+
+                    case STRING:
+                        HyPlus.getInstance().getConfig().addProperty(property, (String) setting.getDefault());
+                        break;
+                    case INT:
+                        HyPlus.getInstance().getConfig().addProperty(property, (Integer) setting.getDefault());
+                        break;
+                    case BOOLEAN:
+                        HyPlus.getInstance().getConfig().addProperty(property, (Boolean) setting.getDefault());
+                        break;
+                    case CHAR:
+                        HyPlus.getInstance().getConfig().addProperty(property, (Character) setting.getDefault());
+                        break;
+                    default:
+                        System.out.println("uhm this is not indented nor wanted. (create) fix asap? " + property);
+                        return;
+
+                }
+
+            }
+            catch (ClassCastException e) {
+
+                HyPlus.getInstance().log("Failed to create setting. : " + setting.getConfigName());
+                e.printStackTrace();
 
             }
 

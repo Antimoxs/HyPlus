@@ -184,10 +184,10 @@ public class HyEventManager {
 
     private void sendAddonPacketSelfAPI(String key, String json) {
 
-        String jsonBytes = HyAdvanced.HYPLUS_ADVANCED_API.getValueBoolean() ? json : "{}";
+        String jsonBytes = HyAdvanced.HYPLUS_ADVANCED_API.getValue() ? json : "{}";
         PacketAddonDevelopment pad = new PacketAddonDevelopment(
                 LabyMod.getInstance().getPlayerUUID(),
-                HyAdvanced.HYPLUS_ADVANCED_API.getValueBoolean() ? "hyplus:" + key : "hyplus:disabled",
+                HyAdvanced.HYPLUS_ADVANCED_API.getValue() ? "hyplus:" + key : "hyplus:disabled",
                 jsonBytes.getBytes(StandardCharsets.UTF_8)
         );
         LabyMod.getInstance().getLabyModAPI().sendAddonDevelopmentPacket(pad);

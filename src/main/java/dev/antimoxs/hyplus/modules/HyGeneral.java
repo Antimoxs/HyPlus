@@ -13,9 +13,9 @@ import java.util.List;
 
 public class HyGeneral implements IHyPlusModule {
 
-    public static final HySetting HYPLUS_GENERAL_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_GENERAL_TOGGLE", "HyPlus enabled", "Toggle all features of the HyPlus addon.", true, true, Material.REDSTONE);
-    public static final HySetting HYPLUS_GENERAL_LOOP_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_GENERAL_LOOP_TOGGLE", "ModuleLoop (-performance)", "Toggle the HyLoop, used for module updates, ex. Discord callbacks (Low performance impact)", true, true, Material.FISHING_ROD);
-    public static final HySetting HYPLUS_GENERAL_APIKEY = new HySetting(HySettingType.STRING, "HYPLUS_GENERAL_APIKEY", "Hypixel API-Key", "Set the HypixelAPI key. (Needed for a range of features.) Get your key with '/api' ingame.", "", "", Material.TRIPWIRE_HOOK);
+    public static final HySetting<Boolean> HYPLUS_GENERAL_TOGGLE = new HySetting<>("HYPLUS_GENERAL_TOGGLE", "HyPlus enabled", "Toggle all features of the HyPlus addon.", true, Material.REDSTONE);
+    public static final HySetting<Boolean> HYPLUS_GENERAL_LOOP_TOGGLE = new HySetting<>("HYPLUS_GENERAL_LOOP_TOGGLE", "ModuleLoop (-performance)", "Toggle the HyLoop, used for module updates, ex. Discord callbacks (Low performance impact)", true, Material.FISHING_ROD);
+    public static final HySetting<String> HYPLUS_GENERAL_APIKEY = new HySetting<>("HYPLUS_GENERAL_APIKEY", "Hypixel API-Key", "Set the HypixelAPI key. (Needed for a range of features.) Get your key with '/api' ingame.", "", Material.TRIPWIRE_HOOK);
 
     @Override
     public String getModuleName() {
@@ -49,16 +49,16 @@ public class HyGeneral implements IHyPlusModule {
             HyPlus.getInstance().hyDiscordPresence.presenceCheck(); // check for presence
 
 
-        }, HYPLUS_GENERAL_TOGGLE.getValueBoolean());
+        }, HYPLUS_GENERAL_TOGGLE.getValue());
         gen_all.setDescriptionText(HYPLUS_GENERAL_TOGGLE.getDescription());
         BooleanElement gen_loop = new BooleanElement(HYPLUS_GENERAL_LOOP_TOGGLE.getDisplayName(), HYPLUS_GENERAL_LOOP_TOGGLE.getIcon(), (booleanElement) -> {
 
             HYPLUS_GENERAL_LOOP_TOGGLE.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
-        }, HYPLUS_GENERAL_LOOP_TOGGLE.getValueBoolean());
+        }, HYPLUS_GENERAL_LOOP_TOGGLE.getValue());
         gen_loop.setDescriptionText(HYPLUS_GENERAL_LOOP_TOGGLE.getDescription());
-        StringElement gen_apikey = new StringElement(HYPLUS_GENERAL_APIKEY.getDisplayName(), HYPLUS_GENERAL_APIKEY.getIcon(), HYPLUS_GENERAL_APIKEY.getValueString(), (accepted) -> {
+        StringElement gen_apikey = new StringElement(HYPLUS_GENERAL_APIKEY.getDisplayName(), HYPLUS_GENERAL_APIKEY.getIcon(), HYPLUS_GENERAL_APIKEY.getValue(), (accepted) -> {
 
            HYPLUS_GENERAL_APIKEY.changeConfigValue(HyPlus.getInstance(), accepted);
            checkConfig(false);
@@ -77,7 +77,7 @@ public class HyGeneral implements IHyPlusModule {
 
     public String getApiKey() {
 
-        return HYPLUS_GENERAL_APIKEY.getValueString();
+        return HYPLUS_GENERAL_APIKEY.getValue();
 
     }
 

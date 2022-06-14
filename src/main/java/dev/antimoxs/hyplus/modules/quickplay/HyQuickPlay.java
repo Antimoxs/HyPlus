@@ -15,8 +15,8 @@ import java.util.List;
 
 public class HyQuickPlay implements IHyPlusModule {
 
-    public static final HySetting HYPLUS_QUICKPLAY_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_QUICKPLAY_TOGGLE", "Quickplay", "Toggles if the quickplay hotkey is enabled.", true, true, Material.POTION);
-    public static final HySetting HYPLUS_QUICKPLAY_KEY = new HySetting(HySettingType.INT, "HYPLUS_QUICKPLAY_KEY", "Quickplay menu key", "Set the activation key for the quickplay menu", 89, 89, Material.ACACIA_STAIRS);
+    public static final HySetting<Boolean> HYPLUS_QUICKPLAY_TOGGLE = new HySetting("HYPLUS_QUICKPLAY_TOGGLE", "Quickplay", "Toggles if the quickplay hotkey is enabled.", true, Material.POTION);
+    public static final HySetting<Integer> HYPLUS_QUICKPLAY_KEY = new HySetting("HYPLUS_QUICKPLAY_KEY", "Quickplay menu key", "Set the activation key for the quickplay menu", 89, Material.ACACIA_STAIRS);
 
     @Override
     public List<SettingsElement> getModuleSettings() {
@@ -28,9 +28,9 @@ public class HyQuickPlay implements IHyPlusModule {
             HYPLUS_QUICKPLAY_TOGGLE.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
-        }, HYPLUS_QUICKPLAY_TOGGLE.getValueBoolean());
+        }, HYPLUS_QUICKPLAY_TOGGLE.getValue());
         qp_toggle.setDescriptionText(HYPLUS_QUICKPLAY_TOGGLE.getDescription());
-        KeyElement qp_key = new KeyElement(HYPLUS_QUICKPLAY_KEY.getDisplayName(), HYPLUS_QUICKPLAY_KEY.getIcon(), HYPLUS_QUICKPLAY_KEY.getValueInt(), (accepted) -> {
+        KeyElement qp_key = new KeyElement(HYPLUS_QUICKPLAY_KEY.getDisplayName(), HYPLUS_QUICKPLAY_KEY.getIcon(), HYPLUS_QUICKPLAY_KEY.getValue(), (accepted) -> {
 
             HYPLUS_QUICKPLAY_KEY.changeConfigValue(HyPlus.getInstance(), accepted);
             checkConfig(false);

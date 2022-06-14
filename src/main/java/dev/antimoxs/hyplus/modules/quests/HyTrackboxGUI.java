@@ -23,7 +23,7 @@ public class HyTrackboxGUI extends Module {
     public HyTrackboxGUI() {
 
         this.tracker = HyPlus.getInstance().hyQuestTracker;
-        this.lastSort = HyQuestTracker.HYPLUS_CTR_SORTORDER.getDefaultBoolean();
+        this.lastSort = HyQuestTracker.HYPLUS_CTR_SORTORDER.getDefault();
 
     }
 
@@ -43,10 +43,10 @@ public class HyTrackboxGUI extends Module {
 
         double posX = x;
 
-        if (this.lastSort != HyQuestTracker.HYPLUS_CTR_SORTORDER.getValueBoolean()) {
+        if (this.lastSort != HyQuestTracker.HYPLUS_CTR_SORTORDER.getValue()) {
 
             tracker.updateChallanges(HyPlus.getInstance().hyLocationDetector.getCurrentLocation().rawloc.toLowerCase());
-            this.lastSort = HyQuestTracker.HYPLUS_CTR_SORTORDER.getValueBoolean();
+            this.lastSort = HyQuestTracker.HYPLUS_CTR_SORTORDER.getValue();
             return;
 
         }
@@ -60,7 +60,7 @@ public class HyTrackboxGUI extends Module {
                 if (HyPlus.getInstance().hyQuestTracker.dspc2.isEmpty()) return;
                 for (QuestData data : HyPlus.getInstance().hyQuestTracker.dspc2.values()) {
 
-                    int boxW = HyQuestTracker.HYPLUS_CTR_SORTORDER.getValueBoolean() ? -data.getL(data.percent == 100) : data.getL(data.percent == 100);
+                    int boxW = HyQuestTracker.HYPLUS_CTR_SORTORDER.getValue() ? -data.getL(data.percent == 100) : data.getL(data.percent == 100);
                     if (this.isLastRightBound()) posX = rightX - boxW;
 
                     if (data.id.equals("empty")) {

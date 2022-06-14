@@ -22,13 +22,13 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
         HyPlus.debugLog("[AdvancedChatLog][" + s.replaceAll("\n","{\\n}") + "]");
 
         // Check if we are enabled.
-        if (!HyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return false;
+        if (!HyGeneral.HYPLUS_GENERAL_TOGGLE.getValue()) return false;
 
         // Making sure we are on hypixel.
         if (HyPlus.getInstance().hypixel.checkOnServer()) {
 
             // Checking if we have API-mode disabled and detection activated. (location)
-            if ((!HyLocationDetector.HYPLUS_LD_API.getValueBoolean()) && HyLocationDetector.HYPLUS_LD_TOGGLE.getValueBoolean()) {
+            if ((!HyLocationDetector.HYPLUS_LD_API.getValue()) && HyLocationDetector.HYPLUS_LD_TOGGLE.getValue()) {
 
                 // Filtering for our locraw message
                 if (s.startsWith("§f{\"")) {
@@ -50,12 +50,12 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
             }
 
             // Let's check for status indicating
-            if (HyLocationDetector.HYPLUS_LD_TOGGLE.getValueBoolean()) {
+            if (HyLocationDetector.HYPLUS_LD_TOGGLE.getValue()) {
                 if (s.startsWith("§r§e§r§e")) HyPlus.getInstance().hyEventManager.callGameStatusChange("Chat detect");
             }
 
             // Checking for MSG message
-            if (HyBetterMsg.HYPLUS_BETTERMSG_TOGGLE.getValueBoolean()) {
+            if (HyBetterMsg.HYPLUS_BETTERMSG_TOGGLE.getValue()) {
 
                 if (s.startsWith("§dFrom ")) {
 
@@ -76,7 +76,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
             }
 
             // Checking if it's a friend request
-            if (HyFriend.HYPLUS_AUTOFRIEND_TOGGLE.getValueBoolean()) {
+            if (HyFriend.HYPLUS_AUTOFRIEND_TOGGLE.getValue()) {
 
 
 
@@ -116,9 +116,9 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
             }
 
             // Checking for party message
-            if (HyPartyManager.HYPLUS_PM_TOGGLE.getValueBoolean()) {
+            if (HyPartyManager.HYPLUS_PM_TOGGLE.getValue()) {
 
-                boolean hideMsg = HyPartyManager.HYPLUS_PM_TOGGLE.getValueBoolean();
+                boolean hideMsg = HyPartyManager.HYPLUS_PM_TOGGLE.getValue();
 
                 /*
                 * Disgusting if chain :[

@@ -17,7 +17,7 @@ public class HyListenerChatSend implements MessageSendEvent, Consumer<ServerData
         if (!HyPlus.getInstance().hypixel.checkOnServer()) return false;
 
         // Check if we are enabled.
-        if (!HyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return false;
+        if (!HyGeneral.HYPLUS_GENERAL_TOGGLE.getValue()) return false;
 
         String[] command = s.split(" ");
 
@@ -30,7 +30,7 @@ public class HyListenerChatSend implements MessageSendEvent, Consumer<ServerData
             case "/party": {
 
                 HyPlus.getInstance().hyPartyManager.overriddenPartyCommands(s);
-                return HyPartyManager.HYPLUS_PM_TOGGLE.getValueBoolean();
+                return HyPartyManager.HYPLUS_PM_TOGGLE.getValue();
 
             }
 

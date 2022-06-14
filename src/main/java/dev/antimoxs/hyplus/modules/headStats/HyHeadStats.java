@@ -23,9 +23,9 @@ import java.util.List;
 
 public class HyHeadStats implements IHyPlusModule, IHyPlusEvent {
 
-    public static final HySetting HYPLUS_HS_GENERAL = new HySetting(HySettingType.BOOLEAN, "HP_HS_GENERAL", "Head-stats", "Display floating head stats", true, true, Material.BOOKSHELF);
-    public static final HySetting HYPLUS_HS_HPXL_LEVEL = new HySetting(HySettingType.BOOLEAN, "HP_HS_HPXL_LEVEL", "Hypixel Level", "Display level", true, true, Material.PAPER);
-    public static final HySetting HYPLUS_HS_BW_STARS = new HySetting(HySettingType.BOOLEAN, "HP_HS_BW_STARS", "BedWars stars", "Display BedWarsStars", true, true, Material.BED);
+    public static final HySetting<Boolean> HYPLUS_HS_GENERAL = new HySetting<>("HP_HS_GENERAL", "Head-stats", "Display floating head stats", true, Material.BOOKSHELF);
+    public static final HySetting<Boolean> HYPLUS_HS_HPXL_LEVEL = new HySetting<>("HP_HS_HPXL_LEVEL", "Hypixel Level", "Display level", true, Material.PAPER);
+    public static final HySetting<Boolean> HYPLUS_HS_BW_STARS = new HySetting<>("HP_HS_BW_STARS", "BedWars stars", "Display BedWarsStars", true, Material.BED);
 
     @Override
     public String getModuleName() {
@@ -57,7 +57,7 @@ public class HyHeadStats implements IHyPlusModule, IHyPlusEvent {
             checkConfig(false);
             HyPlus.getInstance().hyPlayerTagExchanger.clearSubtitles();
 
-        }, HYPLUS_HS_GENERAL.getValueBoolean());
+        }, HYPLUS_HS_GENERAL.getValue());
         toggle.setDescriptionText(HYPLUS_HS_GENERAL.getDescription());
 
         Settings subs = new Settings();
@@ -80,9 +80,9 @@ public class HyHeadStats implements IHyPlusModule, IHyPlusEvent {
         HeaderElement headStats = new HeaderElement("HeadStats settings");
         HeaderElement betaNotice = new HeaderElement("This feature is currently in beta.");
         HeaderElement betaNotice2 = new HeaderElement("When changing settings, rejoin to fully apply them!");
-        BooleanElement level = new BooleanElement(HYPLUS_HS_HPXL_LEVEL.getDisplayName(), HyPlus.getInstance(), HYPLUS_HS_HPXL_LEVEL.getIcon(), HYPLUS_HS_HPXL_LEVEL.getConfigName(), HYPLUS_HS_HPXL_LEVEL.getDefaultBoolean());
+        BooleanElement level = new BooleanElement(HYPLUS_HS_HPXL_LEVEL.getDisplayName(), HyPlus.getInstance(), HYPLUS_HS_HPXL_LEVEL.getIcon(), HYPLUS_HS_HPXL_LEVEL.getConfigName(), HYPLUS_HS_HPXL_LEVEL.getDefault());
         level.setDescriptionText(HYPLUS_HS_HPXL_LEVEL.getDescription());
-        BooleanElement bw_stars = new BooleanElement(HYPLUS_HS_BW_STARS.getDisplayName(), HyPlus.getInstance(), HYPLUS_HS_BW_STARS.getIcon(), HYPLUS_HS_BW_STARS.getConfigName(), HYPLUS_HS_BW_STARS.getDefaultBoolean());
+        BooleanElement bw_stars = new BooleanElement(HYPLUS_HS_BW_STARS.getDisplayName(), HyPlus.getInstance(), HYPLUS_HS_BW_STARS.getIcon(), HYPLUS_HS_BW_STARS.getConfigName(), HYPLUS_HS_BW_STARS.getDefault());
         level.setDescriptionText(HYPLUS_HS_BW_STARS.getDescription());
 
         subSettings.add(headStats);
@@ -98,7 +98,7 @@ public class HyHeadStats implements IHyPlusModule, IHyPlusEvent {
     @Override
     public void onPlayerSpawn(PlayerSpawnEvent event) {
 
-        if (HYPLUS_HS_GENERAL.getValueBoolean()) {
+        if (HYPLUS_HS_GENERAL.getValue()) {
             try {
                 if (!HyPlayerStorage.playerInStorage(event.playerUUID)) {
 
@@ -109,7 +109,7 @@ public class HyHeadStats implements IHyPlusModule, IHyPlusEvent {
 
                 }
 
-                if (HYPLUS_HS_HPXL_LEVEL.getValueBoolean()) {
+                if (HYPLUS_HS_HPXL_LEVEL.getValue()) {
 
                     int nexp = HyPlayerStorage.getPlayerObject(event.playerUUID).networkExp;
                     String level = "Level " + ((int) (LevelCalculator.getExactLevel(nexp) * 10)) / 10;
@@ -120,7 +120,7 @@ public class HyHeadStats implements IHyPlusModule, IHyPlusEvent {
                     HyPlus.getInstance().hyPlayerTagExchanger.getTagForPlayer(event.playerUUID).removeValueById(1);
 
                 }
-                if (HYPLUS_HS_BW_STARS.getValueBoolean()) {
+                if (HYPLUS_HS_BW_STARS.getValue()) {
 
                     int xp = HyPlayerStorage.getPlayerObject(event.playerUUID).stats.Bedwars.exp;
                     if (xp != 0) {

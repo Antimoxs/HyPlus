@@ -245,11 +245,11 @@ public class ModRichPresenceExtender {
 
 
         // settings:
-        boolean sgame = HyDiscordPresence.HYPLUS_DP_GAME.getValueBoolean();
-        boolean smode = HyDiscordPresence.HYPLUS_DP_MODE.getValueBoolean();
-        boolean stime = HyDiscordPresence.HYPLUS_DP_TIME.getValueBoolean();
-        boolean sstate = HyDiscordPresence.HYPLUS_DP_STATE.getValueBoolean();
-        boolean sparty = HyPartyManager.HYPLUS_PM_SHOW.getValueBoolean();
+        boolean sgame = HyDiscordPresence.HYPLUS_DP_GAME.getValue();
+        boolean smode = HyDiscordPresence.HYPLUS_DP_MODE.getValue();
+        boolean stime = HyDiscordPresence.HYPLUS_DP_TIME.getValue();
+        boolean sstate = HyDiscordPresence.HYPLUS_DP_STATE.getValue();
+        boolean sparty = HyPartyManager.HYPLUS_PM_SHOW.getValue();
 
         RichPresence.Builder builder = new RichPresence.Builder();
 

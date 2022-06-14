@@ -30,9 +30,9 @@ import java.util.Objects;
 public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
     // LocationDetector settings
-    public static final HySetting HYPLUS_LD_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_LD_TOGGLE", "Toggle location detection", "The location detection is important for a range of features and should not be turned off.", true, true, Material.COMPASS);
-    public static final HySetting HYPLUS_LD_LABYCHAT = new HySetting(HySettingType.BOOLEAN, "HYPLUS_LD_LABYCHAT", "Show location in the labychat", "Toggle whether your location is displayed in ur labychat status.", true, true, Material.PAPER);
-    public static final HySetting HYPLUS_LD_API = new HySetting(HySettingType.BOOLEAN, "HYPLUS_LD_API", "Use API instead of ingame detection.", "You can use the HypixelAPI for location detection but it's not recommended.", false, false, Material.COMMAND);
+    public static final HySetting<Boolean> HYPLUS_LD_TOGGLE = new HySetting<>("HYPLUS_LD_TOGGLE", "Toggle location detection", "The location detection is important for a range of features and should not be turned off.", true, Material.COMPASS);
+    public static final HySetting<Boolean> HYPLUS_LD_LABYCHAT = new HySetting<>("HYPLUS_LD_LABYCHAT", "Show location in the labychat", "Toggle whether your location is displayed in ur labychat status.", true, Material.PAPER);
+    public static final HySetting<Boolean> HYPLUS_LD_API = new HySetting<>("HYPLUS_LD_API", "Use API instead of ingame detection.", "You can use the HypixelAPI for location detection but it's not recommended.", false, Material.COMMAND);
 
 
     private int responseWaiter = 1;
@@ -49,7 +49,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
         Thread t = new Thread(() -> {
 
             HyPlus.debugLog("[LocationDetection] Updating location... (Api: " + HYPLUS_LD_API + ")");
-            if (HYPLUS_LD_API.getValueBoolean()) {
+            if (HYPLUS_LD_API.getValue()) {
 
                 getLocationAPI(forceUpdate);
 
@@ -182,7 +182,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
     public void onHypixelJoin() {
 
         // Auto-Update on join?
-        if (HYPLUS_LD_TOGGLE.getValueBoolean()) {
+        if (HYPLUS_LD_TOGGLE.getValue()) {
 
             getLocationAsync(false);
 
@@ -226,7 +226,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
         List<SettingsElement> moduleSettings = new ArrayList<>();
 
         BooleanElement locationSettings = new BooleanElement(
-                HYPLUS_LD_TOGGLE.getDisplayName(), HYPLUS_LD_TOGGLE.getIcon(), (bool) -> HYPLUS_LD_TOGGLE.changeConfigValue(HyPlus.getInstance(), bool), HYPLUS_LD_TOGGLE.getValueBoolean()
+                HYPLUS_LD_TOGGLE.getDisplayName(), HYPLUS_LD_TOGGLE.getIcon(), (bool) -> HYPLUS_LD_TOGGLE.changeConfigValue(HyPlus.getInstance(), bool), HYPLUS_LD_TOGGLE.getValue()
         );
         locationSettings.setDescriptionText(HYPLUS_LD_TOGGLE.getDescription());
 
@@ -241,11 +241,11 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
             HYPLUS_LD_LABYCHAT.changeConfigValue(HyPlus.getInstance(), bool);
             LabyMod.getInstance().getLabyConnect().updatePlayingOnServerState(null);
 
-        }, HYPLUS_LD_LABYCHAT.getValueBoolean());
+        }, HYPLUS_LD_LABYCHAT.getValue());
         locationSettings.setDescriptionText(HYPLUS_LD_LABYCHAT.getDescription());
 
         BooleanElement locSettings_useApi = new BooleanElement(
-                HYPLUS_LD_API.getDisplayName(), HYPLUS_LD_API.getIcon(), (bool) -> HYPLUS_LD_API.changeConfigValue(HyPlus.getInstance(), bool), HYPLUS_LD_API.getValueBoolean()
+                HYPLUS_LD_API.getDisplayName(), HYPLUS_LD_API.getIcon(), (bool) -> HYPLUS_LD_API.changeConfigValue(HyPlus.getInstance(), bool), HYPLUS_LD_API.getValue()
         );
         locationSettings.setDescriptionText(HYPLUS_LD_API.getDescription());
 
@@ -290,7 +290,7 @@ public class HyLocationDetector implements IHyPlusModule, IHyPlusEvent {
 
     public void refreshLabyChatStatus(String gametypeIn) {
 
-        if (HYPLUS_LD_LABYCHAT.getValueBoolean()) {
+        if (HYPLUS_LD_LABYCHAT.getValue()) {
 
             String gametype = hypixelFetcher.fetchGame(gametypeIn);
             //String gamemode = hypixelFetcher.fetchModeStatus(location.rawmod);

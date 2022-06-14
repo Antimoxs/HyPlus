@@ -13,7 +13,7 @@ public class HyListenerPacket implements Consumer<Object> {
     public void accept(Object o) {
 
         // Check if we are enabled.
-        if (!HyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return;
+        if (!HyGeneral.HYPLUS_GENERAL_TOGGLE.getValue()) return;
 
         if (HyPlus.getInstance().hypixel.checkOnServer()) {
 

@@ -14,10 +14,10 @@ import java.util.List;
 
 public class HyAdvanced implements IHyPlusModule{
 
-    public static final HySetting HYPLUS_ADVANCED_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_ADVANCED_TOGGLE", "Advanced settings", "View advanced settings", true, true, Material.COMMAND);
-    public static final HySetting HYPLUS_ADVANCED_API = new HySetting(HySettingType.BOOLEAN, "HYPLUS_ADVANCED_API", "External HyPlus API", "Toggle the HyPlus API for other addons.", true, true, Material.COMMAND);
+    public static final HySetting<Boolean> HYPLUS_ADVANCED_TOGGLE = new HySetting<>("HYPLUS_ADVANCED_TOGGLE", "Advanced settings", "View advanced settings", true, Material.COMMAND);
+    public static final HySetting<Boolean> HYPLUS_ADVANCED_API = new HySetting<>("HYPLUS_ADVANCED_API", "External HyPlus API", "Toggle the HyPlus API for other addons.", true, Material.COMMAND);
 
-    public static final HySetting HYPLUS_ADVANCED_DEBUGLOG = new HySetting(HySettingType.BOOLEAN, "HYPLUS_ADVANCED_DEBUGLOG", "Enable DebugLog", "Toggle the HyPlus Debug Log", false, false, Material.ANVIL);
+    public static final HySetting<Boolean> HYPLUS_ADVANCED_DEBUGLOG = new HySetting<>("HYPLUS_ADVANCED_DEBUGLOG", "Enable DebugLog", "Toggle the HyPlus Debug Log", false, Material.ANVIL);
 
 
     @Override
@@ -52,7 +52,7 @@ public class HyAdvanced implements IHyPlusModule{
             HYPLUS_ADVANCED_API.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
-        }, HYPLUS_ADVANCED_API.getValueBoolean());
+        }, HYPLUS_ADVANCED_API.getValue());
         adv_api.setDescriptionText(HYPLUS_ADVANCED_API.getDescription());
 
         BooleanElement adv_dl = new BooleanElement(HYPLUS_ADVANCED_DEBUGLOG.getDisplayName(), HYPLUS_ADVANCED_DEBUGLOG.getIcon(), (booleanElement) -> {
@@ -60,7 +60,7 @@ public class HyAdvanced implements IHyPlusModule{
             HYPLUS_ADVANCED_DEBUGLOG.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
-        }, HYPLUS_ADVANCED_DEBUGLOG.getValueBoolean());
+        }, HYPLUS_ADVANCED_DEBUGLOG.getValue());
         adv_api.setDescriptionText(HYPLUS_ADVANCED_DEBUGLOG.getDescription());
 
         Settings adv_sub = new Settings();

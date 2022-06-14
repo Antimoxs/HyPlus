@@ -84,9 +84,9 @@ public class HyUtilities {
         return false;
 
     }
-    public static CheckBox.EnumCheckBoxValue vCheckbox(HySetting setting) {
+    public static CheckBox.EnumCheckBoxValue vCheckbox(HySetting<Boolean> setting) {
 
-        if (setting.getValueBoolean()) return CheckBox.EnumCheckBoxValue.ENABLED;
+        if (setting.getValue()) return CheckBox.EnumCheckBoxValue.ENABLED;
         return CheckBox.EnumCheckBoxValue.DISABLED;
 
     }

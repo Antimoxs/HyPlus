@@ -26,12 +26,12 @@ import java.util.UUID;
 
 public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
-    public static final HySetting HYPLUS_PM_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_PM_TOGGLE", "PartyManager", "Toggle the party-manager.", true, true, Material.CAKE);
-    public static final HySetting HYPLUS_PM_SHOW = new HySetting(HySettingType.BOOLEAN, "HYPLUS_PM_SHOW", "Show in DiscordPresence", "Toggle the display of the current party state in the Discord.", true, true, Material.PAPER);
-    public static final HySetting HYPLUS_PM_JOIN = new HySetting(HySettingType.BOOLEAN, "HYPLUS_PM_JOIN", "Allow party joins.", "Allow players to join ur party. (Only public party)", true, true, Material.GOLD_BOOTS);
-    public static final HySetting HYPLUS_PM_DC_UPDATE = new HySetting(HySettingType.INT, "HYPLUS_PM_DC_UPDATE", "Discord Callback interval.", "Set the interval for Callback checks.", 2, 2, Material.WATCH);
+    public static final HySetting<Boolean> HYPLUS_PM_TOGGLE = new HySetting<>("HYPLUS_PM_TOGGLE", "PartyManager", "Toggle the party-manager.", true, Material.CAKE);
+    public static final HySetting<Boolean> HYPLUS_PM_SHOW = new HySetting<>("HYPLUS_PM_SHOW", "Show in DiscordPresence", "Toggle the display of the current party state in the Discord.", true, Material.PAPER);
+    public static final HySetting<Boolean> HYPLUS_PM_JOIN = new HySetting<>("HYPLUS_PM_JOIN", "Allow party joins.", "Allow players to join ur party. (Only public party)", true, Material.GOLD_BOOTS);
+    public static final HySetting<Integer> HYPLUS_PM_DC_UPDATE = new HySetting<>("HYPLUS_PM_DC_UPDATE", "Discord Callback interval.", "Set the interval for Callback checks.", 2, Material.WATCH);
 
-    public static final HySetting HYPLUS_PM_MESSAGE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_PM_MESSAGE", "Display Update-Message", "Display the party update message", true, true, Material.BOOK_AND_QUILL);
+    public static final HySetting<Boolean> HYPLUS_PM_MESSAGE = new HySetting<>("HYPLUS_PM_MESSAGE", "Display Update-Message", "Display the party update message", true, Material.BOOK_AND_QUILL);
 
     private HyParty party = new HyParty();
 
@@ -66,7 +66,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
             checkConfig(false);
             updateParty(false);
 
-        }, HYPLUS_PM_TOGGLE.getValueBoolean());
+        }, HYPLUS_PM_TOGGLE.getValue());
         toggle.setDescriptionText(HYPLUS_PM_TOGGLE.getDescription());
 
         Settings subs = new Settings();
@@ -89,7 +89,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
             checkConfig(false);
             updateParty(false);
 
-        }, HYPLUS_PM_SHOW.getValueBoolean());
+        }, HYPLUS_PM_SHOW.getValue());
         show.setDescriptionText(HYPLUS_PM_SHOW.getDescription());
 
         BooleanElement join = new BooleanElement(HYPLUS_PM_JOIN.getDisplayName(), HYPLUS_PM_JOIN.getIcon(), (booleanElement) -> {
@@ -98,7 +98,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
             checkConfig(false);
             updateParty(false);
 
-        }, HYPLUS_PM_JOIN.getValueBoolean());
+        }, HYPLUS_PM_JOIN.getValue());
         join.setDescriptionText(HYPLUS_PM_JOIN.getDescription());
 
         BooleanElement msg = new BooleanElement(HYPLUS_PM_MESSAGE.getDisplayName(), HYPLUS_PM_MESSAGE.getIcon(), (booleanElement) -> {
@@ -107,10 +107,10 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
             checkConfig(false);
             updateParty(false);
 
-        }, HYPLUS_PM_MESSAGE.getValueBoolean());
+        }, HYPLUS_PM_MESSAGE.getValue());
         msg.setDescriptionText(HYPLUS_PM_MESSAGE.getDescription());
 
-        SliderElement interval = new SliderElement(HYPLUS_PM_DC_UPDATE.getDisplayName(), HYPLUS_PM_DC_UPDATE.getIcon(), HYPLUS_PM_DC_UPDATE.getValueInt());
+        SliderElement interval = new SliderElement(HYPLUS_PM_DC_UPDATE.getDisplayName(), HYPLUS_PM_DC_UPDATE.getIcon(), HYPLUS_PM_DC_UPDATE.getValue());
         interval.addCallback((sliderElement) -> {
 
             HYPLUS_PM_DC_UPDATE.changeConfigValue(HyPlus.getInstance(), sliderElement);
@@ -135,7 +135,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
     @Override
     public void onLocationChange(HyServerLocation location) {
 
-        if (!HYPLUS_PM_TOGGLE.getValueBoolean()) return;
+        if (!HYPLUS_PM_TOGGLE.getValue()) return;
         HyPlus.getInstance().sendMessageIngameChat("/pl");
 
     }
@@ -145,7 +145,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
     @Override
     public boolean loop() {
 
-        if (interval > HYPLUS_PM_DC_UPDATE.getValueInt()) {
+        if (interval > HYPLUS_PM_DC_UPDATE.getValue()) {
 
             interval = 0;
 
@@ -569,7 +569,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
             if (!HyPlus.getInstance().hyDiscordPresence.presenceCheck()) return;
 
-            if (!this.party.doesExist() || !HYPLUS_PM_SHOW.getValueBoolean()) {
+            if (!this.party.doesExist() || !HYPLUS_PM_SHOW.getValue()) {
 
                 HyPlus.getInstance().discordManager.getRichPresence().updateParty(false, 0, 0, "");
                 HyPlus.getInstance().discordManager.getRichPresence().updateJoinSecret(false, null);
@@ -589,7 +589,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
             String id = MojangRequest.getUUID(name);
             HyPlus.getInstance().discordManager.getRichPresence().updateParty(true, max, count, id);
 
-            if (this.party.isPublic() && HYPLUS_PM_JOIN.getValueBoolean()) {
+            if (this.party.isPublic() && HYPLUS_PM_JOIN.getValue()) {
 
                 generateInvite(id);
 
@@ -640,7 +640,7 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
             }
 
-            if (HYPLUS_PM_MESSAGE.getValueBoolean()) HyPlus.getInstance().displayIgMessage("PartyManager", "Updating your party <3");
+            if (HYPLUS_PM_MESSAGE.getValue()) HyPlus.getInstance().displayIgMessage("PartyManager", "Updating your party <3");
 
 
         });

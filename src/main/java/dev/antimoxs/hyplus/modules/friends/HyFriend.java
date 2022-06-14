@@ -20,15 +20,15 @@ import java.util.List;
 
 public class HyFriend implements IHyPlusModule, IHyPlusEvent {
 
-    public static final HySetting HYPLUS_AUTOFRIEND_TOGGLE = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND", "Autofriend", "Auto-accept friend invites.", true, true, Material.SKULL);
-    private static final HySetting HYPLUS_AUTOFRIEND_AA_NON = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_NON", "Nons", "Accept invites from no-ranks.", true, true, Material.LEATHER_BOOTS);
-    private static final HySetting HYPLUS_AUTOFRIEND_AA_VIP = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_VIP", "VIPs", "Accept invites from VIPs.", true, true, Material.CHAINMAIL_BOOTS);
-    private static final HySetting HYPLUS_AUTOFRIEND_AA_VIPP = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_VIPP", "VIP+s", "Accept invites from VIP+s.", true, true, Material.GOLD_BOOTS);
-    private static final HySetting HYPLUS_AUTOFRIEND_AA_MVP = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_MVP", "MVPs", "Accept invites from MVPs.", true, true, Material.IRON_BOOTS);
-    private static final HySetting HYPLUS_AUTOFRIEND_AA_MVPP = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_MVPP", "MVP+s", "Accept invites from MVP+s.", true, true, Material.DIAMOND_BOOTS);
-    private static final HySetting HYPLUS_AUTOFRIEND_AA_MVPPP = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_MVPPP", "MVP++s", "Accept invites from MVP++s.", true, true, Material.NETHER_STAR);
-    private static final HySetting HYPLUS_AUTOFRIEND_AA_YT = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_YT", "YTs", "Accept invites from YTs.", true, true, Material.PAINTING);
-    private static final HySetting HYPLUS_AUTOFRIEND_AA_STAFF = new HySetting(HySettingType.BOOLEAN, "HYPLUS_AUTOFRIEND_AA_STAFF", "Staff", "Accept invites from Staff.", true, true, Material.COMMAND);
+    public static final HySetting<Boolean> HYPLUS_AUTOFRIEND_TOGGLE = new HySetting<>("HYPLUS_AUTOFRIEND", "Autofriend", "Auto-accept friend invites.", true, Material.SKULL);
+    private static final HySetting<Boolean> HYPLUS_AUTOFRIEND_AA_NON = new HySetting<>("HYPLUS_AUTOFRIEND_AA_NON", "Nons", "Accept invites from no-ranks.", true, Material.LEATHER_BOOTS);
+    private static final HySetting<Boolean> HYPLUS_AUTOFRIEND_AA_VIP = new HySetting<>("HYPLUS_AUTOFRIEND_AA_VIP", "VIPs", "Accept invites from VIPs.", true, Material.CHAINMAIL_BOOTS);
+    private static final HySetting<Boolean> HYPLUS_AUTOFRIEND_AA_VIPP = new HySetting<>("HYPLUS_AUTOFRIEND_AA_VIPP", "VIP+s", "Accept invites from VIP+s.", true, Material.GOLD_BOOTS);
+    private static final HySetting<Boolean> HYPLUS_AUTOFRIEND_AA_MVP = new HySetting<>("HYPLUS_AUTOFRIEND_AA_MVP", "MVPs", "Accept invites from MVPs.", true, Material.IRON_BOOTS);
+    private static final HySetting<Boolean> HYPLUS_AUTOFRIEND_AA_MVPP = new HySetting<>("HYPLUS_AUTOFRIEND_AA_MVPP", "MVP+s", "Accept invites from MVP+s.", true, Material.DIAMOND_BOOTS);
+    private static final HySetting<Boolean> HYPLUS_AUTOFRIEND_AA_MVPPP = new HySetting<>("HYPLUS_AUTOFRIEND_AA_MVPPP", "MVP++s", "Accept invites from MVP++s.", true, Material.NETHER_STAR);
+    private static final HySetting<Boolean> HYPLUS_AUTOFRIEND_AA_YT = new HySetting<>("HYPLUS_AUTOFRIEND_AA_YT", "YTs", "Accept invites from YTs.", true, Material.PAINTING);
+    private static final HySetting<Boolean> HYPLUS_AUTOFRIEND_AA_STAFF = new HySetting<>("HYPLUS_AUTOFRIEND_AA_STAFF", "Staff", "Accept invites from Staff.", true, Material.COMMAND);
 
     private FriendList fl;
 
@@ -42,7 +42,7 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
             HYPLUS_AUTOFRIEND_TOGGLE.changeConfigValue(HyPlus.getInstance(), booleanElement);
             checkConfig(false);
 
-        }, HYPLUS_AUTOFRIEND_TOGGLE.getValueBoolean());
+        }, HYPLUS_AUTOFRIEND_TOGGLE.getValue());
         toggle.setDescriptionText(HYPLUS_AUTOFRIEND_TOGGLE.getDescription());
 
 
@@ -188,27 +188,27 @@ public class HyFriend implements IHyPlusModule, IHyPlusEvent {
 
         if (!(rank.startsWith("[") && rank.endsWith("]"))) {
 
-            if (HYPLUS_AUTOFRIEND_AA_NON.getValueBoolean()) { HyPlus.getInstance().sendMessageIngameChat("/friend accept " + name); return true; }
+            if (HYPLUS_AUTOFRIEND_AA_NON.getValue()) { HyPlus.getInstance().sendMessageIngameChat("/friend accept " + name); return true; }
 
         }
         else {
 
             switch (rank.toUpperCase()) {
 
-                case "[VIP]": if (HYPLUS_AUTOFRIEND_AA_VIP.getValueBoolean()) { HyPlus.getInstance().sendMessageIngameChat("/friend accept " + name); return true; }
-                case "[VIP+]": if (HYPLUS_AUTOFRIEND_AA_VIPP.getValueBoolean()) { HyPlus.getInstance().sendMessageIngameChat("/friend accept " + name); return true; }
-                case "[MVP]": if (HYPLUS_AUTOFRIEND_AA_MVP.getValueBoolean()) { HyPlus.getInstance().sendMessageIngameChat("/friend accept " + name); return true; }
-                case "[MVP+]": if (HYPLUS_AUTOFRIEND_AA_MVPP.getValueBoolean()) { HyPlus.getInstance().sendMessageIngameChat("/friend accept " + name); return true; }
-                case "[MVP++]": if (HYPLUS_AUTOFRIEND_AA_MVPPP.getValueBoolean()) { HyPlus.getInstance().sendMessageIngameChat("/friend accept " + name); return true; }
+                case "[VIP]": if (HYPLUS_AUTOFRIEND_AA_VIP.getValue()) { HyPlus.getInstance().sendMessageIngameChat("/friend accept " + name); return true; }
+                case "[VIP+]": if (HYPLUS_AUTOFRIEND_AA_VIPP.getValue()) { HyPlus.getInstance().sendMessageIngameChat("/friend accept " + name); return true; }
+                case "[MVP]": if (HYPLUS_AUTOFRIEND_AA_MVP.getValue()) { HyPlus.getInstance().sendMessageIngameChat("/friend accept " + name); return true; }
+                case "[MVP+]": if (HYPLUS_AUTOFRIEND_AA_MVPP.getValue()) { HyPlus.getInstance().sendMessageIngameChat("/friend accept " + name); return true; }
+                case "[MVP++]": if (HYPLUS_AUTOFRIEND_AA_MVPPP.getValue()) { HyPlus.getInstance().sendMessageIngameChat("/friend accept " + name); return true; }
                 case "[YOUTUBE]":
                 case "[PIG+++]":
-                    if (HYPLUS_AUTOFRIEND_AA_YT.getValueBoolean()) { HyPlus.getInstance().sendMessageIngameChat("/friend accept " + name); return true; }
+                    if (HYPLUS_AUTOFRIEND_AA_YT.getValue()) { HyPlus.getInstance().sendMessageIngameChat("/friend accept " + name); return true; }
                 case "[HELPER]":
                 case "[GM]":
                 case "[MODERATOR]":
                 case "[OWNER]":
                 case "[ADMIN]":
-                    if (HYPLUS_AUTOFRIEND_AA_STAFF.getValueBoolean()) { HyPlus.getInstance().sendMessageIngameChat("/friend accept " + name); return true; }
+                    if (HYPLUS_AUTOFRIEND_AA_STAFF.getValue()) { HyPlus.getInstance().sendMessageIngameChat("/friend accept " + name); return true; }
                 default:
                     return false;
 

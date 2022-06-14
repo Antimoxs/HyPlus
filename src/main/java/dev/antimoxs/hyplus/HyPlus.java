@@ -299,8 +299,8 @@ public class HyPlus extends LabyModAddon {
     private void loop() {
 
         // Check if we are enabled and loop is on.
-        if (!HyGeneral.HYPLUS_GENERAL_TOGGLE.getValueBoolean()) return;
-        if (!HyGeneral.HYPLUS_GENERAL_LOOP_TOGGLE.getValueBoolean()) return;
+        if (!HyGeneral.HYPLUS_GENERAL_TOGGLE.getValue()) return;
+        if (!HyGeneral.HYPLUS_GENERAL_LOOP_TOGGLE.getValue()) return;
 
         // try-catch block to prevent any loop interruptions
         try {
@@ -381,7 +381,7 @@ public class HyPlus extends LabyModAddon {
      */
     public static void debugLog(String s) {
 
-        if (HyAdvanced.HYPLUS_ADVANCED_DEBUGLOG.getValueBoolean()) {
+        if (HyAdvanced.HYPLUS_ADVANCED_DEBUGLOG.getValue()) {
 
             HyPlus.getInstance().log(s);
 
