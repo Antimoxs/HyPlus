@@ -144,7 +144,7 @@ public class DiscordManager {
             } catch (Exception e) {
                 this.connected = this.discordClient.getStatus() == PipeStatus.CONNECTED;
                 HyPlus.debugLog("Can't start discord rpc: " + e.getMessage());
-                return false;
+                return connected;
             }
 
     }
