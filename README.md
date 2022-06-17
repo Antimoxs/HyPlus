@@ -9,9 +9,21 @@ Nearly all features can be toggled and customzed to fit your style and needs.
 ***
 
 ## Setup
+
+### Step 1: Download 
+
+(Labymod Addon Store)
+1. Start LabyMod 1.8.9
+2. Download the HyPlus addon from the addon store.
+3. Restart LabyMod.
+
+(Direct Download)
 1. Close all LabyMod 1.8 instances.
 2. Download the [`HyPlus.jar`](https://github.com/Antimoxs/HyPlus/releases/latest) and drop it into your `.minecraft/LabyMod/addons-1.8` folder.
-3. Start LabyMod 1.8.
+3. Start LabyMod 1.8.9
+
+### Step 2: HyPlus setup
+
 4. Get a Hypixel-API key. 
   (Join Hypixel and do `/api`)
 5. Go to the HyPlus addon settings and insert your API-key.
