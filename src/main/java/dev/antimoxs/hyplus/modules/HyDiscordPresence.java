@@ -363,7 +363,7 @@ public class HyDiscordPresence implements IHyPlusModule, IHyPlusEvent {
                     case PREGAME: {
 
                         // do we have a countdown yet?
-                        HyPlus.getInstance().displayIgMessage(getModuleName(), status.toString());
+                        if (HyAdvanced.HYPLUS_ADVANCED_DEBUGLOG.getValue()) HyPlus.getInstance().displayIgMessage(getModuleName(), status.toString());
                         if (status.endingTimestamp != 0L) {
 
                             HyPlus.getInstance().discordManager.getRichPresence().updateTimestamps(false, status.endingTimestamp);
