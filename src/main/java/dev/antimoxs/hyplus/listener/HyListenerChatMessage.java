@@ -88,7 +88,7 @@ public class HyListenerChatMessage implements MessageReceiveEvent {
                 // §9§m-----------------------------------------------------§r§9
 
                 //if (s.contains("§9§m-----------------------------------------------------§r§9") && s.contains("§r§e")) {
-                if (s.startsWith(AUTOFRIEND_LINE) && s.contains("§r§e")) {
+                if (s.startsWith(AUTOFRIEND_LINE) && s.contains("§r§e") && s.contains("§r§a§l") && s.contains("§r§8 - §r§c§")) {
 
                     HyPlus.debugLog("[HyFriend] It's a friend request bois!!!");
 
