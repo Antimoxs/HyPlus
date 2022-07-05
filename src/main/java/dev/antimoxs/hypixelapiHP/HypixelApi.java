@@ -9,6 +9,7 @@ import dev.antimoxs.hypixelapiHP.events.IHypixelApiEvent;
 import dev.antimoxs.hypixelapiHP.objects.ApiKey;
 import dev.antimoxs.hypixelapiHP.response.ApiResponse;
 import dev.antimoxs.hypixelapiHP.response.KeyResponse;
+import dev.antimoxs.hyplus.HyPlus;
 
 import java.util.ArrayList;
 
@@ -263,7 +264,7 @@ public class HypixelApi {
 
     public static void log(String s) {
 
-        System.out.println("[HypixelAPI] " + s);
+        HyPlus.debugLog("[HypixelAPI] " + s);
 
     }
 
