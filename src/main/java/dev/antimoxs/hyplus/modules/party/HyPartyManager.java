@@ -142,6 +142,9 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
 
     private int interval = 0;
 
+    // No loop needed in current configuration :D
+
+    /*
     @Override
     public boolean loop() {
 
@@ -166,6 +169,8 @@ public class HyPartyManager implements IHyPlusModule, IHyPlusEvent {
         return true;
 
     }
+
+     */
 
     // methods
 
