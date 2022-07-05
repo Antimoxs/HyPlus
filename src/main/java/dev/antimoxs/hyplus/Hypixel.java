@@ -28,7 +28,7 @@ public class Hypixel extends Server implements IHyPlusEvent {
     public boolean onServer = false;
 
     public Hypixel() {
-        super("hypixel", "hypixel.net");
+        super("hypixel", "hypixel.net", "hypixel.net:25565");
     }
 
     // dev function for testing; not used in normal use
@@ -163,7 +163,12 @@ public class Hypixel extends Server implements IHyPlusEvent {
     @Override
     public void onJoin(net.minecraft.client.multiplayer.ServerData serverData) {
 
-        if (!Minecraft.getMinecraft().getCurrentServerData().serverIP.toLowerCase().endsWith("hypixel.net")) {
+        String mcA = Minecraft.getMinecraft().getCurrentServerData().serverIP;
+        String evA = serverData.serverIP;
+
+        if (!evA.equals(mcA)) HyPlus.debugLog("mca and eva are unequal.");
+
+        if (!checkServerAddress(serverData.serverIP)) {
 
             HyPlus.debugLog("This is not Hypixel.");
             return;
@@ -229,8 +234,24 @@ public class Hypixel extends Server implements IHyPlusEvent {
     public boolean checkOnServer() {
 
         if (Minecraft.getMinecraft().getCurrentServerData() == null) { return false; }
+        return checkServerAddress(Minecraft.getMinecraft().getCurrentServerData().serverIP);
 
-        return Minecraft.getMinecraft().getCurrentServerData().serverIP.toLowerCase().endsWith("hypixel.net");
+    }
+
+    /**
+     * Check function to combine all checks into one
+     * @param address current server address as {@link String}
+     * @return Whether we are currently on hypixel
+     */
+    public static boolean checkServerAddress(String address) {
+
+        //HyPlus.debugLog("Checking for Hypixel: '" + address + "'"); do not contain in live build :)
+        if (address.contains(":")) {
+            address = address.split(":")[0];
+
+        }
+        return address.toLowerCase().endsWith("hypixel.net");
+
     }
 
 }
