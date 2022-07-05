@@ -1,6 +1,7 @@
 package dev.antimoxs.hyplus.listener;
 
 import dev.antimoxs.hyplus.HyPlus;
+import dev.antimoxs.hyplus.Hypixel;
 import dev.antimoxs.hyplus.modules.serverConnector.HyGuiConnecting;
 import net.labymod.core.LabyModCore;
 import net.labymod.main.LabyMod;
@@ -28,7 +29,7 @@ public class HyListenerGuiOpen {
             GuiScreen guiScreen = LabyModCore.getForge().getGuiOpenEventGui(event);
 
             // TODO delete mc writing
-            if (Minecraft.getMinecraft().getCurrentServerData().serverName.toLowerCase().endsWith("hypixel.net")) {
+            if (Hypixel.checkServerAddress(Minecraft.getMinecraft().getCurrentServerData().serverIP.toLowerCase())) {
             //if (LabyMod.getInstance().getCurrentServerData().getIp().toLowerCase().endsWith("hypixel.net")) {
 
                 // Let's make sure it's not our gui :)
