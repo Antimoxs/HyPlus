@@ -1,5 +1,7 @@
-# HyPlus by Antimoxs 
+# HyPlus by Antimoxs (LabyMod 3)
 [![Java Gradle Build](https://github.com/Antimoxs/HyPlus/actions/workflows/gradle.yml/badge.svg?branch=master)](https://github.com/Antimoxs/HyPlus/actions/workflows/gradle.yml)
+
+### Note: This is the old addon for LabyMod 3. Since lm3 is not further supported, this version of HyPlus won't receive further updates.
 
 The HyPlus LabyMod Addon is a non-official server-support-addon for the Hypixel Network. It provides a range of features to extend the game
 experience and helps you to display important information directly.
